@@ -1,3 +1,15 @@
+#include "struct.h"
+#include "date.h"
+#include <libxml/parser.h>
+#include <string.h>
+#include <libxml/xmlmemory.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <memory.h>
+
 int count (xmlDocPtr doc){
 	xmlNodePtr cur, a;
 	int c=0;
@@ -24,6 +36,33 @@ int isPost (xmlNodePtr cur){
 
 int isUser (xmlNodePtr cur){
 	return xmlStrcmp(cur->name, (const xmlChar *) "users");
+}
+
+int isTag (xmlNodePtr cur){
+	return xmlStrcmp(cur->name, (const xmlChar *) "tags");
+}
+
+Date creatingDate(char *s){
+    char ano[4],mes[2],dia[2];
+    int i=0,m,j=0,d,a,k=0;
+    while(isdigit(s[i])) {
+    	ano[i]=s[i];
+    	i++;
+    }
+        ano[4]=0;
+  	    a=atoi(ano);i++;
+    while(isdigit(s[i])){
+  	    mes[j++]=s[i++];
+    }
+    mes[2]=0;
+  	m=atoi(mes);i++;
+    while(isdigit(s[i])) {
+  	    dia[k++]=s[i++];
+    }
+        dia[2]=0;
+        d=atoi(dia);
+    free(s);
+    return createDate(d,m,a);
 }
 
 void loadingPost (xmlNodePtr n,TAD_community com){
@@ -75,6 +114,24 @@ void loadingPost (xmlNodePtr n,TAD_community com){
 	}	
 }
 
+void loadingTags (xmlNodePtr n, TAD_community com){
+	xmlNodePtr cur = n->xmlChildrenNode;
+	long id;
+	char *tagName=NULL;
+	xmlChar *ID;
+	while (cur!=NULL){
+		if((!xmlStrcmp(cur->name,(const xmlChar *)"row"))){
+			ID = xmlGetProp(cur,(xmlChar *)"Id");
+		    id = atol((char *) ID);
+		    xmlFree(ID);
+		    tagName = (char *) xmlGetProp(cur,(xmlChar *)"TagName");  
+		
+		   addTags(com, tagName, id);
+		}
+		cur = cur->next;
+	}
+}
+
 void loadingUsers (xmlNodePtr n, TAD_community com){
 	xmlNodePtr cur = n->xmlChildrenNode;
 	int reputation;
@@ -116,6 +173,22 @@ void add (TAD_community com, xmlNodePtr t){
 	if(flag==1) insere_Heap(com);
 }
 
+void parseDoc(xmlDocPtr doc, TAD_community com){
+	xmlNodePtr cur, a;
+	if (doc==NULL){
+		fprintf (stderr,"Fail\n");
+		return;
+	}
+ 	cur = xmlDocGetRootElement(doc);
+	if (cur == NULL) {
+		fprintf(stderr,"empty document\n");
+		xmlFreeDoc(doc);
+	return;
+	}
+	a = cur;
+	add(com, a);
+}
+
 void parse (TAD_community com, char* dump_path){
 	int dataSize, usersSize, tagsSize;
 	if (dump_path == NULL){
@@ -145,4 +218,9 @@ void parse (TAD_community com, char* dump_path){
 	}
 	free(z);free(w);free(k);
 	xmlCleanupParser();
+}
+
+TAD_community load (TAD_community com ,char* dump_path){
+    parse(com, dump_path);
+    return com;
 }
