@@ -47,6 +47,10 @@ void free_new_pair(NEW_pair pair) {
     free(pair);
 }
 
+int max(int e,int d){
+  return e>d?e:d;
+}
+
 int verificaTag(char *s,char *t){
   int a=0,i=0,k=0,j;
   char *tag=malloc(strlen(s)*sizeof(char));
