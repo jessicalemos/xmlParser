@@ -330,7 +330,7 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
 	long localB = get_fst_long(local), localE = get_snd_long(local);
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	if(localB==-1 && localE==-1){
-		c = conta(com, 0, TAD_community_get_dataSize(com), begin, end, tag); 
+		c = conta(com, 0, TAD_community_get_dataSize(com)-1, begin, end, tag); 
 		array = malloc(c*sizeof(long));
 		for(int j=0; j<c; j++) array[j]=-2;
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
