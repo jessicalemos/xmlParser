@@ -1,5 +1,6 @@
 #include "interface.h"
 #include "struct.h"
+#include "auxiliary.h"
 
 void selectionSort(long* p, int tam){
 	int i, j, max, aux;
