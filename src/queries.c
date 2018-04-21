@@ -341,7 +341,7 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
 			}
 		}
 	}
-	if(localB!=-1 && localE!=-1 && localB<=localE){ 
+	else if(localB!=-1 && localE!=-1 && localB<=localE){ 
 		c = conta(com, localB, localE, begin, end, tag); 
 		array = malloc(c*sizeof(long));
 		for(int j=0; j<c; j++) array[j]=-2; 
