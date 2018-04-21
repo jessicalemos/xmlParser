@@ -1,3 +1,24 @@
+void selectionSort(long* p, int tam){
+	int i, j, max, aux;
+	for (i=0; i<tam-1; i++) {
+		max = i;
+	for (j=i+1; j<tam; j++) {
+		if (p[j] >p[max]) max = j;
+	} 
+	aux = p[i];
+	p[i] = p[max];
+	p[max] = aux;
+	}
+}
+
+int contaTitulo (TAD_community com,char *word){
+	int i, c = 0;
+	for(i=0;i<TAD_community_get_dataSize(com);i++)
+		if(existeTree(com,i))
+			c += retiraTitulo(com,i,word);  
+	return c;
+}
+
 LONG_list contains_word(TAD_community com, char* word, int N){
 	int c = contaTitulo(com,word), j, i;
 	long* id = malloc(c*sizeof(long));
