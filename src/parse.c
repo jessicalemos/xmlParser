@@ -43,7 +43,7 @@ int isTag (xmlNodePtr cur){
 }
 
 Date creatingDate(char *s){
-    char ano[4],mes[2],dia[2];
+    char ano[5],mes[3],dia[3];
     int i=0,m,j=0,d,a,k=0;
     while(isdigit(s[i])) {
     	ano[i]=s[i];
