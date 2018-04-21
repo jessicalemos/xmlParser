@@ -47,6 +47,24 @@ void free_new_pair(NEW_pair pair) {
     free(pair);
 }
 
+int verificaTag(char *s,char *t){
+  int a=0,i=0,k=0,j;
+  char *tag=malloc(strlen(s)*sizeof(char));
+  while(s[k]){
+    i=k;
+    while(s[i] && s[i]=='<') i++;
+    for(j=i,a=0;s[j] && s[j]!='>';j++,a++){
+        tag[a]=s[j];
+    }
+    tag[a]=0;
+      if(!strcmp(tag,t)) return 1;
+      if(s[j] && s[j]=='>') {j++;}
+      k=j;
+  }
+  free(tag);
+  return 0;
+}
+
 void insere (int x, long id, long *p, int *s,int N){
     int i,j;
   for(i=0;i<N-1 && s[i]>x;i++);
@@ -89,6 +107,12 @@ int procuraArray (long* postId, long id, int N){
   for(i=0; i<N && postId[i]!=id; i++);
   if (i==N) return 0;
   return 1;
+}
+
+int compareDate (Date d1, Date d2){
+  if (get_year(d1)==get_year(d2) && get_month(d1)==get_month(d2) && get_day(d1)==get_day(d2))
+    return 1;
+  return 0;
 }
 
 int compareDateQ (Date d1, Date d2){
