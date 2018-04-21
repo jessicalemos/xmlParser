@@ -2,7 +2,7 @@
 #include <string.h>
 #include <common.h>
 #include "auxiliary.h"
-#include "date.h"
+#include <ctype.h>
 
 struct new_pair {
   float fst;
@@ -89,4 +89,37 @@ int procuraArray (long* postId, long id, int N){
   for(i=0; i<N && postId[i]!=id; i++);
   if (i==N) return 0;
   return 1;
+}
+
+int compareDateQ (Date d1, Date d2){
+  if (get_year(d1)==get_year(d2) && get_month(d1)==get_month(d2) && get_day(d1)==get_day(d2))
+    return 1;
+  if(get_year(d1)>get_year(d2) || (get_year(d1)==get_year(d2) && get_month(d1)>get_month(d2)) || (get_year(d1)==get_year(d2) && get_month(d1)==get_month(d2) && get_day(d1)>get_day(d2))) 
+    return 2 ;
+  return 0;
+}
+
+void insereT(Date d,long postId,Date *data,long *id,int N){
+  int i,j;
+  for(i=0;i<N-1 && data[i]!=NULL && compareDateQ(data[i],d)==2;i++);
+  if(data[i]==NULL){
+    data[i] = d;
+    id[i] = postId;
+  }
+  else{
+    if(i==N-1 && compareDateQ(data[i],d)==0) {
+      data[i] = d;
+      id[i] = postId;
+    } 
+    else{
+      for(j=N-1;j>i;j--){
+        data[j] = data[j-1];
+        id[j] = id[j-1];
+      }
+      if(compareDateQ(data[i],d)!=2){
+        data[i] = d;
+        id[i] = postId;
+      }
+    }
+  }
 }
