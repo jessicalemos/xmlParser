@@ -4,7 +4,6 @@
 #include "auxiliary.h"
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include <assert.h>
 
 typedef struct elemento{
@@ -98,6 +97,14 @@ long get_topN(TAD_community com, int i){
 	return(com->topN[i]);
 }
 
+char* users_getDisplayName (TAD_community com, int i){
+	return com->hashUser[i]->displayName;
+}
+
+char* users_getAboutMe (TAD_community com, int i){
+	return com->hashUser[i]->aboutMe;
+}
+
 int post_getPostTypeId (TAD_community com, int i, long id){
 	Post* a = com->treeHash[i]->tree;
 	while (a){
@@ -138,8 +145,36 @@ int post_getScore (TAD_community com, int i, long id){
 	return -1;
 }
 
+long post_getOwnerUserId (TAD_community com, int i, long id){
+	Post* a = com->treeHash[i]->tree;
+	while (a){
+		if (a->id == id) return a->ownerUserId;
+		else if (a->id > id && a->esq!=NULL ) a=a->esq;
+		else a=a->dir; 
+	}
+	return -1;
+}
+
+long post_getparentId (TAD_community com, int i, long id){
+	Post* a = com->treeHash[i]->tree;
+	while (a){
+		if (a->id == id) return a->parentId;
+		else if (a->id > id && a->esq!=NULL ) a=a->esq;
+		else a=a->dir; 
+	}
+	return -1;
+}
+
 int treeHash_getNumRespostas (TAD_community com, int i){
 	return com->treeHash[i]->numRespostas;
+}
+
+long treeHash_getContadorR (TAD_community com, int i){
+	return com->treeHash[i]->contadorR;
+}
+
+long treeHash_getContadorP (TAD_community com, int i){
+	return com->treeHash[i]->contadorP;
 }
 
 void TAD_community_set_usersSize(TAD_community com, int usersSize){
@@ -172,6 +207,15 @@ TAD_community initHashUsers (TAD_community com, int N){
 	com->hashUser=user;
 	com->topN = malloc((N/2)*sizeof(long));
 	for(int j=0;j<N/2;j++) com->topN[j]=-2;
+	return com;
+}
+
+TAD_community initHashTags (TAD_community com, int N){
+	HashTableTags tag = malloc(N*sizeof(Tags*));
+	for (int i=0; i<N; i++){
+		tag[i] = NULL;
+	}
+	com->hashTag=tag;
 	return com;
 }
 
@@ -210,6 +254,26 @@ void addUser (TAD_community com,int reputation, long id,char *name,char *about){
 	insereTableUsers(com->hashUser,i,reputation, id, name, about);
 }
 
+int procuraUser (TAD_community com, long id){
+	int i, chave = userHash(id,com),c=0;
+	for (i=chave; com->hashUser[i]!=NULL && c<com->usersSize && com->hashUser[i]->ownerUserId!=id; i++){
+		if (i+1>com->usersSize) i=0;
+		c++;
+	}
+	if (com->hashUser[i]!=NULL && com->hashUser[i]->ownerUserId==id) return i;
+	else return -1;
+}
+
+void incrementaPost(TAD_community com, long id){
+	int i = procuraUser(com, id);
+	com->hashUser[i]->nPosts++;
+}
+
+int tagHash (long id, TAD_community com){
+	if(id<0) return (-(id % com->tagsSize));
+    return(id % com->tagsSize);
+}
+
 void insereTableTags (HashTableTags h1, int i, long id, char* tagName){
 	Tags *new = malloc(sizeof(Tags));
 	new->id = id;
@@ -224,6 +288,11 @@ void addTags (TAD_community com,char* tagName, long id){
 		else i++;
 	}
 	insereTableTags(com->hashTag, i, id, tagName);
+}
+
+int dataHash (Date data, TAD_community com){
+	int i = get_day(data) + get_month(data) + get_year(data);
+	return ((i) % com->dataSize); 
 }
 
 int height(Post *p){
@@ -248,6 +317,22 @@ Post* rotate_left(Post *p){
 	return q;
 }
 
+Post* balancaTree (Post *p){
+	Post *p1 = p->esq;	
+	Post *p2 = p->dir;
+	if ( height(p->esq) - height(p->dir) == 2 ){
+		if ( height(p1->dir) > height(p1->esq) )
+			p->esq = rotate_left(p->esq);
+		return rotate_right(p);
+	}
+	else if ( height(p->dir) - height(p->esq) == 2 ){
+		if ( height(p2->esq) > height(p2->dir) )
+			p->dir = rotate_right(p->dir);
+		return rotate_left(p);
+	}
+	return p;
+}
+
 Post* insereTree(int score, int postTypeId, long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data, int commentCount){
 	Post *p = malloc (sizeof(Post));
 	if(p!=NULL){
@@ -268,6 +353,39 @@ Post* insereTree(int score, int postTypeId, long parentId, long id, char *tag, c
 	return p;
 }
 
+Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char *tag, char *title, long ownUserId, char *question, int answerCount, Date data, int commentCount){
+	if(c==NULL){
+	    return insereTree(score, postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
+	}
+    else{
+    	if(c->id>id) c->esq=rec(c->esq,score,postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
+        else c->dir=rec(c->dir,score,postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
+    }
+    return balancaTree(c);
+}
+ 
+void addPost (TAD_community com,int score,int postTypeId,long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data,int commentCount){
+	int i=dataHash(data,com); 
+	while (com->treeHash[i]!=NULL && !compareDate(com->treeHash[i]->tree->creationDate,data)){
+		if (i>com->dataSize) i=0;
+		else i++;
+	}
+	if(com->treeHash[i]==NULL){
+			TreeHash *new= malloc(sizeof(TreeHash));
+			new->tree=NULL;
+			com->treeHash[i]=new;
+		    com->treeHash[i]->contadorR = 0;
+        	com->treeHash[i]->contadorP = 0;
+        	com->treeHash[i]->numRespostas = 0;
+	}
+    com->treeHash[i]->tree=rec(com->treeHash[i]->tree,score,postTypeId,parentId,id,tag,title,ownerUserId,question,answerCount,data,commentCount);
+    incrementaPost(com,ownerUserId);
+    if (postTypeId ==1 || postTypeId == 2) insere_Heap_Posts(com,ownerUserId,id,data);
+    if (postTypeId == 2) com->treeHash[i]->contadorR++;
+    if (postTypeId == 1) com->treeHash[i]->contadorP++;
+    com->treeHash[i]->numRespostas++;
+}
+
 int procuraPost (TAD_community com, long id){
 	for(int i=0; i< com->dataSize; i++){
 		if (com->treeHash[i]!=NULL){
@@ -282,9 +400,47 @@ int procuraPost (TAD_community com, long id){
 	return -1;
 }
 
+int contaTagR (Post* a, char* tag){
+	int c=0;
+	if (a!=NULL){
+		if (a->tag!=NULL && a->postTypeId!=2){ 
+			if (verificaTag(a->tag,tag)==1){   
+				c = 1 + contaTagR(a->esq, tag) + contaTagR(a->esq, tag);
+			}
+			else {c = contaTagR(a->esq, tag) + contaTagR(a->dir, tag);}
+		}
+		else {c = contaTagR(a->esq, tag) + contaTagR(a->dir, tag);}
+	}
+	return c;
+}
+
 int contaTag (TAD_community com, int i, char* tag){
 	Post* a = com->treeHash[i]->tree;
 	return contaTagR (a,tag);
+}
+
+int existeTree (TAD_community com, int i){
+    if(com->treeHash[i]!=NULL) return 1;
+    return 0;
+}
+
+void retornaIdR (Post* a, char* tag, long* p, int c){
+	int i;
+	if (a!=NULL){
+		if (a->tag!=NULL && a->postTypeId!=2){
+			if (verificaTag(a->tag,tag)==1){
+				for (i=0; i<c && p[i]!=-2; i++);
+				p[i] = a->id;
+			}
+		}
+	retornaIdR (a->esq,tag,p,c);
+	retornaIdR (a->dir,tag,p,c);
+	}
+}
+
+void retornaId (TAD_community com, int i, long* p, char* tag, int c){
+	Post* a = com->treeHash[i]->tree;
+	retornaIdR (a, tag, p, c);
 }
 
 void retornaSIdR (Post* a, long *p, int *s, int N){
@@ -350,6 +506,15 @@ int retiraTitulo(TAD_community com,int i,char* word){
 	return retiraTituloR(a,word);
 }
 
+void procuraTituloR(Post *a,char *word,Date *data,long *id,int N){
+	if(a){
+		if(a->title!=NULL && a->postTypeId!=2)
+			if(contida(a->title,word)) insereT(a->creationDate,a->id,data,id,N);
+		procuraTituloR(a->esq,word,data,id,N);
+		procuraTituloR(a->dir,word,data,id,N);
+	}
+}
+
 void procuraTitulo(TAD_community com,char *word,Date *data,long *id,int N){
 	int i;
 	for(i=0;i<com->dataSize;i++){
@@ -372,6 +537,32 @@ int contaTR (Post* a, char* word){
 		else c = contaTR(a->esq, word) + contaTR(a->dir, word);
 	}
 	return c;
+}
+
+int contaT (TAD_community com, int i, char* word){
+	Post* a = com->treeHash[i]->tree;
+	return contaTR (a,word);
+}
+
+void guardaRespostas(TAD_community com, Post* a, long id, float max, int flag, NEW_pair p){
+	float c = 0;
+	if(a!=NULL && get_trd_new(p)!=0){
+		if(a->postTypeId==2 && a->parentId == id){
+			set_trd_new(p,get_trd_new(p)-1);
+			c = (com->hashUser[procuraUser(com,a->ownerUserId)]->reputation)*0.25 + (a->score)*0.65 + (a->commentCount)*0.1;
+			if(flag==0) {
+				set_snd_new(p,a->id);
+				set_fst_new(p,c);
+				flag = 1;
+			}
+			else if(c>max) {
+				set_snd_new(p,a->id);
+				set_fst_new(p,c);
+			}
+		}
+		guardaRespostas(com,a->esq, id, max, flag,p);
+		guardaRespostas(com,a->dir, id, max, flag,p);
+	}
 }
 
 long procuraRespostas(TAD_community com, long id){
@@ -479,6 +670,76 @@ int procuraData(TAD_community com, Date data){
 	return -1;
 }
 
+void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3){
+	int c = h->used, j; 
+	long idP;
+	for(j=0;j<c;j++){
+		Date data = h->array[0].data;
+		idP = extractMaxPosts2(h,h3);
+		int chave = procuraData(com,data);
+		if(post_getPostTypeId(com,chave,idP)==1){
+			postId[j]=idP; 
+		}
+		else if (post_getPostTypeId(com,chave,idP)==2){
+			long id = post_getparentId(com,chave,idP); 
+			postId[j] = id; 
+		}
+	}
+}
+
+int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,int chave1,int chave2){
+	int k=0; 
+	if(h1->used<h2->used) {
+		int c = h2->used,j;
+		int a = h1->used;
+		HeapPosts h3 = initHeapPosts(c);
+		HeapPosts h4 = initHeapPosts(a);
+		long* ID = malloc(c*sizeof(long));
+		procuraId(h2,com,ID,h3);
+		for(j=0;j<a && k<N;j++){
+			Date data = h1->array[0].data;
+			long postId;
+			postId = extractMaxPosts2(h1,h4);
+			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c)){
+				id[k] = postId; k++;
+			}
+			else {
+				long idP = post_getparentId(com,procuraData(com,data),postId);
+				if(procuraArray(ID,idP,c)!=0){
+					id[k] = idP ;
+					k++;
+				 }
+			}
+		}
+		com->hashUser[chave2]->top10=h3;com->hashUser[chave1]->top10=h4;free(ID);
+	}
+	else{
+		int c = h1->used,j;
+		int a = h2->used;
+		HeapPosts h3 = initHeapPosts(c);
+		HeapPosts h4 = initHeapPosts(a);
+		long* ID = malloc(c*sizeof(long));
+		procuraId(h1,com,ID,h3);
+		for(j=0;j<a && k<N;j++){
+			Date data = h2->array[0].data;
+			long postId = extractMaxPosts2(h2,h4);
+			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c)!=0){
+				id[k] = postId; 
+			}
+			else {
+				long idP = post_getparentId(com,procuraData(com,data),postId);
+				if(procuraArray(ID,idP,c)!=0){
+					id[k] = idP ;
+					k++;
+				 }
+			}
+		}
+		com->hashUser[chave1]->top10=h3;
+	    com->hashUser[chave2]->top10=h4;free(ID);
+	}
+	return k;
+}
+
 Heap initHeap(int size){
     Heap h = malloc(sizeof(struct heap));
     if(h != NULL) {
@@ -511,6 +772,49 @@ void swapPosts(HeapPosts h, int a, int b){
     h->array[b] = t;
 }
 
+void bubbleUp(Heap h, int i){
+    while (i!=0 && h->array[i].count > h->array[PARENT(i)].count) {
+        swap(h, i, PARENT(i));
+        i = PARENT(i);
+    }
+}
+
+void bubbleDown(Heap h, int N){
+    int i = 0, max ;
+    while (RIGHT(i) < N && h->array[max = h->array[LEFT(i)].count > h->array[RIGHT(i)].count ? LEFT(i) : RIGHT(i)].count > h->array[i].count) {
+        swap(h, i, max);
+        i = max;
+    }
+    if (LEFT(i) < N && h->array[LEFT(i)].count > h->array[i].count)
+        swap(h, i, LEFT(i));
+}
+
+int insertHeap(Heap h,int count,long id){
+    if (h->used == h->size) {
+        h->array= realloc(h->array, 2*(h->size)*sizeof(struct elemento));
+        h->size *= 2;
+    }
+    assert( h!= NULL);
+    h->array[h->used].count= count;
+    h->array[h->used].id= id;
+    (h->used)++;
+    bubbleUp(h, h->used-1);
+    return 1;
+}
+
+long extractMax(Heap h){
+    if (h->used > 0) {
+        elem novo= h->array[0];
+        long res=novo.id;
+       
+        h->array[0] = h->array[h->used-1];
+        (h->used)--;
+        bubbleDown(h, h->used);
+        return res;
+    } 
+    else return -1;
+}
+
 void insere_Heap(TAD_community com){
     int i,tam=com->usersSize/2;
     com->Top=initHeap(tam);
@@ -518,6 +822,11 @@ void insere_Heap(TAD_community com){
   		if(com->hashUser[i]!=NULL && com->hashUser[i]->nPosts!=0)
    		 	insertHeap((com->Top),com->hashUser[i]->nPosts,com->hashUser[i]->ownerUserId);
     }
+}
+
+void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
+	int i = procuraUser(com, ownerUserId);
+	insertHeapPosts(com->hashUser[i]->top10,data,id);
 }
 
 long extractMaxPosts2(HeapPosts h,HeapPosts h2){
@@ -530,6 +839,21 @@ long extractMaxPosts2(HeapPosts h,HeapPosts h2){
         bubbleDownPosts(h, h->used);
         return res;
     } else return -1;
+}
+
+long* retornaTop10(TAD_community com, int i){
+	long* id = malloc(10*sizeof(long));
+	int c=com->hashUser[i]->top10->used,j;
+	HeapPosts b = com->hashUser[i]->top10;
+	HeapPosts h=initHeapPosts(c);
+	for(j=0;j<10 && j<c;j++){
+		id[j] = extractMaxPosts2(com->hashUser[i]->top10,h);
+	}
+	for(int k=j;k<c;k++)
+		extractMaxPosts2(com->hashUser[i]->top10,h);
+	com->hashUser[i]->top10=h;
+	freeHeapPosts(b);
+	return id;
 }
 
 LONG_list contaPosts(TAD_community com, int N, int nOrdenados){
@@ -601,6 +925,13 @@ void freeHeapPosts(HeapPosts r){
     }
 }
 
+void freeHeap(Heap r){
+	if(r!=NULL){
+		free(r->array);
+		free(r);
+	}
+}
+
 void freeTop(TAD_community com){
 	freeHeap(com->Top);
 }
@@ -630,4 +961,34 @@ void freeHashTableTags (TAD_community com, int size){
 		}
 	}	
 	free(com->hashTag);
+}
+
+void freeP(Post* p2){
+	if(p2!=NULL){
+		free(p2->title);
+		free(p2->tag);
+		free(p2->question);
+		free_date(p2->creationDate);
+		freeP((p2->esq));
+		freeP((p2->dir));
+		free(p2);
+	}
+}
+
+void freeTreeHashData (TAD_community com,int size){
+	int i;
+	TreeHash *cur, *prev;
+	for(i=0;i<size;i++){
+		if(com->treeHash[i]!=NULL){
+			cur = com->treeHash[i];
+			prev = cur;
+			Post *a = prev->tree;
+			if(a!=NULL){
+				Post* a2 = a;
+				freeP(a2);		
+			}
+			free(prev);
+		}
+	}
+	free(com->treeHash);
 }
