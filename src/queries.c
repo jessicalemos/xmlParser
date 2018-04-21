@@ -324,7 +324,7 @@ LONG_list contains_word(TAD_community com, char* word, int N){
 }
 
 LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end){
-	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), c = 0, n, l, i, k, j; 
+	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), c = 0, n, l, i, k, j,w; 
 	long *array;
 	LONG_pair local = existeData(com,begin,end,chaveB,chaveE);
 	long localB = get_fst_long(local), localE = get_snd_long(local);
