@@ -1,3 +1,6 @@
+#include "interface.h"
+#include "struct.h"
+
 void selectionSort(long* p, int tam){
 	int i, j, max, aux;
 	for (i=0; i<tam-1; i++) {
@@ -43,6 +46,18 @@ STR_pair info_from_post(TAD_community com, long id){
 			nome =  users_getDisplayName (com, iU);
 			if (iU != -1) nome = users_getDisplayName (com, iU);
 		}
+		else {
+			long parent = post_getparentId (com,iP,id);
+			int iP2 = procuraPost(com,parent);
+			title = post_getTitle (com, iP2, parent);
+			long ownerUserId =  post_getOwnerUserId (com,iP2,parent);
+			int iU = procuraUser(com,ownerUserId);
+			if (iU != -1) nome = users_getDisplayName (com, iU);
+		}
+	}
+	STR_pair p= create_str_pair (title, nome);
+	return p;
+}
 
 LONG_list top_most_active(TAD_community com, int N){
 	int k;
@@ -78,14 +93,129 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
 			}
 		}
 		else if(localB==-1 && localE!=-1){
-			for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
-				if(existeTree(com,l)){
-					if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
-						perguntas += treeHash_getContadorP (com,l);
-						respostas += treeHash_getContadorR (com,l);
+				for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
+					if(existeTree(com,l)){
+						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+							perguntas += treeHash_getContadorP (com,l);
+							respostas += treeHash_getContadorR (com,l);
+						}
+					}
+				}
+				if(l!=localE){
+					for(c=0;c!=localE;c++){
+						if(existeTree(com,c)){
+							if(compareDateQ(post_getCreationDate (com,c), begin)!=0 && compareDateQ(post_getCreationDate (com,c), end)!=2){
+								perguntas += treeHash_getContadorP (com,c);
+								respostas += treeHash_getContadorR (com,c);
+							}
+						}
+					}
+				}
+				perguntas += treeHash_getContadorP (com,localE);
+				respostas += treeHash_getContadorR (com,localE);
+			}
+			else{
+				for(j=localB;j<TAD_community_get_dataSize(com);j++){
+					if(existeTree(com,j)){
+						if(compareDateQ(post_getCreationDate (com,j), begin)!=0 && compareDateQ(post_getCreationDate (com,j), end)!=2){
+						perguntas += treeHash_getContadorP (com,j);
+						respostas += treeHash_getContadorR (com,j);
+						}
+					}
+				}
+				if(localE==-1) localE=localB-1;
+				for(k=0;k<=localE; k++){
+					if(existeTree(com,k)){
+						if(compareDateQ(post_getCreationDate (com,k), begin)!=0 && compareDateQ(post_getCreationDate (com,k), end)!=2) {
+							perguntas += treeHash_getContadorP (com, k);
+							respostas += treeHash_getContadorR (com, k);
+						}
 					}
 				}
 			}
+		free_long_pair(local);
+		return create_long_pair(perguntas,respostas);
+}
+
+LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
+	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), n, l, k, j, w; 
+	long *array;
+	int *arrayS;
+	LONG_pair local = existeData(com,begin,end,chaveB,chaveE);
+	long localB = get_fst_long(local), localE = get_snd_long(local);
+	if(compareDateQ(begin,end)==2) return create_list(0);
+	if(localB==-1 && localE==-1){
+		array = malloc(N*sizeof(long));
+		arrayS = malloc(N*sizeof(int));
+		for(int j=0; j<N; j++) {array[j]=-2;arrayS[j]=-20;}
+		for(w=0;w<TAD_community_get_dataSize(com);w++){
+			if(existeTree(com,w)){
+				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+					retornaSId (com,array,arrayS,N,w); 
+				}
+			}
+		}
+	}
+	else if(localB==-1 && localE!=-1){
+		 	if(localE<chaveB){
+				array = malloc(N*sizeof(long));
+				arrayS = malloc(N*sizeof(int));
+				for(int j=0; j<N; j++) {array[j]=0;arrayS[j]=-20;}
+				for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
+					if(existeTree(com,l)){
+						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+	       					retornaSId (com, array, arrayS, N,l);
+						}
+					}
+				}
+				for(n=0;n!=localE;n++){
+					if(existeTree(com,n)){
+						if(compareDateQ(post_getCreationDate (com,n), begin)!=0 && compareDateQ(post_getCreationDate (com,n), end)!=2){
+							retornaSId (com, array, arrayS, N,n);
+						}
+					}
+				}
+				retornaSId (com, array, arrayS, N,n);
+			}
+	    	else{
+				array = malloc(N*sizeof(long));
+				arrayS = malloc(N*sizeof(int));
+				for(int j=0; j<N; j++) {array[j]=0;arrayS[j]=-20;}
+				for(l=chaveB;l<=localE && l<TAD_community_get_dataSize(com);l++){
+					if(existeTree(com,l)){
+						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+	       					retornaSId (com, array, arrayS, N,l);
+						}
+					}
+				}
+			}
+		}
+		else{
+			array = malloc(N*sizeof(long));
+			arrayS = malloc(N*sizeof(int));
+			for(int j=0; j<N; j++) {array[j]=0;arrayS[j]=-20;}
+			for(j=localB;j<TAD_community_get_dataSize(com);j++){
+				if(existeTree(com,j)){
+					if(compareDateQ(post_getCreationDate (com,j), begin)!=0 && compareDateQ(post_getCreationDate (com,j), end)!=2){
+						retornaSId (com, array, arrayS, N,j);
+					}
+				}
+			}
+			if(localE==-1) localE=localB-1;
+			for(k=0;k<=localE; k++){
+				if(existeTree(com,k)){
+					if(compareDateQ(post_getCreationDate (com,k), begin)!=0 && compareDateQ(post_getCreationDate (com,k), end)!=2) {
+						retornaSId (com, array, arrayS, N,k);
+					}
+				}
+			}
+		} 
+	LONG_list list = create_list(N); 
+	for (int i=0; i<N; i++)
+		set_list(list, i, array[i]); 
+	free(array);free(arrayS);free_long_pair(local);
+	return list;
+}
 
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
 	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), n, l, k, j, h, w; 
@@ -273,6 +403,28 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
 	free(array);
 	return list;
 }
+
+USER get_user_info(TAD_community com, long id){
+	int i = procuraUser(com,id);
+	char* aboutMe = users_getAboutMe(com,i);
+	long* idP = retornaTop10(com,i);
+	USER u = create_user(aboutMe,idP);
+	free(idP);
+	return u;
+}
+
+LONG_list both_participated(TAD_community com, long id1, long id2, int N){
+	long* id = malloc(N*sizeof(long));
+	int chave1 = procuraUser(com,id1),chave2 = procuraUser(com,id2),tam; 
+	if (chave1 == -1 || chave2 == -1) return create_list(0);
+	else tam = extraiHeaps(com,chave1,chave2,N,id); 
+	LONG_list l = create_list(tam);
+	for(int j=0;j<tam;j++)
+		set_list(l,j,id[j]);
+	free(id);
+	return l;	
+}
+
 
 long better_answer(TAD_community com, long id){
 	return procuraRespostas(com, id);
