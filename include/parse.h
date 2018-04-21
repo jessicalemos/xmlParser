@@ -8,5 +8,9 @@ void loadingPost (xmlNodePtr n,TAD_community com);
 void loadingUsers (xmlNodePtr n, TAD_community com);
 void add (TAD_community com, xmlNodePtr t);
 void parse (TAD_community com, char* dump_path);
+int isTag (xmlNodePtr cur);
+Date creatingDate(char *s);
+void loadingTags (xmlNodePtr n, TAD_community com);
+void parseDoc(xmlDocPtr doc, TAD_community com);
 
 #endif
