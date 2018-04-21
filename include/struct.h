@@ -20,10 +20,21 @@ TAD_community initHashData (TAD_community com, int N);
 void addTags (TAD_community com,char* tagName, long id);
 void retornaAId (TAD_community com,long *p, int *s, int N,int i);
 void retorna (TAD_community com, int *r , long *p, int N, int i);
-int retiraTitulo(TAD_community com,int i,char* word);
+void addUser (TAD_community com,int reputation, long id, char *name, char *about);
+int userHash (long i, TAD_community com);
+int procuraPost (TAD_community com, long id);
+int contaTag (TAD_community com, int i, char* tag);
+void retornaSId (TAD_community com, long *p, int *s, int N, int i);
+void procuraTitulo(TAD_community com, char *word, Date *data, long *id, int N);
+int retiraTitulo(TAD_community com, int i,char* word);
 int procuraData(TAD_community com, Date data);
 void insere_Heap(TAD_community com);
 int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id);
+long procuraRespostas(TAD_community com, long id);
+LONG_list contaPosts(TAD_community com, int N, int nOrdenados);
+LONG_pair existeData(TAD_community com, Date b, Date f, int chaveB, int chaveE);
 void freeHashTableUsers  (TAD_community com, int size);
-
+void freeHashTableTags (TAD_community com, int size);
+void freeTop(TAD_community com);
+void freeTopN(TAD_community com);
 #endif
