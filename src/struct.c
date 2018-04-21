@@ -690,6 +690,48 @@ void swapPosts(HeapPosts h, int a, int b){
     h->array[b] = t;
 }
 
+void bubbleUpPosts(HeapPosts h, int i){                
+    while (i!=0 && compareDateQ(h->array[i].data,h->array[PARENT(i)].data)==2) {
+        swapPosts(h, i, PARENT(i));
+        i = PARENT(i);
+    }
+}
+
+void bubbleDownPosts(HeapPosts h, int N){    
+    int i = 0, max ;
+    while (RIGHT(i) < N && compareDateQ(h->array[max=(compareDateQ(h->array[LEFT(i)].data,h->array[RIGHT(i)].data)==2) ? LEFT(i) : RIGHT(i)].data, h->array[i].data)==2) {
+        swapPosts(h, i, max);
+        i = max;
+    }
+    if (LEFT(i) < N && compareDateQ(h->array[LEFT(i)].data,h->array[i].data)==2)
+        swapPosts(h, i, LEFT(i));
+}
+
+int insertHeapPosts(HeapPosts h,Date data,long id){
+    if (h->used == h->size) {
+        h->array= realloc(h->array, 2*(h->size)*sizeof(struct elemPosts));
+        h->size *= 2;
+    }
+    assert( h!= NULL);
+    h->array[h->used].data= data;
+    h->array[h->used].id= id;
+    (h->used)++;
+    bubbleUpPosts(h, h->used-1);
+    return 1;
+}
+
+long extractMaxPosts2(HeapPosts h,HeapPosts h2){
+    if (h->used > 0) {
+        elemP novo= h->array[0];
+        long res=novo.id;
+        insertHeapPosts(h2,novo.data,res);
+        h->array[0] = h->array[h->used-1];
+        (h->used)--;
+        bubbleDownPosts(h, h->used);
+        return res;
+    } else return -1;
+}
+
 void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3){
 	int c = h->used, j; 
 	long idP;
@@ -833,18 +875,6 @@ void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
 	insertHeapPosts(com->hashUser[i]->top10,data,id);
 }
 
-long extractMaxPosts2(HeapPosts h,HeapPosts h2){
-    if (h->used > 0) {
-        elemP novo= h->array[0];
-        long res=novo.id;
-        insertHeapPosts(h2,novo.data,res);
-        h->array[0] = h->array[h->used-1];
-        (h->used)--;
-        bubbleDownPosts(h, h->used);
-        return res;
-    } else return -1;
-}
-
 void freeHeapPosts(HeapPosts r){
     if(r != NULL) {
         free(r->array);
@@ -882,36 +912,6 @@ LONG_list contaPosts(TAD_community com, int N, int nOrdenados){
 		set_list(list, i, com->topN[i]); 
 	}
 	return list;
-}
-
-void bubbleUpPosts(HeapPosts h, int i){                
-    while (i!=0 && compareDateQ(h->array[i].data,h->array[PARENT(i)].data)==2) {
-        swapPosts(h, i, PARENT(i));
-        i = PARENT(i);
-    }
-}
-
-void bubbleDownPosts(HeapPosts h, int N){    
-    int i = 0, max ;
-    while (RIGHT(i) < N && compareDateQ(h->array[max=(compareDateQ(h->array[LEFT(i)].data,h->array[RIGHT(i)].data)==2) ? LEFT(i) : RIGHT(i)].data, h->array[i].data)==2) {
-        swapPosts(h, i, max);
-        i = max;
-    }
-    if (LEFT(i) < N && compareDateQ(h->array[LEFT(i)].data,h->array[i].data)==2)
-        swapPosts(h, i, LEFT(i));
-}
-
-int insertHeapPosts(HeapPosts h,Date data,long id){
-    if (h->used == h->size) {
-        h->array= realloc(h->array, 2*(h->size)*sizeof(struct elemPosts));
-        h->size *= 2;
-    }
-    assert( h!= NULL);
-    h->array[h->used].data= data;
-    h->array[h->used].id= id;
-    (h->used)++;
-    bubbleUpPosts(h, h->used-1);
-    return 1;
 }
 
 int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id){
