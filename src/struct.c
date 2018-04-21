@@ -232,6 +232,16 @@ TAD_community initHashData (TAD_community com, int N){
 	return com;
 }
 
+HeapPosts initHeapPosts(int size){
+    HeapPosts h = malloc(sizeof(struct heapPosts));
+    if(h != NULL) {
+        h->size = size;
+        h->used = 0;
+        h->array=malloc(size*sizeof(struct elemPosts));
+    }
+    return h;
+}
+
 int userHash (long i, TAD_community com){
 	if (i < 0) return (-(i % com->usersSize));
 	else return (i % (com->usersSize));
@@ -674,6 +684,12 @@ int procuraData(TAD_community com, Date data){
 	return -1;
 }
 
+void swapPosts(HeapPosts h, int a, int b){
+    elemP t = h->array[a];
+    h->array[a] = h->array[b];
+    h->array[b] = t;
+}
+
 void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3){
 	int c = h->used, j; 
 	long idP;
@@ -754,24 +770,8 @@ Heap initHeap(int size){
     return h;
 }
 
-HeapPosts initHeapPosts(int size){
-    HeapPosts h = malloc(sizeof(struct heapPosts));
-    if(h != NULL) {
-        h->size = size;
-        h->used = 0;
-        h->array=malloc(size*sizeof(struct elemPosts));
-    }
-    return h;
-}
-
 void swap(Heap h, int a, int b){
     elem t = h->array[a];
-    h->array[a] = h->array[b];
-    h->array[b] = t;
-}
-
-void swapPosts(HeapPosts h, int a, int b){
-    elemP t = h->array[a];
     h->array[a] = h->array[b];
     h->array[b] = t;
 }
@@ -843,6 +843,13 @@ long extractMaxPosts2(HeapPosts h,HeapPosts h2){
         bubbleDownPosts(h, h->used);
         return res;
     } else return -1;
+}
+
+void freeHeapPosts(HeapPosts r){
+    if(r != NULL) {
+        free(r->array);
+        free(r);
+    }
 }
 
 long* retornaTop10(TAD_community com, int i){
@@ -920,13 +927,6 @@ int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id){
 
 void freeTopN(TAD_community com){
 	free(com->topN);
-}
-
-void freeHeapPosts(HeapPosts r){
-    if(r != NULL) {
-        free(r->array);
-        free(r);
-    }
 }
 
 void freeHeap(Heap r){
