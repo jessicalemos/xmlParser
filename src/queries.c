@@ -19,6 +19,155 @@ int contaTitulo (TAD_community com,char *word){
 	return c;
 }
 
+int conta (TAD_community com, int localB, int localE, Date begin, Date end, char* tag){
+	int i, c = 0;
+	for(i=localB;i<=localE;i++){ 
+		if(existeTree(com,i)){
+			if(compareDateQ(post_getCreationDate (com,i), begin)!=0 && compareDateQ(post_getCreationDate (com,i), end)!=2){
+					 c += contaTag(com, i, tag);  
+			}
+		}
+	} 
+	return c;
+}
+
+STR_pair info_from_post(TAD_community com, long id){
+	char *nome = NULL, *title = NULL;
+	int iP = procuraPost(com,id); 
+	if (iP != -1){
+		int type = post_getPostTypeId (com, iP, id); 
+		if (type == 1){
+			title = post_getTitle (com, iP, id);
+			long ownerUserId =  post_getOwnerUserId (com,iP, id);
+			int iU = procuraUser(com,ownerUserId); 
+			nome =  users_getDisplayName (com, iU);
+			if (iU != -1) nome = users_getDisplayName (com, iU);
+		}
+
+LONG_list top_most_active(TAD_community com, int N){
+	int k;
+	for(k=0;get_topN(com,k)!=-2;k++);
+	int tam=N-k;
+	return contaPosts(com,tam,k);
+}
+
+LONG_pair total_posts(TAD_community com, Date begin, Date end){
+	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), j, i, k,c,l,w;
+	LONG_pair local=existeData(com,begin,end,chaveB,chaveE);
+	long localB=get_fst_long(local),localE=get_snd_long(local);
+	long perguntas = 0, respostas = 0;
+	if(compareDateQ(begin,end)==2) return create_long_pair(perguntas,respostas);
+	if(localB==-1 && localE==-1){
+		for(w=0;w<TAD_community_get_dataSize(com);w++){
+			if(existeTree(com,w)){
+				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+					perguntas += treeHash_getContadorP (com,w);
+					respostas += treeHash_getContadorR (com,w);
+				}
+			}
+		}
+	}
+	else if(localB!=-1 && localE!=-1 && localB<=localE){
+			for(i=localB;i<=localE;i++){
+				if(existeTree(com,i)){
+					if(compareDateQ(post_getCreationDate (com,i), begin)!=0 && compareDateQ(post_getCreationDate (com,i), end)!=2){
+						perguntas += treeHash_getContadorP (com,i);
+						respostas += treeHash_getContadorR (com,i);
+					}
+				}
+			}
+		}
+		else if(localB==-1 && localE!=-1){
+			for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
+				if(existeTree(com,l)){
+					if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+						perguntas += treeHash_getContadorP (com,l);
+						respostas += treeHash_getContadorR (com,l);
+					}
+				}
+			}
+
+LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
+	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), n, l, k, j, h, w; 
+	long *array;
+	int *arrayA;
+	LONG_pair local = existeData(com,begin,end,chaveB,chaveE);
+	long localB = get_fst_long(local), localE = get_snd_long(local);
+	if(compareDateQ(begin,end)==2) return create_list(0);
+	if(localB==-1 && localE==-1){
+		array = malloc(N*sizeof(long));
+		arrayA = malloc(N*sizeof(int));
+		for(int j=0; j<N; j++) {array[j]=-2;arrayA[j]=-20;}
+		for(w=0;w<TAD_community_get_dataSize(com);w++){
+			if(existeTree(com,w)){
+				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+					retornaAId (com,array,arrayA,N,w); 
+				}
+			}
+		}
+	}
+	else if(localB==-1 && localE!=-1){
+			if(localE<chaveB){
+				array = malloc(N*sizeof(long));
+				arrayA = malloc(N*sizeof(int));
+				for(int j=0; j<N; j++) {array[j]=0;arrayA[j]=-20;}
+				for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
+					if(existeTree(com,l)){
+						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+	       					retornaAId (com, array, arrayA, N,l);
+						}
+					}
+				}
+				for(n=0;n!=localE;n++){
+					if(existeTree(com,n)){
+						if(compareDateQ(post_getCreationDate (com,n), begin)!=0 && compareDateQ(post_getCreationDate (com,n), end)!=2){
+							retornaAId (com, array, arrayA, N,n);
+						}
+					}
+				}
+				retornaSId (com, array, arrayA, N,n);
+			}
+	    	else{
+				array = malloc(N*sizeof(long));
+				arrayA = malloc(N*sizeof(int));
+				for(int j=0; j<N; j++) {array[j]=0;arrayA[j]=-20;}
+				for(l=chaveB;l<=localE && l<TAD_community_get_dataSize(com);l++){
+					if(existeTree(com,l)){
+						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+	       					retornaAId (com, array, arrayA, N,l);
+						}
+					}
+				}
+			}
+		}
+		else{
+			array = malloc(N*sizeof(long));
+			arrayA = malloc(N*sizeof(int));
+			for(int j=0; j<N; j++) {array[j]=0;arrayA[j]=-20;}
+			for(j=localB;j<TAD_community_get_dataSize(com);j++){
+				if(existeTree(com,j)){
+					if(compareDateQ(post_getCreationDate (com,j), begin)!=0 && compareDateQ(post_getCreationDate (com,j), end)!=2){
+						retornaAId (com, array, arrayA, N,j);
+					}
+				}
+			}
+			if(localE==-1) localE=localB-1;
+			for(k=0;k<=localE; k++){
+				if(existeTree(com,k)){
+					if(compareDateQ(post_getCreationDate (com,k), begin)!=0 && compareDateQ(post_getCreationDate (com,k), end)!=2) {
+						retornaAId (com, array, arrayA, N,k);
+					}
+				}
+			}
+		} 
+		for(h=0;h<N && array[h]!=-2;h++);
+		LONG_list list = create_list(h); 
+		for (int i=0; i<h; i++)
+		    set_list(list, i, array[i]); 
+		free(array);free(arrayA);free_long_pair(local);
+		return list;
+}
+
 LONG_list contains_word(TAD_community com, char* word, int N){
 	int c = contaTitulo(com,word), j, i;
 	long* id = malloc(c*sizeof(long));
@@ -127,4 +276,18 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
 
 long better_answer(TAD_community com, long id){
 	return procuraRespostas(com, id);
+}
+
+TAD_community clean (TAD_community com){
+    if (com!=NULL){
+        if(TAD_community_get_dataSize(com)!=-1){
+	        freeTreeHashData(com, TAD_community_get_dataSize(com));
+   	        freeHashTableUsers(com, TAD_community_get_usersSize(com));
+            freeHashTableTags(com, TAD_community_get_tagsSize(com));
+	    }
+        freeTopN(com);
+        freeTop(com);
+	    free(com);
+	}
+	return com;
 }
