@@ -105,6 +105,10 @@ char* users_getAboutMe (TAD_community com, int i){
 	return com->hashUser[i]->aboutMe;
 }
 
+Date post_getCreationDate (TAD_community com, int i){
+	return com->treeHash[i]->tree->creationDate;
+}
+
 int post_getPostTypeId (TAD_community com, int i, long id){
 	Post* a = com->treeHash[i]->tree;
 	while (a){
