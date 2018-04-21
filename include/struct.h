@@ -3,6 +3,10 @@
 #include "interface.h"
 #include <stdlib.h>
 
+#define PARENT(i) (i-1)/2
+#define LEFT(i) (2*i+1)
+#define RIGHT(i) (2*i+2)
+
 typedef struct TCD_community* TAD_community;
 int TAD_community_get_usersSize(TAD_community com);
 int TAD_community_get_dataSize(TAD_community com);
