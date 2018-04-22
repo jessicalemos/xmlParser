@@ -941,6 +941,7 @@ int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id){
 
 void freeTopN(TAD_community com){
 	free(com->topN);
+	free(com->topNR);
 }
 
 void freeHeap(Heap r){
@@ -1040,6 +1041,7 @@ void insere_Heap_Reputation(TAD_community com){
 
 void freeTop(TAD_community com){
 	freeHeap(com->Top);
+	freeHeap(com->TopR);
 }
 
 void freeHashTableUsers  (TAD_community com, int size){
