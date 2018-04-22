@@ -38,7 +38,7 @@ void retorna (TAD_community com, int *r , long *p, int N, int i);
 void addUser (TAD_community com,int reputation, long id, char *name, char *about);
 int procuraUser (TAD_community com, long id);
 void incrementaPost(TAD_community com, long id);
-int tagHash (long id, TAD_community com);
+int tagHash (char* s, TAD_community com);
 int userHash (long i, TAD_community com);
 void addPost (TAD_community com,int score,int postTypeId,long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data,int commentCount);
 int procuraPost (TAD_community com, long id);
