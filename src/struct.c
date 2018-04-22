@@ -100,6 +100,10 @@ long get_topN(TAD_community com, int i){
 	return(com->topN[i]);
 }
 
+long get_topNR(TAD_community com, int i){
+	return(com->topNR[i]);
+}
+
 char* users_getDisplayName (TAD_community com, int i){
 	return com->hashUser[i]->displayName;
 }
