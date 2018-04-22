@@ -479,7 +479,7 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 			}
 		}
 		else if(localB==-1 && localE!=-1){
-			if(localE<chaveB){
+			 if(localE<chaveB){
 				arrayT = malloc(size*sizeof(long));
 				for(int j=0; j<size; j++) arrayT[j]=-2;
 				nTags = malloc(size*sizeof(int));
@@ -491,7 +491,60 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 						}
 					}
 				}
-				
+					for(n=0;n!=localE;n++){
+						if(existeTree(com,n)){
+							if(compareDateQ(post_getCreationDate (com,n), begin)!=0 && compareDateQ(post_getCreationDate (com,n), end)!=2){
+								retornaTId(com,n,nTags,arrayT,N,tam,z,size,ocupados);
+							}
+						}
+					}
+					retornaTId(com,n,nTags,arrayT,N,tam,z,size,ocupados);
+				}
+	    		else{
+					arrayT = malloc(size*sizeof(long));
+					for(int j=0; j<size; j++) arrayT[j]=-2;
+					nTags = malloc(size*sizeof(int));
+					for (int k=0; k<size; k++) nTags[k] = 0;
+					for(l=chaveB;l<=localE && l<TAD_community_get_dataSize(com);l++){
+						if(existeTree(com,l)){
+							if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+	       						retornaTId(com,l,nTags,arrayT,N,tam,z,size,ocupados);
+							}
+						}
+					}
+				}
+			}
+			else{
+				arrayT = malloc(size*sizeof(long));
+				for(int j=0; j<size; j++) arrayT[j]=-2;
+				nTags = malloc(size*sizeof(int));
+				for (int k=0; k<size; k++) nTags[k] = 0;
+				for(j=localB;j<TAD_community_get_dataSize(com);j++){
+					if(existeTree(com,j)){
+						if(compareDateQ(post_getCreationDate (com,j), begin)!=0 && compareDateQ(post_getCreationDate (com,j), end)!=2){
+							retornaTId(com,j,nTags,arrayT,N,tam,z,size,ocupados);
+						}
+					}
+				}
+				if(localE==-1) localE=localB-1;
+				for(k=0;k<=localE; k++){
+					if(existeTree(com,k)){
+						if(compareDateQ(post_getCreationDate (com,k), begin)!=0 && compareDateQ(post_getCreationDate (com,k), end)!=2) {
+							retornaTId(com,k,nTags,arrayT,N,tam,z,size,ocupados);
+						}
+					}
+				}
+			} 
+	extrai(arrayT,nTags,size,N);
+	LONG_list list = create_list(N); 		
+	for (int i=0; i<N && arrayT[i]!=-2; i++){
+		set_list(list, i, arrayT[i]); 
+	}
+	free_long_pair(local); free(arrayT); free(nTags);
+	return list;
+}
+
+
 TAD_community clean (TAD_community com){
     if (com!=NULL){
         if(TAD_community_get_dataSize(com)!=-1){
