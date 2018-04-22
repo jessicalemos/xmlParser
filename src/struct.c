@@ -223,6 +223,7 @@ TAD_community initHashUsers (TAD_community com, int N){
 	for(int j=0;j<N/2;j++){
         com->topN[j]=-2;
 		com->topNR[j]=-2;
+    }
 	return com;
 }
 
