@@ -941,6 +941,13 @@ void freeHeap(Heap r){
 	}
 }
 
+int pertenceU (TAD_community com, long ownerUserId, int N, int n){
+	for(int i=0; i<N && i<n && i<com->usersSize/2; i++){ 
+		if (ownerUserId==com->topNR[i]) return 1;
+	}
+	return 0;
+}
+
 void buscaId (TAD_community com, char* tag, long* p, int* n, int size){
 	int chave = tagHash(tag, com), c=0, i;
 	for(i=chave; com->hashTag[i]!=NULL && c>com->tagsSize && strcmp(com->hashTag[i]->tagName,tag); i++){
@@ -967,6 +974,32 @@ int buscaTag(TAD_community com, char *s, long* p, int* n, int size){
   }
   free(tag);
   return 0;
+}
+
+void retornaTIdR (TAD_community com, Post* a, long* p, int* n, int N, int z, int size, int ocupados){
+	if (a!=NULL){
+		if (pertenceU(com,a->ownerUserId,N,ocupados))
+			if (a->tag!=NULL) buscaTag(com,a->tag,p,n,size);
+		retornaTIdR (com,a->esq,p,n,N,z,size,ocupados);
+		retornaTIdR (com,a->dir,p,n,N,z,size,ocupados);
+	}
+}
+
+int preencheTopNR (TAD_community com, int tam, int z, int N){
+	int b = com->TopR->used;
+	if (tam>0){
+		for (int k=0; k<tam && k<b; k++){
+			com->topNR[z] = extractMax(com->TopR);
+			z++;
+		}
+	}
+	else{
+		for (int k=0; k<N && k<b; k++){
+			com->topNR[z] = extractMax(com->TopR);
+			z++;
+		}
+	}
+	return b;
 }
 
 void retornaTId(TAD_community com, int i, int* nTags, long* arrayT, int N, int tam, int z, int size, int ocupados){
