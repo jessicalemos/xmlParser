@@ -460,7 +460,7 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
 				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-					retornaTId(com,w,nTags,arrayT,N,tam,z,size, ocupados); //printf("%s\n", "AQI");
+					retornaTId(com,w,nTags,arrayT,N,tam,z,size, ocupados); 
 				}
 			}
 		}
