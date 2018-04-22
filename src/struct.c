@@ -78,7 +78,10 @@ typedef struct TCD_community{
 	HashTableUsers hashUser;  /* Tabela de hash dos utilizadores */
 	HashTableTags hashTag; /* Tabela de hash das tags */
 	long *topN; /* Apontador para o array com os ids do top N */
+	long *topNR; /* Apontador para o array com os ids do top N dos utilizadore com melhor reputação */
 	Heap Top; /* Heap com os ids de utilizador organizada pelo número de posts*/
+	Heap TopR; /* Heap com os ids de utilizador organizada pela reputação*/
+	
 }TCD_community;
 
 int TAD_community_get_usersSize(TAD_community com){
@@ -283,9 +286,11 @@ void incrementaPost(TAD_community com, long id){
 	com->hashUser[i]->nPosts++;
 }
 
-int tagHash (long id, TAD_community com){
-	if(id<0) return (-(id % com->tagsSize));
-    return(id % com->tagsSize);
+int tagHash (char* s, TAD_community com){
+	int l = strlen(s),soma = 0;
+    for(int i=0; i<l; i++)
+        soma += s[i];
+	return (soma % com->tagsSize);
 }
 
 void insereTableTags (HashTableTags h1, int i, long id, char* tagName){
@@ -296,7 +301,7 @@ void insereTableTags (HashTableTags h1, int i, long id, char* tagName){
 }
 
 void addTags (TAD_community com,char* tagName, long id){
-	int i = tagHash(id,com); 
+	int i = tagHash(tagName,com); 
 	while (com->hashTag[i]!=NULL){
 		if (i>com->tagsSize) i=0;
 		else i++;
@@ -934,6 +939,48 @@ void freeHeap(Heap r){
 		free(r->array);
 		free(r);
 	}
+}
+
+void buscaId (TAD_community com, char* tag, long* p, int* n, int size){
+	int chave = tagHash(tag, com), c=0, i;
+	for(i=chave; com->hashTag[i]!=NULL && c>com->tagsSize && strcmp(com->hashTag[i]->tagName,tag); i++){
+		if (i+1>com->tagsSize) i=0;
+		c++;
+	}
+	if (com->hashTag[i]!=NULL && !strcmp(com->hashTag[i]->tagName,tag))
+		insereTag(com->hashTag[i]->id,p,n,size);
+}
+
+int buscaTag(TAD_community com, char *s, long* p, int* n, int size){
+  int a=0,i=0,k=0,j; 
+  char *tag=malloc(strlen(s)*sizeof(char));
+  while(s[k]){
+    i=k;
+    while(s[i] && s[i]=='<') i++;
+    for(j=i,a=0;s[j] && s[j]!='>';j++,a++){
+        tag[a]=s[j];
+    }
+    tag[a]=0; 
+      buscaId(com,tag,p,n,size);
+      if(s[j] && s[j]=='>') {j++;}
+      k=j;
+  }
+  free(tag);
+  return 0;
+}
+
+void retornaTId(TAD_community com, int i, int* nTags, long* arrayT, int N, int tam, int z, int size, int ocupados){
+	Post* a = com->treeHash[i]->tree;
+	retornaTIdR (com,a,arrayT,nTags,N,z,size,ocupados);
+}
+
+void insere_Heap_Reputation(TAD_community com){
+    int i,tam=com->usersSize/2;
+    com->TopR=initHeap(tam);
+    for(i=0;i<com->usersSize;i++){
+  		if(com->hashUser[i]!=NULL && com->hashUser[i]->nPosts!=0)
+   		 	insertHeap((com->TopR),com->hashUser[i]->reputation,com->hashUser[i]->ownerUserId);
+    }
 }
 
 void freeTop(TAD_community com){
