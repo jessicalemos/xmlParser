@@ -12,6 +12,7 @@ int TAD_community_get_usersSize(TAD_community com);
 int TAD_community_get_dataSize(TAD_community com);
 int TAD_community_get_tagsSize(TAD_community com);
 long get_topN(TAD_community com, int i);
+long get_topNR(TAD_community com, int i);
 char* users_getDisplayName (TAD_community com, int i);
 char* users_getAboutMe (TAD_community com, int i);
 char* post_getTitle (TAD_community com, int i, long id);
