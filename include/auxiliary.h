@@ -20,5 +20,6 @@ int procuraArray (long* postId, long id, int N);
 int compareDate (Date d1, Date d2);
 int compareDateQ (Date d1, Date d2);
 void insereT(Date d,long postId,Date *data,long *id,int N);
+void insereTag (long tag, long* p, int* s, int N);
 
 #endif
