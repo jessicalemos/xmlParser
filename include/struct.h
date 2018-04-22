@@ -62,6 +62,7 @@ int preencheTopNR (TAD_community com, int tam, int z, int N);
 void buscaId (TAD_community com, char* tag, long* p, int* n, int size);
 int buscaTag(TAD_community com, char *s, long* p, int* n, int size);
 void retornaTId(TAD_community com, int i, int* nTags, long* arrayT, int N, int tam, int z, int size, int ocupados);
+void extrai(long* arrayT, int* nTags, int size, int N);
 void insere_Heap_Reputation(TAD_community com);
 void freeHashTableUsers  (TAD_community com, int size);
 void freeHashTableTags (TAD_community com, int size);

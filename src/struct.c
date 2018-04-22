@@ -1007,6 +1007,19 @@ void retornaTId(TAD_community com, int i, int* nTags, long* arrayT, int N, int t
 	retornaTIdR (com,a,arrayT,nTags,N,z,size,ocupados);
 }
 
+void extrai(long* arrayT, int* nTags, int size, int N){
+	Heap tag;
+	tag = NULL;
+	tag = initHeap(size);
+	for(int i=0; i<size && arrayT[i]!=-2; i++)
+		insertHeap(tag,nTags[i],arrayT[i]);
+	int c = tag->used;
+	for(int j=0; j<N && j<c; j++){
+		arrayT[j] = extractMax(tag);
+	}
+	freeHeap(tag);
+}
+
 void insere_Heap_Reputation(TAD_community com){
     int i,tam=com->usersSize/2;
     com->TopR=initHeap(tam);
