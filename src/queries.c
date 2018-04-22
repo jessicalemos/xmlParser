@@ -479,18 +479,18 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 			}
 		}
 		else if(localB==-1 && localE!=-1){
-			 if(localE<chaveB){
-				arrayT = malloc(size*sizeof(long));
-				for(int j=0; j<size; j++) arrayT[j]=-2;
-				nTags = malloc(size*sizeof(int));
-				for (int k=0; k<size; k++) nTags[k] = 0;
-				for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
-					if(existeTree(com,l)){
-						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
-	       					retornaTId(com,l,nTags,arrayT,N,tam,z,size,ocupados);
+			 	if(localE<chaveB){
+					arrayT = malloc(size*sizeof(long));
+					for(int j=0; j<size; j++) arrayT[j]=-2;
+					nTags = malloc(size*sizeof(int));
+					for (int k=0; k<size; k++) nTags[k] = 0;
+					for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
+						if(existeTree(com,l)){
+							if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+	       						retornaTId(com,l,nTags,arrayT,N,tam,z,size,ocupados);
+							}
 						}
 					}
-				}
 					for(n=0;n!=localE;n++){
 						if(existeTree(com,n)){
 							if(compareDateQ(post_getCreationDate (com,n), begin)!=0 && compareDateQ(post_getCreationDate (com,n), end)!=2){
