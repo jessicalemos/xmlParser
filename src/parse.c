@@ -170,7 +170,10 @@ void add (TAD_community com, xmlNodePtr t){
 	   com = initHashTags (com, TAD_community_get_tagsSize(com));
 	   loadingTags(a,com);
 	}
-	if(flag==1) insere_Heap(com);
+	if(flag==1){
+		insere_Heap(com);
+		insere_Heap_Reputation(com);
+	}
 }
 
 void parseDoc(xmlDocPtr doc, TAD_community com){
