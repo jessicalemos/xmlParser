@@ -151,3 +151,13 @@ void insereT(Date d,long postId,Date *data,long *id,int N){
     }
   }
 }
+
+void insereTag (long tag, long* p, int* s, int N){ 
+  int i;
+  for(i=0;i<N-1 && p[i]!=-2 && p[i]!=tag; i++);
+  if (p[i]==tag) s[i]++;
+  else{
+    p[i]=tag; 
+    s[i]=1;
+  }
+}
