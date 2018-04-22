@@ -207,6 +207,8 @@ TAD_community init(){
     TAD_community_set_tagsSize(com,-1);
     com->topN=NULL;
     com->Top=NULL;
+    com->topNR=NULL;
+    com->TopR=NULL;
     return com;
 }
 
@@ -216,8 +218,11 @@ TAD_community initHashUsers (TAD_community com, int N){
 		user[i] = NULL;
 	}
 	com->hashUser=user;
+	com->topNR = malloc((N/2)*sizeof(long));
 	com->topN = malloc((N/2)*sizeof(long));
-	for(int j=0;j<N/2;j++) com->topN[j]=-2;
+	for(int j=0;j<N/2;j++){
+        com->topN[j]=-2;
+		com->topNR[j]=-2;
 	return com;
 }
 
