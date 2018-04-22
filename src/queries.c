@@ -438,11 +438,60 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
 	return l;	
 }
 
-
 long better_answer(TAD_community com, long id){
 	return procuraRespostas(com, id);
 }
 
+LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
+	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), n, l, i, k, j, w, z; 
+	long *arrayT; int* nTags;
+	LONG_pair local = existeData(com,begin,end,chaveB,chaveE);
+	long localB = get_fst_long(local), localE = get_snd_long(local);
+	for(z=0; get_topNR(com,z)!=-2; z++);
+	int tam = N-z, size = 2*TAD_community_get_tagsSize(com);
+	if(compareDateQ(begin,end)==2) return create_list(0);
+	int ocupados = preencheTopNR(com,tam,z,N);
+	if (ocupados == 0) ocupados = N;
+	if(localB==-1 && localE==-1){
+		arrayT = malloc(size*sizeof(long));
+		for(int j=0; j<size; j++) arrayT[j]=-2;
+		nTags = malloc(size*sizeof(int));
+		for (int k=0; k<size; k++) nTags[k] = 0;
+		for(w=0;w<TAD_community_get_dataSize(com);w++){
+			if(existeTree(com,w)){
+				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+					retornaTId(com,w,nTags,arrayT,N,tam,z,size, ocupados); //printf("%s\n", "AQI");
+				}
+			}
+		}
+	}
+	else if(localB!=-1 && localE!=-1 && localB<=localE){  
+		 	arrayT = malloc(size*sizeof(long));
+		 	for(int j=0; j<size; j++) arrayT[j]=-2;
+		 	nTags = malloc(size*sizeof(int));
+		 	for (int k=0; k<size; k++) nTags[k] = 0;
+		 	for(i=localB;i<=localE;i++){
+				if(existeTree(com,i)){
+					if(compareDateQ(post_getCreationDate (com,i), begin)!=0 && compareDateQ(post_getCreationDate (com,i), end)!=2){
+						retornaTId(com,i,nTags,arrayT,N,tam,z,size, ocupados);
+					}	
+				}
+			}
+		}
+		else if(localB==-1 && localE!=-1){
+			if(localE<chaveB){
+				arrayT = malloc(size*sizeof(long));
+				for(int j=0; j<size; j++) arrayT[j]=-2;
+				nTags = malloc(size*sizeof(int));
+				for (int k=0; k<size; k++) nTags[k] = 0;
+				for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
+					if(existeTree(com,l)){
+						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
+	       					retornaTId(com,l,nTags,arrayT,N,tam,z,size,ocupados);
+						}
+					}
+				}
+				
 TAD_community clean (TAD_community com){
     if (com!=NULL){
         if(TAD_community_get_dataSize(com)!=-1){
