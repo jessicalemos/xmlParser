@@ -68,12 +68,10 @@ LONG_list top_most_active(TAD_community com, int N){
 }
 
 LONG_pair total_posts(TAD_community com, Date begin, Date end){
-	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), j, i, k,c,l,w;
-	LONG_pair local=existeData(com,begin,end,chaveB,chaveE);
-	long localB=get_fst_long(local),localE=get_snd_long(local);
+	int w;
 	long perguntas = 0, respostas = 0;
 	if(compareDateQ(begin,end)==2) return create_long_pair(perguntas,respostas);
-	if(localB==-1 && localE==-1){
+	else{
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
 				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
@@ -83,140 +81,34 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
 			}
 		}
 	}
-	else if(localB!=-1 && localE!=-1 && localB<=localE){
-			for(i=localB;i<=localE;i++){
-				if(existeTree(com,i)){
-					if(compareDateQ(post_getCreationDate (com,i), begin)!=0 && compareDateQ(post_getCreationDate (com,i), end)!=2){
-						perguntas += treeHash_getContadorP (com,i);
-						respostas += treeHash_getContadorR (com,i);
-					}
-				}
-			}
-		}
-		else if(localB==-1 && localE!=-1){
-				for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
-					if(existeTree(com,l)){
-						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
-							perguntas += treeHash_getContadorP (com,l);
-							respostas += treeHash_getContadorR (com,l);
-						}
-					}
-				}
-				if(l!=localE){
-					for(c=0;c!=localE;c++){
-						if(existeTree(com,c)){
-							if(compareDateQ(post_getCreationDate (com,c), begin)!=0 && compareDateQ(post_getCreationDate (com,c), end)!=2){
-								perguntas += treeHash_getContadorP (com,c);
-								respostas += treeHash_getContadorR (com,c);
-							}
-						}
-					}
-				}
-				perguntas += treeHash_getContadorP (com,localE);
-				respostas += treeHash_getContadorR (com,localE);
-			}
-			else{
-				for(j=localB;j<TAD_community_get_dataSize(com);j++){
-					if(existeTree(com,j)){
-						if(compareDateQ(post_getCreationDate (com,j), begin)!=0 && compareDateQ(post_getCreationDate (com,j), end)!=2){
-						perguntas += treeHash_getContadorP (com,j);
-						respostas += treeHash_getContadorR (com,j);
-						}
-					}
-				}
-				if(localE==-1) localE=localB-1;
-				for(k=0;k<=localE; k++){
-					if(existeTree(com,k)){
-						if(compareDateQ(post_getCreationDate (com,k), begin)!=0 && compareDateQ(post_getCreationDate (com,k), end)!=2) {
-							perguntas += treeHash_getContadorP (com, k);
-							respostas += treeHash_getContadorR (com, k);
-						}
-					}
-				}
-			}
-		free_long_pair(local);
 		return create_long_pair(perguntas,respostas);
 }
 
-LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
-	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), n, l, k, j, w; 
+LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
+	int w, h; 
 	long *array;
-	int *arrayS;
-	LONG_pair local = existeData(com,begin,end,chaveB,chaveE);
-	long localB = get_fst_long(local), localE = get_snd_long(local);
+	int *arrayA;
 	if(compareDateQ(begin,end)==2) return create_list(0);
-	if(localB==-1 && localE==-1){
+	else{
 		array = malloc(N*sizeof(long));
-		arrayS = malloc(N*sizeof(int));
-		for(int j=0; j<N; j++) {array[j]=-2;arrayS[j]=-20;}
+		arrayA = malloc(N*sizeof(int));
+		for(int j=0; j<N; j++) {array[j]=-2;arrayA[j]=-20;}
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
 				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-					retornaSId (com,array,arrayS,N,w); 
+					retornaAId (com,array,arrayA,N,w); 
 				}
 			}
 		}
 	}
-	else if(localB==-1 && localE!=-1){
-		 	if(localE<chaveB){
-				array = malloc(N*sizeof(long));
-				arrayS = malloc(N*sizeof(int));
-				for(int j=0; j<N; j++) {array[j]=0;arrayS[j]=-20;}
-				for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
-					if(existeTree(com,l)){
-						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
-	       					retornaSId (com, array, arrayS, N,l);
-						}
-					}
-				}
-				for(n=0;n!=localE;n++){
-					if(existeTree(com,n)){
-						if(compareDateQ(post_getCreationDate (com,n), begin)!=0 && compareDateQ(post_getCreationDate (com,n), end)!=2){
-							retornaSId (com, array, arrayS, N,n);
-						}
-					}
-				}
-				retornaSId (com, array, arrayS, N,n);
-			}
-	    	else{
-				array = malloc(N*sizeof(long));
-				arrayS = malloc(N*sizeof(int));
-				for(int j=0; j<N; j++) {array[j]=0;arrayS[j]=-20;}
-				for(l=chaveB;l<=localE && l<TAD_community_get_dataSize(com);l++){
-					if(existeTree(com,l)){
-						if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
-	       					retornaSId (com, array, arrayS, N,l);
-						}
-					}
-				}
-			}
-		}
-		else{
-			array = malloc(N*sizeof(long));
-			arrayS = malloc(N*sizeof(int));
-			for(int j=0; j<N; j++) {array[j]=0;arrayS[j]=-20;}
-			for(j=localB;j<TAD_community_get_dataSize(com);j++){
-				if(existeTree(com,j)){
-					if(compareDateQ(post_getCreationDate (com,j), begin)!=0 && compareDateQ(post_getCreationDate (com,j), end)!=2){
-						retornaSId (com, array, arrayS, N,j);
-					}
-				}
-			}
-			if(localE==-1) localE=localB-1;
-			for(k=0;k<=localE; k++){
-				if(existeTree(com,k)){
-					if(compareDateQ(post_getCreationDate (com,k), begin)!=0 && compareDateQ(post_getCreationDate (com,k), end)!=2) {
-						retornaSId (com, array, arrayS, N,k);
-					}
-				}
-			}
-		} 
-	LONG_list list = create_list(N); 
-	for (int i=0; i<N; i++)
+	for(h=0;h<N && array[h]!=-2;h++);
+	LONG_list list = create_list(h); 
+	for (int i=0; i<h; i++)
 		set_list(list, i, array[i]); 
-	free(array);free(arrayS);free_long_pair(local);
+	free(array);free(arrayA);
 	return list;
 }
+
 
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
 	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), n, l, k, j, h, w; 
