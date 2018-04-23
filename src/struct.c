@@ -649,46 +649,6 @@ long procuraRespostas(TAD_community com, long id){
 	return idM;
 }
 
-LONG_pair existeData(TAD_community com, Date b, Date f, int chaveB, int chaveE){
-	long fst=-1,snd=-1;
-	if(chaveE>=chaveB){
-		for(int i=chaveE;i<com->dataSize && (fst==-1 || snd==-1);i++){
-			if(com->treeHash[i]!=NULL){
-				if(compareDate(com->treeHash[i]->tree->creationDate,b)==1) fst=i;
-				if(compareDate(com->treeHash[i]->tree->creationDate,f)==1) snd=i;
-			}
-		}
-		if(fst==-1){
-			for(int i=0;i<chaveE && (fst==-1 || snd==-1);i++){
-				if(com->treeHash[i]!=NULL){
-					if(compareDate(com->treeHash[i]->tree->creationDate,b)==1) fst=i;
-					if(compareDate(com->treeHash[i]->tree->creationDate,f)==1) snd=i;
-				}
-			}
-		}
-		else if(snd==-1){
-			for(int i=0;i<chaveE &&  snd==-1;i++)
-				if(com->treeHash[i]!=NULL){
-					if(compareDate(com->treeHash[i]->tree->creationDate,f)==1) snd=i;
-				}
-			}
-	}
-	else{
-		for(int j=chaveE;j<com->dataSize && fst==-1;j++){
-			if(com->treeHash[j]!=NULL){
-				if(compareDate(com->treeHash[j]->tree->creationDate,b)==1) fst=j;
-				if(compareDate(com->treeHash[j]->tree->creationDate,f)==1) snd=j;
-			}
-		}
-		for(int j=0;j<chaveE && snd==-1;j++){
-			if(com->treeHash[j]!=NULL){
-				if(compareDate(com->treeHash[j]->tree->creationDate,f)==1) snd=j;
-			}
-		}
-	}
-	return create_long_pair(fst,snd);
-}
-
 int procuraData(TAD_community com, Date data){
 	int chave = dataHash(data,com),i,c=0;
 	for(i=chave;com->treeHash[i]!=NULL && c<com->dataSize && !compareDate(com->treeHash[i]->tree->creationDate,data);i++){
