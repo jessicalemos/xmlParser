@@ -57,7 +57,6 @@ int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id);
 int contaT (TAD_community com, int i, char* word);
 long procuraRespostas(TAD_community com, long id);
 LONG_list contaPosts(TAD_community com, int N, int nOrdenados);
-LONG_pair existeData(TAD_community com, Date b, Date f, int chaveB, int chaveE);
 int pertenceU (TAD_community com, long ownerUserId, int N, int n);
 int preencheTopNR (TAD_community com, int tam, int z, int N);
 void buscaId (TAD_community com, char* tag, long* p, int* n, int size);
