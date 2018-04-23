@@ -84,6 +84,31 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
 		return create_long_pair(perguntas,respostas);
 }
 
+LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
+	int  w; 
+	long *array;
+	int *arrayS;
+	if(compareDateQ(begin,end)==2) return create_list(0);
+	else{
+		array = malloc(N*sizeof(long));
+		arrayS = malloc(N*sizeof(int));
+		for(int j=0; j<N; j++) {array[j]=-2;arrayS[j]=-20;}
+		for(w=0;w<TAD_community_get_dataSize(com);w++){
+			if(existeTree(com,w)){
+				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+					retornaSId (com,array,arrayS,N,w); 
+				}
+			}
+		}
+	}
+	LONG_list list = create_list(N); 
+	for (int i=0; i<N; i++){
+		set_list(list, i, array[i]); 
+	}
+	free(array);free(arrayS);
+	return list;
+}
+
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
 	int w, h; 
 	long *array;
@@ -253,107 +278,31 @@ long better_answer(TAD_community com, long id){
 }
 
 LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
-	int chaveB = dataHash(begin, com), chaveE = dataHash(end, com), n, l, i, k, j, w, z; 
+	int w, z; 
 	long *arrayT; int* nTags;
-	LONG_pair local = existeData(com,begin,end,chaveB,chaveE);
-	long localB = get_fst_long(local), localE = get_snd_long(local);
 	for(z=0; get_topNR(com,z)!=-2; z++);
 	int tam = N-z, size = 2*TAD_community_get_tagsSize(com);
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	int ocupados = preencheTopNR(com,tam,z,N);
 	if (ocupados == 0) ocupados = N;
-	if(localB==-1 && localE==-1){
-		arrayT = malloc(size*sizeof(long));
-		for(int j=0; j<size; j++) arrayT[j]=-2;
-		nTags = malloc(size*sizeof(int));
-		for (int k=0; k<size; k++) nTags[k] = 0;
-		for(w=0;w<TAD_community_get_dataSize(com);w++){
-			if(existeTree(com,w)){
-				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-					retornaTId(com,w,nTags,arrayT,N,tam,z,size, ocupados); 
-				}
+	arrayT = malloc(size*sizeof(long));
+	for(int j=0; j<size; j++) arrayT[j]=-2;
+	nTags = malloc(size*sizeof(int));
+	for (int k=0; k<size; k++) nTags[k] = 0;
+	for(w=0;w<TAD_community_get_dataSize(com);w++){
+		if(existeTree(com,w)){
+			if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+				retornaTId(com,w,nTags,arrayT,N,tam,z,size, ocupados); 
 			}
 		}
 	}
-	else if(localB!=-1 && localE!=-1 && localB<=localE){  
-		 	arrayT = malloc(size*sizeof(long));
-		 	for(int j=0; j<size; j++) arrayT[j]=-2;
-		 	nTags = malloc(size*sizeof(int));
-		 	for (int k=0; k<size; k++) nTags[k] = 0;
-		 	for(i=localB;i<=localE;i++){
-				if(existeTree(com,i)){
-					if(compareDateQ(post_getCreationDate (com,i), begin)!=0 && compareDateQ(post_getCreationDate (com,i), end)!=2){
-						retornaTId(com,i,nTags,arrayT,N,tam,z,size, ocupados);
-					}	
-				}
-			}
-		}
-		else if(localB==-1 && localE!=-1){
-			 	if(localE<chaveB){
-					arrayT = malloc(size*sizeof(long));
-					for(int j=0; j<size; j++) arrayT[j]=-2;
-					nTags = malloc(size*sizeof(int));
-					for (int k=0; k<size; k++) nTags[k] = 0;
-					for(l=chaveB;l!=localE && l<TAD_community_get_dataSize(com);l++){
-						if(existeTree(com,l)){
-							if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
-	       						retornaTId(com,l,nTags,arrayT,N,tam,z,size,ocupados);
-							}
-						}
-					}
-					for(n=0;n!=localE;n++){
-						if(existeTree(com,n)){
-							if(compareDateQ(post_getCreationDate (com,n), begin)!=0 && compareDateQ(post_getCreationDate (com,n), end)!=2){
-								retornaTId(com,n,nTags,arrayT,N,tam,z,size,ocupados);
-							}
-						}
-					}
-					retornaTId(com,n,nTags,arrayT,N,tam,z,size,ocupados);
-				}
-	    		else{
-					arrayT = malloc(size*sizeof(long));
-					for(int j=0; j<size; j++) arrayT[j]=-2;
-					nTags = malloc(size*sizeof(int));
-					for (int k=0; k<size; k++) nTags[k] = 0;
-					for(l=chaveB;l<=localE && l<TAD_community_get_dataSize(com);l++){
-						if(existeTree(com,l)){
-							if(compareDateQ(post_getCreationDate (com,l), begin)!=0 && compareDateQ(post_getCreationDate (com,l), end)!=2){
-	       						retornaTId(com,l,nTags,arrayT,N,tam,z,size,ocupados);
-							}
-						}
-					}
-				}
-			}
-			else{
-				arrayT = malloc(size*sizeof(long));
-				for(int j=0; j<size; j++) arrayT[j]=-2;
-				nTags = malloc(size*sizeof(int));
-				for (int k=0; k<size; k++) nTags[k] = 0;
-				for(j=localB;j<TAD_community_get_dataSize(com);j++){
-					if(existeTree(com,j)){
-						if(compareDateQ(post_getCreationDate (com,j), begin)!=0 && compareDateQ(post_getCreationDate (com,j), end)!=2){
-							retornaTId(com,j,nTags,arrayT,N,tam,z,size,ocupados);
-						}
-					}
-				}
-				if(localE==-1) localE=localB-1;
-				for(k=0;k<=localE; k++){
-					if(existeTree(com,k)){
-						if(compareDateQ(post_getCreationDate (com,k), begin)!=0 && compareDateQ(post_getCreationDate (com,k), end)!=2) {
-							retornaTId(com,k,nTags,arrayT,N,tam,z,size,ocupados);
-						}
-					}
-				}
-			} 
 	extrai(arrayT,nTags,size,N);
 	LONG_list list = create_list(N); 		
-	for (int i=0; i<N && arrayT[i]!=-2; i++){
+	for (int i=0; i<N && arrayT[i]!=-2; i++)
 		set_list(list, i, arrayT[i]); 
-	}
-	free_long_pair(local); free(arrayT); free(nTags);
+	free(arrayT); free(nTags);
 	return list;
 }
-
 
 TAD_community clean (TAD_community com){
     if (com!=NULL){
