@@ -61,7 +61,7 @@ int verificaTag(char *s,char *t){
         tag[a]=s[j];
     }
     tag[a]=0;
-      if(!strcmp(tag,t)) return 1;
+      if(!strcmp(tag,t)) {free(tag);return 1;}
       if(s[j] && s[j]=='>') {j++;}
       k=j;
   }
