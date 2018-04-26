@@ -44,7 +44,7 @@ int userHash (long i, TAD_community com);
 void addPost (TAD_community com,int score,int postTypeId,long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data,int commentCount);
 int procuraPost (TAD_community com, long id);
 int existeTree (TAD_community com, int i);
-void retornaId (TAD_community com, int i, long* p, char* tag, int c, Date* arrayD)
+void retornaId (TAD_community com, int i, long* p, char* tag, int c, Date* arrayD);
 void retornaSId (TAD_community com, long *p, int *s, int N, int i);
 void procuraTitulo(TAD_community com, char *word, Date *data, long *id, int N);
 int procuraData(TAD_community com, Date data);
