@@ -2,30 +2,6 @@
 #include "struct.h"
 #include "auxiliary.h"
 
-void selectionSort(long* p, int tam){
-	int i, j, max, aux;
-	for (i=0; i<tam-1; i++) {
-		max = i;
-	for (j=i+1; j<tam; j++) {
-		if (p[j] >p[max]) max = j;
-	} 
-	aux = p[i];
-	p[i] = p[max];
-	p[max] = aux;
-	}
-}
-
-int conta (TAD_community com, int localB, int localE, Date begin, Date end, char* tag){
-	int i, c = 0;
-	for(i=localB;i<=localE;i++){ 
-		if(existeTree(com,i)){
-			if(compareDateQ(post_getCreationDate (com,i), begin)!=0 && compareDateQ(post_getCreationDate (com,i), end)!=2){
-					 c += contaTag(com, i, tag);  
-			}
-		}
-	} 
-	return c;
-}
 
 STR_pair info_from_post(TAD_community com, long id){
 	char *nome = NULL, *title = NULL;
@@ -180,6 +156,7 @@ USER get_user_info(TAD_community com, long id){
 
 LONG_list both_participated(TAD_community com, long id1, long id2, int N){
 	long* id = malloc(N*sizeof(long));
+	for(int i=0;i<N;i++) id[i]=-2;
 	int chave1 = procuraUser(com,id1),chave2 = procuraUser(com,id2),tam; 
 	if (chave1 == -1 || chave2 == -1) return create_list(0);
 	else tam = extraiHeaps(com,chave1,chave2,N,id); 

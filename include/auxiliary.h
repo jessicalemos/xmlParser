@@ -14,12 +14,12 @@ void free_new_pair(NEW_pair pair);
 int max(int e,int d);
 int verificaTag(char *s,char *t);
 void insere (int x, long id, long *p, int *s,int N);
-int elimRep (long v[], int N);
 int contida (char* s,char* word);
 int procuraArray (long* postId, long id, int N);
 int compareDate (Date d1, Date d2);
 int compareDateQ (Date d1, Date d2);
 void insereT(Date d,long postId,Date *data,long *id,int N);
 void insereTag (long tag, long* p, int* s, int N);
-
+int existeQ7(HashTableQuery7 h,int i);
+int existeQ11(HashTableQuery11 h,int i);
 #endif

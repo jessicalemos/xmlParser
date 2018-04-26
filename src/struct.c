@@ -429,25 +429,6 @@ int procuraPost (TAD_community com, long id){
 	return -1;
 }
 
-int contaTagR (Post* a, char* tag){
-	int c=0;
-	if (a!=NULL){
-		if (a->tag!=NULL && a->postTypeId!=2){ 
-			if (verificaTag(a->tag,tag)==1){   
-				c = 1 + contaTagR(a->esq, tag) + contaTagR(a->esq, tag);
-			}
-			else {c = contaTagR(a->esq, tag) + contaTagR(a->dir, tag);}
-		}
-		else {c = contaTagR(a->esq, tag) + contaTagR(a->dir, tag);}
-	}
-	return c;
-}
-
-int contaTag (TAD_community com, int i, char* tag){
-	Post* a = com->treeHash[i]->tree;
-	return contaTagR (a,tag);
-}
-
 int existeTree (TAD_community com, int i){
     if(com->treeHash[i]!=NULL) return 1;
     return 0;
@@ -501,40 +482,6 @@ void retornaAId (TAD_community com,long *p, int *s, int N,int i){
 	retornaAIdR (a, p, s, N);
 }
 
-long* insereUsersA (Post* a, long* array, int i){
-	if (a){
-	  array[i]=a->ownerUserId;
-	  if (a->esq!=NULL) insereUsersA (a->esq, array, i++);
-	  if (a->dir!=NULL) insereUsersA (a->dir, array, i++);
-	}
-	return array;
-}
-
-void retorna (TAD_community com, int *r , long *p, int N, int i){ 
-	Post* a = com->treeHash[i]->tree;
-	long *array = malloc(com->treeHash[i]->numRespostas * sizeof(long));
-	int tam = elimRep (insereUsersA (a, array, 0), com->treeHash[i]->numRespostas);
-	for (int i=0; i<tam; i++)
-		insere(com->hashUser[procuraUser(com,array[i])]->reputation, array[i], p, r, N);
-}
-
-int retiraTituloR(Post* a,char* word){
-	int c = 0;
-	if(a){
-	    if(a->title!=NULL && a->postTypeId!=2){
-	   		if(contida(a->title,word)) c = 1 + retiraTituloR(a->esq,word) + retiraTituloR(a->dir,word);
-	   		else c = retiraTituloR(a->esq,word) + retiraTituloR(a->dir,word);
-		}
-		else c = retiraTituloR(a->esq,word) + retiraTituloR(a->dir,word);
-	}
-	return c;
-}
-
-int retiraTitulo(TAD_community com,int i,char* word){
-	Post* a = com->treeHash[i]->tree;
-	return retiraTituloR(a,word);
-}
-
 void procuraTituloR(Post *a,char *word,Date *data,long *id,int N){
 	if(a){
 		if(a->title!=NULL && a->postTypeId!=2)
@@ -552,25 +499,6 @@ void procuraTitulo(TAD_community com,char *word,Date *data,long *id,int N){
 			procuraTituloR(a,word,data,id,N);
 		}
 	}
-}
-
-int contaTR (Post* a, char* word){
-	int c=0;
-	if (a!=NULL){
-		if (a->title!=NULL && a->postTypeId!=2){ 
-			if (contida(a->title,word)==1){   
-				c = 1 + contaTR(a->esq, word) + contaTR(a->esq, word);
-			}
-			else c = contaTR(a->esq, word) + contaTR(a->dir, word);
-		}
-		else c = contaTR(a->esq, word) + contaTR(a->dir, word);
-	}
-	return c;
-}
-
-int contaT (TAD_community com, int i, char* word){
-	Post* a = com->treeHash[i]->tree;
-	return contaTR (a,word);
 }
 
 void guardaRespostas(TAD_community com, Post* a, long id, float max, int flag, NEW_pair p){
@@ -850,6 +778,26 @@ void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
 	insertHeapPosts(com->hashUser[i]->top10,data,id);
 }
 
+int q7Hash (long i, TAD_community com){
+	if (i < 0) return (-(i % com->dataSize));
+	else return (i % (com->dataSize));
+}
+
+LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
+	Heap tag;
+	int size=com->tagsSize/2,c=0;
+	tag = NULL;
+	tag = initHeap(size);
+	for(int i=0;i<size;i++)
+			if(existeQ11(h,i)) insertHeap(tag, get_contador(h,i), get_id(h,i));
+	if(tag->used<N) N=tag->used;
+	LONG_list l=create_list(N);
+	for(int k=0;k<N;k++)
+		set_list(l, k, extractMax(tag)); 
+	free(tag);
+    return l;
+}
+
 void freeHeapPosts(HeapPosts r){
     if(r != NULL) {
         free(r->array);
@@ -919,6 +867,16 @@ int pertenceU (TAD_community com, long ownerUserId, int N, int n){
 	return 0;
 }
 
+int procuraTag(TAD_community com,int chave,char* tag){
+	int i,c=0;
+	for(i=chave;com->hashTag[i]!=NULL && c<com->tagsSize && strcmp(com->hashTag[i]->tagName,tag);i++){
+		if (i+1>com->tagsSize) i=0;
+		c++;
+	}
+	if(com->hashTag[i]!=NULL && !strcmp(com->hashTag[i]->tagName,tag)) return i;
+	return -1;
+}
+
 void buscaId (TAD_community com, char* tag, long* p, int* n, int size){
 	int chave = tagHash(tag, com), c=0, i;
 	for(i=chave; com->hashTag[i]!=NULL && c>com->tagsSize && strcmp(com->hashTag[i]->tagName,tag); i++){
@@ -976,19 +934,6 @@ int preencheTopNR (TAD_community com, int tam, int z, int N){
 void retornaTId(TAD_community com, int i, int* nTags, long* arrayT, int N, int tam, int z, int size, int ocupados){
 	Post* a = com->treeHash[i]->tree;
 	retornaTIdR (com,a,arrayT,nTags,N,z,size,ocupados);
-}
-
-void extrai(long* arrayT, int* nTags, int size, int N){
-	Heap tag;
-	tag = NULL;
-	tag = initHeap(size);
-	for(int i=0; i<size && arrayT[i]!=-2; i++)
-		insertHeap(tag,nTags[i],arrayT[i]);
-	int c = tag->used;
-	for(int j=0; j<N && j<c; j++){
-		arrayT[j] = extractMax(tag);
-	}
-	freeHeap(tag);
 }
 
 void insere_Heap_Reputation(TAD_community com){
