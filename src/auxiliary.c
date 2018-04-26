@@ -47,6 +47,36 @@ void free_new_pair(NEW_pair pair) {
     free(pair);
 }
 
+typedef struct query7{
+  long id; /*id da tag*/
+  int flag;
+  int contador;
+} Query7;
+
+long get_id_Q7(HashTableQuery7 h,int i) {
+  return h[i]->id;
+}
+
+int get_flag_Q7(HashTableQuery7 h,int i) {
+  return h[i]->flag;
+}
+
+int get_contador_Q7(HashTableQuery7 h,int i) {
+  return h[i]->contador;
+}
+
+void set_id_Q7(HashTableQuery7 h, long l,int i) {
+  h[i]->id = l;
+}
+
+void set_flag_Q7(HashTableQuery7 h, int flag,int i) {
+  h[i]->flag = flag;
+}
+
+void set_contador_Q7(HashTableQuery7 h, int l,int i) {
+  h[i]->contador = l;
+}
+
 typedef struct query11{
   long id; /*id da tag*/
   char* tag;
@@ -179,6 +209,22 @@ void insereTag (long tag, long* p, int* s, int N){
     p[i]=tag; 
     s[i]=1;
   }
+}
+
+HashTableQuery7 initHashQ7 (int N){
+  HashTableQuery7 tag = malloc(N*sizeof(Query7*));
+  for (int i=0; i<N; i++){
+    tag[i] = NULL;
+  }
+  return tag;
+}
+
+void insereTQ7 (HashTableQuery7 h1, int i,int flag,int contador, long id){
+  Query7 *new= malloc(sizeof(Query7));
+  new->id = id;  
+  new->contador=contador;  
+    new->flag = flag;  
+  h1[i]=new;
 }
 
 int existeQ7(HashTableQuery7 h,int i){
