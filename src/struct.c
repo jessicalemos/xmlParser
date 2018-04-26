@@ -434,13 +434,13 @@ int existeTree (TAD_community com, int i){
     return 0;
 }
 
-void retornaIdR (Post* a, char* tag, long* p, int c){
+void retornaIdR (Post* a, char* tag, long* p, int c, Date* data){
 	int i;
 	if (a!=NULL){
 		if (a->tag!=NULL && a->postTypeId!=2){
 			if (verificaTag(a->tag,tag)==1){
 				for (i=0; i<c && p[i]!=-2; i++);
-				p[i] = a->id;
+				p[i] = a->id;data[i] = a->creationDate;
 			}
 		}
 	retornaIdR (a->esq,tag,p,c);
@@ -448,9 +448,9 @@ void retornaIdR (Post* a, char* tag, long* p, int c){
 	}
 }
 
-void retornaId (TAD_community com, int i, long* p, char* tag, int c){
+void retornaId (TAD_community com, int i, long* p, char* tag, int c, Date* arrayD){
 	Post* a = com->treeHash[i]->tree;
-	retornaIdR (a, tag, p, c);
+	retornaIdR (a, tag, p, c, arrayD);
 }
 
 void retornaSIdR (Post* a, long *p, int *s, int N){
