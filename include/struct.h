@@ -1,6 +1,7 @@
 #ifndef __STRUCT_H__
 #define __STRUCT_H__
 #include "interface.h"
+#include "auxiliary.h"
 #include <stdlib.h>
 
 #define PARENT(i) (i-1)/2
@@ -50,6 +51,7 @@ int procuraData(TAD_community com, Date data);
 void insere_Heap(TAD_community com);
 void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data);
 int q7Hash (long i, TAD_community com);
+LONG_list carregaListaQ(TAD_community com,int N,HashTableQuery7 h);
 LONG_list carregaListaT(TAD_community com,long* id,Date* d);
 LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h);
 long* retornaTop10(TAD_community com, int i);
@@ -59,9 +61,9 @@ LONG_list contaPosts(TAD_community com, int N, int nOrdenados);
 int pertenceU (TAD_community com, long ownerUserId, int N, int n);
 int preencheTopNR (TAD_community com, int tam, int z, int N);
 int procuraTag(TAD_community com,int chave,char* tag);
-void buscaId (TAD_community com, char* tag, long* p, int* n, int size);
-int buscaTag(TAD_community com, char *s, long* p, int* n, int size);
-void retornaTId(TAD_community com, int i, int* nTags, long* arrayT, int N, int tam, int z, int size, int ocupados);
+void buscaId (TAD_community com, char* tag, HashTableQuery11 h);
+int buscaTag(TAD_community com, char *s, HashTableQuery11 h);
+void retornaTId(TAD_community com, int i, int N, int tam, int z, int ocupados,HashTableQuery11 h);
 void insere_Heap_Reputation(TAD_community com);
 void freeHashTableUsers  (TAD_community com, int size);
 void freeHashTableTags (TAD_community com, int size);
