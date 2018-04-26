@@ -47,6 +47,36 @@ void free_new_pair(NEW_pair pair) {
     free(pair);
 }
 
+typedef struct query11{
+  long id; /*id da tag*/
+  char* tag;
+  int contador;
+} Query11;
+
+long get_id(HashTableQuery11 h,int i) {
+  return h[i]->id;
+}
+
+char* get_tag(HashTableQuery11 h,int i) {
+       return h[i]->tag;
+}
+
+int get_contador(HashTableQuery11 h,int i) {
+  return h[i]->contador;
+}
+
+void set_id(HashTableQuery11 h, long l,int i) {
+ h[i]->id = l;
+}
+
+void set_tag(HashTableQuery11 h, char* tag,int i) {
+  h[i]->tag = tag;
+}
+
+void set_contador(HashTableQuery11 h, int l,int i) {
+  h[i]->contador = l;
+}
+
 int max(int e,int d){
   return e>d?e:d;
 }
@@ -154,6 +184,22 @@ void insereTag (long tag, long* p, int* s, int N){
 int existeQ7(HashTableQuery7 h,int i){
   if(h[i]!=NULL) return 1;
   return 0;
+}
+
+HashTableQuery11 initHashQuery11 (int N){
+  HashTableQuery11 tag = malloc(N*sizeof(Query11*));
+  for (int i=0; i<N; i++){
+    tag[i] = NULL;
+  }
+  return tag;
+}
+
+void insereTQuery11 (HashTableQuery11 h1, int i,char* tag,int contador, long id){
+  Query11 *new= malloc(sizeof(Query11));
+  new->id = id;  
+  new->contador=contador;  
+  new->tag = mystrdup(tag);  
+  h1[i]=new;
 }
 
 int existeQ11(HashTableQuery11 h,int i){
