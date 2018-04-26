@@ -172,7 +172,7 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	int w, z; 
 	HashTableQuery11 h = initHashQuery11(TAD_community_get_tagsSize(com));
 	for(z=0; get_topNR(com,z)!=-2; z++);
-	int tam = N-z, size = 2*TAD_community_get_tagsSize(com);
+	int tam = N-z;
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	int ocupados = preencheTopNR(com,tam,z,N);
 	if (ocupados == 0) ocupados = N;
