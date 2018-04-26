@@ -443,8 +443,8 @@ void retornaIdR (Post* a, char* tag, long* p, int c, Date* data){
 				p[i] = a->id;data[i] = a->creationDate;
 			}
 		}
-	retornaIdR (a->esq,tag,p,c);
-	retornaIdR (a->dir,tag,p,c);
+	retornaIdR (a->esq,tag,p,c,data);
+	retornaIdR (a->dir,tag,p,c,data);
 	}
 }
 
