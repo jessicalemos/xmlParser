@@ -86,20 +86,18 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
 	else{
 		array = malloc(N*sizeof(long));
 		arrayA = malloc(N*sizeof(int));
-		for(int j=0; j<N; j++) {array[j]=-2;arrayA[j]=-20;}
+		aId = malloc(size*sizeof(long));
+		for(int j=0; j<N; j++) {array[j]=-2;arrayA[j]=-20;aId[j]=-2;}
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
 				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-					retornaAId (com,array,arrayA,N,w); 
+					retornaAId (com,w,h); 
 				}
 			}
 		}
 	}
-	for(h=0;h<N && array[h]!=-2;h++);
-	LONG_list list = create_list(h); 
-	for (int i=0; i<h; i++)
-		set_list(list, i, array[i]); 
-	free(array);free(arrayA);
+	LONG_list list = carregaListaQ(com,N,h); 
+	free(array);free(arrayA);free(aId);
 	return list;
 }
 
