@@ -826,6 +826,21 @@ void retornaAId (TAD_community com,int i,HashTableQuery7 h){
 	retornaAIdR (a, com, h);
 }
 
+LONG_list carregaListaQ(TAD_community com,int N,HashTableQuery7 h){
+	Heap tag;
+	int size=com->dataSize/2;
+	tag = NULL;
+	tag = initHeap(size);int c=0;
+	for(int i=0;i<size;i++)
+			if(existeQ7(h,i) && get_flag_Q7(h,i)!=0) insertHeap(tag,get_contador_Q7(h,i),get_id_Q7(h,i));
+	if(tag->used<N) N=tag->used;
+	LONG_list l=create_list(N);
+	for(int k=0;k<N;k++)
+		set_list(l, k, extractMax(tag)); 
+	free(tag);
+    return l;
+}
+
 LONG_list carregaListaT(TAD_community com,long* id,Date* d){
 	HeapPosts tag;
 	int size=com->dataSize/2,i;
@@ -924,6 +939,16 @@ int pertenceU (TAD_community com, long ownerUserId, int N, int n){
 	return 0;
 }
 
+int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
+  int i,c=0;
+  for(i=chave;existeQ11(h,i) && c<TAD_community_get_tagsSize(com) && strcmp(get_tag(h,i),tag);i++){
+    if (i+1>TAD_community_get_tagsSize(com)) i=0;
+    c++;
+  }
+  if(existeQ11(h,i) && !strcmp(get_tag(h,i),tag)) return i;
+  return -1;
+}
+
 int procuraTag(TAD_community com,int chave,char* tag){
 	int i,c=0;
 	for(i=chave;com->hashTag[i]!=NULL && c<com->tagsSize && strcmp(com->hashTag[i]->tagName,tag);i++){
@@ -934,17 +959,20 @@ int procuraTag(TAD_community com,int chave,char* tag){
 	return -1;
 }
 
-void buscaId (TAD_community com, char* tag, long* p, int* n, int size){
-	int chave = tagHash(tag, com), c=0, i;
-	for(i=chave; com->hashTag[i]!=NULL && c>com->tagsSize && strcmp(com->hashTag[i]->tagName,tag); i++){
-		if (i+1>com->tagsSize) i=0;
-		c++;
+void buscaId (TAD_community com, char* tag, HashTableQuery11 h){
+	int chave = tagHash(tag, com), c=0, i, local = procuraQ11(com,chave,tag,h);
+	if(local==-1){
+		while(existeQ11(h,chave)){
+			if(chave+1>com->tagsSize) i=0;
+			else chave++;
+		}
+		int idTag = procuraTag(com,chave,tag);
+		if(idTag!=-1) insereTQuery11(h,chave,tag,1,com->hashTag[idTag]->id);
 	}
-	if (com->hashTag[i]!=NULL && !strcmp(com->hashTag[i]->tagName,tag))
-		insereTag(com->hashTag[i]->id,p,n,size);
+	else set_contador(h,get_contador(h,local)+1,local);
 }
 
-int buscaTag(TAD_community com, char *s, long* p, int* n, int size){
+int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
   int a=0,i=0,k=0,j; 
   char *tag=malloc(strlen(s)*sizeof(char));
   while(s[k]){
@@ -954,7 +982,7 @@ int buscaTag(TAD_community com, char *s, long* p, int* n, int size){
         tag[a]=s[j];
     }
     tag[a]=0; 
-      buscaId(com,tag,p,n,size);
+      buscaId(com,tag,h);
       if(s[j] && s[j]=='>') {j++;}
       k=j;
   }
@@ -962,12 +990,12 @@ int buscaTag(TAD_community com, char *s, long* p, int* n, int size){
   return 0;
 }
 
-void retornaTIdR (TAD_community com, Post* a, long* p, int* n, int N, int z, int size, int ocupados){
+void retornaTIdR (TAD_community com, Post* a, int N, int z, int ocupados,HashTableQuery11 h){
 	if (a!=NULL){
 		if (pertenceU(com,a->ownerUserId,N,ocupados))
-			if (a->tag!=NULL) buscaTag(com,a->tag,p,n,size);
-		retornaTIdR (com,a->esq,p,n,N,z,size,ocupados);
-		retornaTIdR (com,a->dir,p,n,N,z,size,ocupados);
+			if (a->tag!=NULL) buscaTag(com,a->tag,h);
+		retornaTIdR (com,a->esq,N,z,ocupados,h);
+		retornaTIdR (com,a->dir,N,z,ocupados,h);
 	}
 }
 
@@ -988,9 +1016,9 @@ int preencheTopNR (TAD_community com, int tam, int z, int N){
 	return b;
 }
 
-void retornaTId(TAD_community com, int i, int* nTags, long* arrayT, int N, int tam, int z, int size, int ocupados){
+void retornaTId(TAD_community com, int i, int N, int tam, int z, int ocupados,HashTableQuery11 h){
 	Post* a = com->treeHash[i]->tree;
-	retornaTIdR (com,a,arrayT,nTags,N,z,size,ocupados);
+	retornaTIdR (com,a,N,z,ocupados,h);
 }
 
 void insere_Heap_Reputation(TAD_community com){
