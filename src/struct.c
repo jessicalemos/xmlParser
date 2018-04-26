@@ -779,9 +779,65 @@ int q7Hash (long i, TAD_community com){
 	else return (i % (com->dataSize));
 }
 
-void retornaAId (TAD_community com,long *p, int *s, int N,int i){
+int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h){
+	int i,c=0;
+	for (i=chave; existeQ7(h,i) && c<com->dataSize && get_id_Q7(h,i)!=id; i++){
+		if (i+1>com->dataSize) i=0;
+		c++;
+	}
+	if (existeQ7(h,i) && get_id_Q7(h,i)==id) return i;
+	else return -1;
+}
+
+static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h){
+	int i,chave,local;
+	if (a!=NULL){//printf("cococo%d\n",a->postTypeId );
+		if (a->postTypeId==1){//printf("%s\n","assa" );
+			chave = q7Hash(a->id,com);
+			local = procuraQ7(com,a->id,chave,h);
+			if(local==-1){
+				while (existeQ7(h,chave)){
+					if (chave+1>com->dataSize) i=0;
+					else chave++;
+				}
+			insereTQ7(h,chave,1,0,a->id);
+			}
+			else set_flag_Q7(h,1,local);
+		}
+		if(a->postTypeId==2){
+			chave = q7Hash(a->parentId,com);
+			local = procuraQ7(com,a->parentId,chave,h);
+			if(local==-1){
+				while (existeQ7(h,chave)){
+					if (chave+1>com->dataSize) i=0;
+					else chave++;
+				}
+			insereTQ7(h,chave,0,1,a->parentId);
+			}
+			else set_contador_Q7(h,get_contador_Q7(h,local)+1,local);
+		}
+	retornaAIdR (a->esq,com,h);
+	retornaAIdR (a->dir,com,h);
+	}
+}
+
+void retornaAId (TAD_community com,int i,HashTableQuery7 h){
 	Post* a = com->treeHash[i]->tree;
-	retornaAIdR (a, p, s, N);
+	retornaAIdR (a, com, h);
+}
+
+LONG_list carregaListaT(TAD_community com,long* id,Date* d){
+	HeapPosts tag;
+	int size=com->dataSize/2,i;
+	tag = NULL;
+	tag = initHeapPosts(size);int c=0;
+	for(i=0;i<size && id[i]!=-2;i++){
+			 insertHeapPosts(tag,d[i],id[i]);}
+	LONG_list l=create_list(i);
+	for(int k=0;k<i;k++)
+		set_list(l, k, extractMaxPosts(tag)); 
+	free(tag);
+    return l;
 }
 
 LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
