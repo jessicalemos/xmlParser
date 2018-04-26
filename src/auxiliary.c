@@ -80,15 +80,6 @@ void insere (int x, long id, long *p, int *s,int N){
        }
 }
 
-int elimRep (long v[], int N) {
-  int r,w,wc;
-  for ( r = 0 , w = 0 ; r < N ; r++ ){
-    for ( wc = w-1 ; wc >= 0 && v[wc] != v[r] ; wc--);
-      if ( wc < 0 ) v[w++] = v[r];
-  }
-  return w;
-}
-
 int contida (char* s,char* word){
   int i = 0, j=0;
   while(s[i]!='\0'){

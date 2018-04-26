@@ -2,30 +2,6 @@
 #include "struct.h"
 #include "auxiliary.h"
 
-void selectionSort(long* p, int tam){
-	int i, j, max, aux;
-	for (i=0; i<tam-1; i++) {
-		max = i;
-	for (j=i+1; j<tam; j++) {
-		if (p[j] >p[max]) max = j;
-	} 
-	aux = p[i];
-	p[i] = p[max];
-	p[max] = aux;
-	}
-}
-
-int conta (TAD_community com, int localB, int localE, Date begin, Date end, char* tag){
-	int i, c = 0;
-	for(i=localB;i<=localE;i++){ 
-		if(existeTree(com,i)){
-			if(compareDateQ(post_getCreationDate (com,i), begin)!=0 && compareDateQ(post_getCreationDate (com,i), end)!=2){
-					 c += contaTag(com, i, tag);  
-			}
-		}
-	} 
-	return c;
-}
 
 STR_pair info_from_post(TAD_community com, long id){
 	char *nome = NULL, *title = NULL;
