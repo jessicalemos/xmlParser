@@ -122,26 +122,24 @@ LONG_list contains_word(TAD_community com, char* word, int N){
 }
 
 LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end){
-	int c = 0,w; 
+	int c = TAD_community_get_dataSize(com)/2,w; 
 	long *array;
+	Date* arrayD;
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	else{
-		c = conta(com, 0, TAD_community_get_dataSize(com)-1, begin, end, tag); 
+		arrayD = malloc(c*sizeof(Date));
 		array = malloc(c*sizeof(long));
-		for(int j=0; j<c; j++) array[j]=-2;
+		for(int j=0; j<c; j++) {array[j]=-2;arrayD[j]=NULL;}
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
 				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-					retornaId (com, w, array, tag, c);
+					retornaId (com, w, array, tag, c, arrayD);
 				}
 			}
 		}
 	}
-	LONG_list list = create_list(c);
-	selectionSort(array,c); 
-	for (int i=0; i<c; i++)
-		set_list(list, i, array[i]); 
-	free(array);
+	LONG_list list = carregaListaT(com,array,arrayD); 
+	free(array);free(arrayD);
 	return list;
 }
 
