@@ -156,6 +156,7 @@ USER get_user_info(TAD_community com, long id){
 
 LONG_list both_participated(TAD_community com, long id1, long id2, int N){
 	long* id = malloc(N*sizeof(long));
+	for(int i=0;i<N;i++) id[i]=-2;
 	int chave1 = procuraUser(com,id1),chave2 = procuraUser(com,id2),tam; 
 	if (chave1 == -1 || chave2 == -1) return create_list(0);
 	else tam = extraiHeaps(com,chave1,chave2,N,id); 

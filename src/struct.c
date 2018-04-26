@@ -778,6 +778,26 @@ void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
 	insertHeapPosts(com->hashUser[i]->top10,data,id);
 }
 
+int q7Hash (long i, TAD_community com){
+	if (i < 0) return (-(i % com->dataSize));
+	else return (i % (com->dataSize));
+}
+
+LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
+	Heap tag;
+	int size=com->tagsSize/2,c=0;
+	tag = NULL;
+	tag = initHeap(size);
+	for(int i=0;i<size;i++)
+			if(existeQ11(h,i)) insertHeap(tag, get_contador(h,i), get_id(h,i));
+	if(tag->used<N) N=tag->used;
+	LONG_list l=create_list(N);
+	for(int k=0;k<N;k++)
+		set_list(l, k, extractMax(tag)); 
+	free(tag);
+    return l;
+}
+
 void freeHeapPosts(HeapPosts r){
     if(r != NULL) {
         free(r->array);
@@ -845,6 +865,16 @@ int pertenceU (TAD_community com, long ownerUserId, int N, int n){
 		if (ownerUserId==com->topNR[i]) return 1;
 	}
 	return 0;
+}
+
+int procuraTag(TAD_community com,int chave,char* tag){
+	int i,c=0;
+	for(i=chave;com->hashTag[i]!=NULL && c<com->tagsSize && strcmp(com->hashTag[i]->tagName,tag);i++){
+		if (i+1>com->tagsSize) i=0;
+		c++;
+	}
+	if(com->hashTag[i]!=NULL && !strcmp(com->hashTag[i]->tagName,tag)) return i;
+	return -1;
 }
 
 void buscaId (TAD_community com, char* tag, long* p, int* n, int size){

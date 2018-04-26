@@ -85,21 +85,19 @@ int contida (char* s,char* word){
   while(s[i]!='\0'){
     while((s[i] != '\0') && (isspace(s[i])))
       i++; 
-    while((s[i] != '\0') && word[i]!='\0' && s[i]==word[j]){
+    while((s[i] != '\0') && word[j]!='\0' && s[i]==word[j]){
       i++; j++; 
     }
-    if ((s[i]=='\0' || s[i]==' ') && word[j]=='\0') return 1;
-    else j=0;
-    while((s[i] != '\0') && (!isspace(s[i]))){ 
-      i++; 
-    }
+    if (word[j]=='\0') return 1;
+    else {j=0; i++;}
   }
   return 0;
 }
 
 int procuraArray (long* postId, long id, int N){
   int i;
-  for(i=0; i<N && postId[i]!=id; i++);
+  for(i=0; i<N && postId[i]!=id && postId[i]!=-2; i++);
+  if(postId[i]==-2) return 0;
   if (i==N) return 0;
   return 1;
 }
@@ -151,4 +149,14 @@ void insereTag (long tag, long* p, int* s, int N){
     p[i]=tag; 
     s[i]=1;
   }
+}
+
+int existeQ7(HashTableQuery7 h,int i){
+  if(h[i]!=NULL) return 1;
+  return 0;
+}
+
+int existeQ11(HashTableQuery11 h,int i){
+  if(h[i]!=NULL) return 1;
+  return 0;
 }
