@@ -467,21 +467,6 @@ void retornaSId (TAD_community com,long *p, int *s, int N,int i){
 	retornaSIdR (a, p, s, N);
 }
 
-void retornaAIdR (Post* a, long *p, int *s, int N){
-	if (a!=NULL){
-		if (a->postTypeId==1){
-			insere(a->answerCount,a->id,p,s,N);
-		}
-	retornaAIdR (a->esq,p,s,N);
-	retornaAIdR (a->dir,p,s,N);
-	}
-}
-
-void retornaAId (TAD_community com,long *p, int *s, int N,int i){
-	Post* a = com->treeHash[i]->tree;
-	retornaAIdR (a, p, s, N);
-}
-
 void procuraTituloR(Post *a,char *word,Date *data,long *id,int N){
 	if(a){
 		if(a->title!=NULL && a->postTypeId!=2)
@@ -635,6 +620,17 @@ long extractMaxPosts2(HeapPosts h,HeapPosts h2){
     } else return -1;
 }
 
+static long extractMaxPosts(HeapPosts h){
+    if (h->used > 0) {
+        elemP novo= h->array[0];
+        long res=novo.id;
+        h->array[0] = h->array[h->used-1];
+        (h->used)--;
+        bubbleDownPosts(h, h->used);
+        return res;
+    } else return -1;
+}
+
 void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3){
 	int c = h->used, j; 
 	long idP;
@@ -781,6 +777,11 @@ void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
 int q7Hash (long i, TAD_community com){
 	if (i < 0) return (-(i % com->dataSize));
 	else return (i % (com->dataSize));
+}
+
+void retornaAId (TAD_community com,long *p, int *s, int N,int i){
+	Post* a = com->treeHash[i]->tree;
+	retornaAIdR (a, p, s, N);
 }
 
 LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
