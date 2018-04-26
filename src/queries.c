@@ -78,9 +78,10 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
 }
 
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
-	int w, h; 
-	long *array;
+	int w, size = TAD_community_get_dataSize(com)/2, tam; 
+	long *array,*aId;
 	int *arrayA;
+	HashTableQuery7 h = initHashQ7(TAD_community_get_dataSize(com));
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	else{
 		array = malloc(N*sizeof(long));
@@ -171,28 +172,20 @@ long better_answer(TAD_community com, long id){
 
 LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	int w, z; 
-	long *arrayT; int* nTags;
+	HashTableQuery11 h = initHashQuery11(TAD_community_get_tagsSize(com));
 	for(z=0; get_topNR(com,z)!=-2; z++);
 	int tam = N-z, size = 2*TAD_community_get_tagsSize(com);
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	int ocupados = preencheTopNR(com,tam,z,N);
 	if (ocupados == 0) ocupados = N;
-	arrayT = malloc(size*sizeof(long));
-	for(int j=0; j<size; j++) arrayT[j]=-2;
-	nTags = malloc(size*sizeof(int));
-	for (int k=0; k<size; k++) nTags[k] = 0;
 	for(w=0;w<TAD_community_get_dataSize(com);w++){
 		if(existeTree(com,w)){
 			if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-				retornaTId(com,w,nTags,arrayT,N,tam,z,size, ocupados); 
+				retornaTId(com,w,N,tam,z,ocupados,h); 
 			}
 		}
 	}
-	extrai(arrayT,nTags,size,N);
-	LONG_list list = create_list(N); 		
-	for (int i=0; i<N && arrayT[i]!=-2; i++)
-		set_list(list, i, arrayT[i]); 
-	free(arrayT); free(nTags);
+	LONG_list list = carregaListaTag(com,N,h); 		
 	return list;
 }
 
