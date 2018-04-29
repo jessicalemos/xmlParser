@@ -148,7 +148,7 @@ USER get_user_info(TAD_community com, long id){
 	if(i!=-1){
 		char* aboutMe = users_getAboutMe(com,i);
 		long* idP = retornaTop10(com,i);
-		USER u = create_user(aboutMe,idP);free(idP);
+		u = create_user(aboutMe,idP);free(idP);
 	}
 	else {
 		long* idP = malloc(10*sizeof(long));
