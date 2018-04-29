@@ -510,7 +510,6 @@ static void guardaRespostas(TAD_community com, Post* a, long id, float max, int 
 long procuraRespostas(TAD_community com, long id){
 	int i,j,flag = 0,local = procuraPost(com,id),nRespostas=0;
 	float max = 0,maximo = 0;
-	NEW_pair p= create_new_pair(0,-2,nRespostas);
 	long idM=-2;
 	if(local!=-1){
 		Post *b = com->treeHash[local]->tree;
@@ -522,6 +521,7 @@ long procuraRespostas(TAD_community com, long id){
 			else if(b->id>id && b->esq!=NULL) b = b->esq;
 				 else b = b->dir;
 		}
+		NEW_pair p= create_new_pair(0,-2,nRespostas);
 		set_trd_new(p,nRespostas);
 		for(i=local;i<com->dataSize && nRespostas!=0;i++){
 			if(com->treeHash[i]!=NULL){
@@ -557,8 +557,8 @@ long procuraRespostas(TAD_community com, long id){
 				}
 			}
 		}
+		free_new_pair(p);
 	}
-	free_new_pair(p);
 	return idM;
 }
 
@@ -585,7 +585,7 @@ static void bubbleUpPosts(HeapPosts h, int i){
     }
 }
 
-void bubbleDownPosts(HeapPosts h, int N){    
+static void bubbleDownPosts(HeapPosts h, int N){    
     int i = 0, max ;
     while (RIGHT(i) < N && compareDateQ(h->array[max=(compareDateQ(h->array[LEFT(i)].data,h->array[RIGHT(i)].data)==2) ? LEFT(i) : RIGHT(i)].data, h->array[i].data)==2) {
         swapPosts(h, i, max);
@@ -595,7 +595,7 @@ void bubbleDownPosts(HeapPosts h, int N){
         swapPosts(h, i, LEFT(i));
 }
 
-int insertHeapPosts(HeapPosts h,Date data,long id){
+static int insertHeapPosts(HeapPosts h,Date data,long id){
     if (h->used == h->size) {
         h->array= realloc(h->array, 2*(h->size)*sizeof(struct elemPosts));
         h->size *= 2;
@@ -608,7 +608,7 @@ int insertHeapPosts(HeapPosts h,Date data,long id){
     return 1;
 }
 
-long extractMaxPosts2(HeapPosts h,HeapPosts h2){
+static long extractMaxPosts2(HeapPosts h,HeapPosts h2){
     if (h->used > 0) {
         elemP novo= h->array[0];
         long res=novo.id;
@@ -631,7 +631,7 @@ static long extractMaxPosts(HeapPosts h){
     } else return -1;
 }
 
-void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3){
+static void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3){
 	int c = h->used, j; 
 	long idP;
 	for(j=0;j<c;j++){
@@ -648,7 +648,7 @@ void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3){
 	}
 }
 
-int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,int chave1,int chave2){
+static int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,int chave1,int chave2){
 	int k=0; 
 	if(h1->used<h2->used) {
 		int c = h2->used,j;
@@ -701,7 +701,7 @@ int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,int chav
 	return k;
 }
 
-Heap initHeap(int size){
+static Heap initHeap(int size){
     Heap h = malloc(sizeof(struct heap));
     if(h != NULL) {
         h->size = size;
@@ -711,20 +711,20 @@ Heap initHeap(int size){
     return h;
 }
 
-void swap(Heap h, int a, int b){
+static void swap(Heap h, int a, int b){
     elem t = h->array[a];
     h->array[a] = h->array[b];
     h->array[b] = t;
 }
 
-void bubbleUp(Heap h, int i){
+static void bubbleUp(Heap h, int i){
     while (i!=0 && h->array[i].count > h->array[PARENT(i)].count) {
         swap(h, i, PARENT(i));
         i = PARENT(i);
     }
 }
 
-void bubbleDown(Heap h, int N){
+static void bubbleDown(Heap h, int N){
     int i = 0, max ;
     while (RIGHT(i) < N && h->array[max = h->array[LEFT(i)].count > h->array[RIGHT(i)].count ? LEFT(i) : RIGHT(i)].count > h->array[i].count) {
         swap(h, i, max);
@@ -734,7 +734,7 @@ void bubbleDown(Heap h, int N){
         swap(h, i, LEFT(i));
 }
 
-int insertHeap(Heap h,int count,long id){
+static int insertHeap(Heap h,int count,long id){
     if (h->used == h->size) {
         h->array= realloc(h->array, 2*(h->size)*sizeof(struct elemento));
         h->size *= 2;
@@ -747,7 +747,7 @@ int insertHeap(Heap h,int count,long id){
     return 1;
 }
 
-long extractMax(Heap h){
+static long extractMax(Heap h){
     if (h->used > 0) {
         elem novo= h->array[0];
         long res=novo.id;
@@ -779,7 +779,7 @@ int q7Hash (long i, TAD_community com){
 	else return (i % (com->dataSize));
 }
 
-int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h){
+static int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h){
 	int i,c=0;
 	for (i=chave; existeQ7(h,i) && c<com->dataSize && get_id_Q7(h,i)!=id; i++){
 		if (i+1>com->dataSize) i=0;
@@ -791,8 +791,8 @@ int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h){
 
 static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h){
 	int i,chave,local;
-	if (a!=NULL){//printf("cococo%d\n",a->postTypeId );
-		if (a->postTypeId==1){//printf("%s\n","assa" );
+	if (a!=NULL){
+		if (a->postTypeId==1){
 			chave = q7Hash(a->id,com);
 			local = procuraQ7(com,a->id,chave,h);
 			if(local==-1){
@@ -826,7 +826,7 @@ void retornaAId (TAD_community com,int i,HashTableQuery7 h){
 	retornaAIdR (a, com, h);
 }
 
-void freeHeap(Heap r){
+static void freeHeap(Heap r){
 	if(r!=NULL){
 		free(r->array);
 		free(r);
