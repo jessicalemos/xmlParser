@@ -144,9 +144,12 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
 
 USER get_user_info(TAD_community com, long id){
 	int i = procuraUser(com,id);
-	char* aboutMe = users_getAboutMe(com,i);
-	long* idP = retornaTop10(com,i);
-	USER u = create_user(aboutMe,idP);
+	USER u;
+	if(i!=-1){
+		char* aboutMe = users_getAboutMe(com,i);
+		long* idP = retornaTop10(com,i);
+		USER u = create_user(aboutMe,idP);free(idP);
+	}
 	free(idP);
 	return u;
 }
