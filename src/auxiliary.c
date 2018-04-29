@@ -264,3 +264,16 @@ int existeQ11(HashTableQuery11 h,int i){
   if(h[i]!=NULL) return 1;
   return 0;
 }
+
+void freeHashTableQuery11 (HashTableQuery11 h, int size){
+  int i;
+  Query11 *cur;
+  for (i=0; i<size; i++){
+    if (h[i]!=NULL){
+      cur = h[i];
+      free(cur->tag);
+      free(cur);
+    }
+  } 
+  free(h);
+}
