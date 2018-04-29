@@ -260,7 +260,7 @@ int userHash (long i, TAD_community com){
 	else return (i % (com->usersSize));
 }
 
-void insereTableUsers (HashTableUsers h1, int i, int reputation, long id, char *name, char *about){
+static void insereTableUsers (HashTableUsers h1, int i, int reputation, long id, char *name, char *about){
 	int tam=10;
 	Users *new= malloc(sizeof(Users));
 	new->ownerUserId = id;  
@@ -303,7 +303,7 @@ int tagHash (char* s, TAD_community com){
 	return (soma % com->tagsSize);
 }
 
-void insereTableTags (HashTableTags h1, int i, long id, char* tagName){
+static void insereTableTags (HashTableTags h1, int i, long id, char* tagName){
 	Tags *new = malloc(sizeof(Tags));
 	new->id = id;
 	new->tagName = tagName; 	
@@ -324,7 +324,7 @@ int dataHash (Date data, TAD_community com){
 	return ((i) % com->dataSize); 
 }
 
-int height(Post *p){
+static int height(Post *p){
 	int altura = 0;
 	if(p!=NULL){
 		altura = 1 + max(height(p->esq),height(p->dir));
@@ -332,21 +332,21 @@ int height(Post *p){
 	return altura;
 }
 
-Post* rotate_right(Post *p){
+static Post* rotate_right(Post *p){
 	Post *q = p->esq;
 	p->esq = q->dir;
 	q->dir = p;
 	return q;
 }
 
-Post* rotate_left(Post *p){
+static Post* rotate_left(Post *p){
 	Post *q = p->dir;
 	p->dir = q->esq;
 	q->esq = p;
 	return q;
 }
 
-Post* balancaTree (Post *p){
+static Post* balancaTree (Post *p){
 	Post *p1 = p->esq;	
 	Post *p2 = p->dir;
 	if ( height(p->esq) - height(p->dir) == 2 ){
@@ -362,7 +362,7 @@ Post* balancaTree (Post *p){
 	return p;
 }
 
-Post* insereTree(int score, int postTypeId, long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data, int commentCount){
+static Post* insereTree(int score, int postTypeId, long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data, int commentCount){
 	Post *p = malloc (sizeof(Post));
 	if(p!=NULL){
 	    p->postTypeId = postTypeId; 
@@ -382,7 +382,7 @@ Post* insereTree(int score, int postTypeId, long parentId, long id, char *tag, c
 	return p;
 }
 
-Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char *tag, char *title, long ownUserId, char *question, int answerCount, Date data, int commentCount){
+static Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char *tag, char *title, long ownUserId, char *question, int answerCount, Date data, int commentCount){
 	if(c==NULL){
 	    return insereTree(score, postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
 	}
@@ -434,7 +434,7 @@ int existeTree (TAD_community com, int i){
     return 0;
 }
 
-void retornaIdR (Post* a, char* tag, long* p, int c, Date* data){
+static void retornaIdR (Post* a, char* tag, long* p, int c, Date* data){
 	int i;
 	if (a!=NULL){
 		if (a->tag!=NULL && a->postTypeId!=2){
@@ -453,7 +453,7 @@ void retornaId (TAD_community com, int i, long* p, char* tag, int c, Date* array
 	retornaIdR (a, tag, p, c, arrayD);
 }
 
-void retornaSIdR (Post* a, long *p, int *s, int N){
+static void retornaSIdR (Post* a, long *p, int *s, int N){
 	if (a!=NULL){
 		if (a->postTypeId!=1){
       		insere(a->score,a->id,p,s,N);
@@ -467,7 +467,7 @@ void retornaSId (TAD_community com,long *p, int *s, int N,int i){
 	retornaSIdR (a, p, s, N);
 }
 
-void procuraTituloR(Post *a,char *word,Date *data,long *id,int N){
+static void procuraTituloR(Post *a,char *word,Date *data,long *id,int N){
 	if(a){
 		if(a->title!=NULL && a->postTypeId!=2)
 			if(contida(a->title,word)) insereT(a->creationDate,a->id,data,id,N);
@@ -486,7 +486,7 @@ void procuraTitulo(TAD_community com,char *word,Date *data,long *id,int N){
 	}
 }
 
-void guardaRespostas(TAD_community com, Post* a, long id, float max, int flag, NEW_pair p){
+static void guardaRespostas(TAD_community com, Post* a, long id, float max, int flag, NEW_pair p){
 	float c = 0;
 	if(a!=NULL && get_trd_new(p)!=0){
 		if(a->postTypeId==2 && a->parentId == id){
@@ -572,13 +572,13 @@ int procuraData(TAD_community com, Date data){
 	return -1;
 }
 
-void swapPosts(HeapPosts h, int a, int b){
+static void swapPosts(HeapPosts h, int a, int b){
     elemP t = h->array[a];
     h->array[a] = h->array[b];
     h->array[b] = t;
 }
 
-void bubbleUpPosts(HeapPosts h, int i){                
+static void bubbleUpPosts(HeapPosts h, int i){                
     while (i!=0 && compareDateQ(h->array[i].data,h->array[PARENT(i)].data)==2) {
         swapPosts(h, i, PARENT(i));
         i = PARENT(i);
@@ -826,6 +826,13 @@ void retornaAId (TAD_community com,int i,HashTableQuery7 h){
 	retornaAIdR (a, com, h);
 }
 
+void freeHeap(Heap r){
+	if(r!=NULL){
+		free(r->array);
+		free(r);
+	}
+}
+
 LONG_list carregaListaQ(TAD_community com,int N,HashTableQuery7 h){
 	Heap tag;
 	int size=com->dataSize/2;
@@ -837,7 +844,7 @@ LONG_list carregaListaQ(TAD_community com,int N,HashTableQuery7 h){
 	LONG_list l=create_list(N);
 	for(int k=0;k<N;k++)
 		set_list(l, k, extractMax(tag)); 
-	free(tag);
+	freeHeap(tag);
     return l;
 }
 
@@ -851,7 +858,7 @@ LONG_list carregaListaT(TAD_community com,long* id,Date* d){
 	LONG_list l=create_list(i);
 	for(int k=0;k<i;k++)
 		set_list(l, k, extractMaxPosts(tag)); 
-	free(tag);
+	freeHeapPosts(tag);
     return l;
 }
 
@@ -866,7 +873,7 @@ LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
 	LONG_list l=create_list(N);
 	for(int k=0;k<N;k++)
 		set_list(l, k, extractMax(tag)); 
-	free(tag);
+	freeHeap(tag);
     return l;
 }
 
@@ -923,13 +930,6 @@ int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id){
 void freeTopN(TAD_community com){
 	free(com->topN);
 	free(com->topNR);
-}
-
-void freeHeap(Heap r){
-	if(r!=NULL){
-		free(r->array);
-		free(r);
-	}
 }
 
 int pertenceU (TAD_community com, long ownerUserId, int N, int n){
