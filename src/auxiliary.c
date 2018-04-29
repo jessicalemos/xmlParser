@@ -149,7 +149,7 @@ int contida (char* s,char* word){
       i++; j++; 
     }
     if (word[j]=='\0') return 1;
-    else {j=0; i++;}
+    else {j=0; if(s[i]!='\0') i++;}
   }
   return 0;
 }
@@ -230,6 +230,18 @@ void insereTQ7 (HashTableQuery7 h1, int i,int flag,int contador, long id){
 int existeQ7(HashTableQuery7 h,int i){
   if(h[i]!=NULL) return 1;
   return 0;
+}
+
+void freeHashTableQuery7 (HashTableQuery7 h, int size){
+  int i;
+  Query7 *cur;
+  for (i=0; i<size; i++){
+    if (h[i]!=NULL){
+      cur = h[i];
+      free(cur);
+    }
+  } 
+  free(h);
 }
 
 HashTableQuery11 initHashQuery11 (int N){
