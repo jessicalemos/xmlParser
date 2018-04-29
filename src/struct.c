@@ -826,7 +826,7 @@ void retornaAId (TAD_community com,int i,HashTableQuery7 h){
 	retornaAIdR (a, com, h);
 }
 
-void freeHeapPosts(HeapPosts r){
+static void freeHeapPosts(HeapPosts r){
     if(r != NULL) {
         free(r->array);
         free(r);
@@ -939,7 +939,7 @@ int pertenceU (TAD_community com, long ownerUserId, int N, int n){
 	return 0;
 }
 
-int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
+static int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
   int i,c=0;
   for(i=chave;existeQ11(h,i) && c<TAD_community_get_tagsSize(com) && strcmp(get_tag(h,i),tag);i++){
     if (i+1>TAD_community_get_tagsSize(com)) i=0;
@@ -990,7 +990,7 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
   return 0;
 }
 
-void retornaTIdR (TAD_community com, Post* a, int N, int z, int ocupados,HashTableQuery11 h){
+static void retornaTIdR (TAD_community com, Post* a, int N, int z, int ocupados,HashTableQuery11 h){
 	if (a!=NULL){
 		if (pertenceU(com,a->ownerUserId,N,ocupados))
 			if (a->tag!=NULL) buscaTag(com,a->tag,h);
@@ -1062,7 +1062,7 @@ void freeHashTableTags (TAD_community com, int size){
 	free(com->hashTag);
 }
 
-void freeP(Post* p2){
+static void freeP(Post* p2){
 	if(p2!=NULL){
 		free(p2->title);
 		free(p2->tag);
