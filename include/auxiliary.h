@@ -31,6 +31,7 @@ void set_contador_Q7(HashTableQuery7 h, int l,int i);
 HashTableQuery7 initHashQ7 (int N);
 void insereTQ7 (HashTableQuery7 h1, int i,int flag,int contador, long id);
 int existeQ7(HashTableQuery7 h,int i);
+void freeHashTableQuery7 (HashTableQuery7 h, int size);
 long get_id(HashTableQuery11 h,int i);
 char* get_tag(HashTableQuery11 h,int i);
 int get_contador(HashTableQuery11 h,int i);
