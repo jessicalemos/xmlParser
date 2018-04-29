@@ -826,6 +826,13 @@ void retornaAId (TAD_community com,int i,HashTableQuery7 h){
 	retornaAIdR (a, com, h);
 }
 
+void freeHeapPosts(HeapPosts r){
+    if(r != NULL) {
+        free(r->array);
+        free(r);
+    }
+}
+
 static void freeHeap(Heap r){
 	if(r!=NULL){
 		free(r->array);
@@ -875,13 +882,6 @@ LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
 		set_list(l, k, extractMax(tag)); 
 	freeHeap(tag);
     return l;
-}
-
-void freeHeapPosts(HeapPosts r){
-    if(r != NULL) {
-        free(r->array);
-        free(r);
-    }
 }
 
 long* retornaTop10(TAD_community com, int i){
