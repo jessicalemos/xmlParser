@@ -41,4 +41,5 @@ void set_contador(HashTableQuery11 h, int l,int i);
 HashTableQuery11 initHashQuery11 (int N);
 void insereTQuery11 (HashTableQuery11 h1, int i,char* tag,int contador, long id);
 int existeQ11(HashTableQuery11 h,int i);
+void freeHashTableQuery11 (HashTableQuery11 h, int size);
 #endif
