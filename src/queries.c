@@ -150,7 +150,11 @@ USER get_user_info(TAD_community com, long id){
 		long* idP = retornaTop10(com,i);
 		USER u = create_user(aboutMe,idP);free(idP);
 	}
-	free(idP);
+	else {
+		long* idP = malloc(10*sizeof(long));
+		for(int j=0;j<10;j++) idP[j] = -2;
+		u = create_user(NULL,idP); free(idP);
+	}
 	return u;
 }
 
@@ -158,7 +162,7 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
 	long* id = malloc(N*sizeof(long));
 	for(int i=0;i<N;i++) id[i]=-2;
 	int chave1 = procuraUser(com,id1),chave2 = procuraUser(com,id2),tam; 
-	if (chave1 == -1 || chave2 == -1) return create_list(0);
+	if (chave1 == -1 || chave2 == -1) {free(id); return create_list(0);}
 	else tam = extraiHeaps(com,chave1,chave2,N,id); 
 	LONG_list l = create_list(tam);
 	for(int j=0;j<tam;j++)
