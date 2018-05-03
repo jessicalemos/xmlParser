@@ -84,6 +84,11 @@ typedef struct TCD_community{
 	
 }TCD_community;
 
+/**
+ * [Obter o tamanho da hashUser]
+ * @param  com     [Estrutura]
+ * @return         [Tamanho da hashUser]
+ */
 int TAD_community_get_usersSize(TAD_community com){
 	return com->usersSize;
 }
@@ -96,18 +101,42 @@ int TAD_community_get_tagsSize(TAD_community com){
 	return com->tagsSize;
 }
 
+/**
+ * [Devolve o id que se encontra numa posição do array]
+ * @param  com     [Estrutura]
+ * @param  i       [Posição do array]
+ * @return         [Id do utilizador]
+ */
 long get_topN(TAD_community com, int i){
 	return(com->topN[i]);
 }
 
+/**
+ * [Devolve o id que se encontra numa posição do array]
+ * @param  com     [Estrutura]
+ * @param  com     [Posição do array]
+ * @return         [Id do utilizador]
+ */
 long get_topNR(TAD_community com, int i){
 	return(com->topNR[i]);
 }
 
+/**
+ * [Devolve o nome de um utilizador]
+ * @param  com     [Estrutura]
+ * @param  i       [Posição da hashUser]
+ * @return         [Nome do utilizador]
+ */
 char* users_getDisplayName (TAD_community com, int i){
 	return com->hashUser[i]->displayName;
 }
 
+/**
+ * [Devolve a informação do perfil de um utilizador]
+ * @param  com     [Estrutura]
+ * @param  i       [Posição da hashUser]
+ * @return         [Informação do utilizador]
+ */
 char* users_getAboutMe (TAD_community com, int i){
 	return com->hashUser[i]->aboutMe;
 }
@@ -116,6 +145,13 @@ Date post_getCreationDate (TAD_community com, int i){
 	return com->treeHash[i]->tree->creationDate;
 }
 
+/**
+ * [Obter postTypeId de um post]
+ * @param  com     [Estrutura]
+ * @param  i       [Posição da treeHash]
+ * @param  id      [Id do post]
+ * @return         [PostTypeId]
+ */
 int post_getPostTypeId (TAD_community com, int i, long id){
 	Post* a = com->treeHash[i]->tree;
 	while (a){
@@ -126,6 +162,13 @@ int post_getPostTypeId (TAD_community com, int i, long id){
 	return -1;
 }
 
+/**
+ * [Obter o título de um post]
+ * @param  com     [Estrutura]
+ * @param  i       [Posição da hash]
+ * @param  id      [Id do post]
+ * @return         [Título]
+ */
 char* post_getTitle (TAD_community com, int i, long id){
 	Post* a = com->treeHash[i]->tree;
 	while (a){
@@ -212,6 +255,12 @@ TAD_community init(){
     return com;
 }
 
+/**
+ * [Inicialização da hashUser]
+ * @param  com     [Estrutura]
+ * @param  N       [Tamanho da hashUser]
+ * @return         [Estrutura]
+ */
 TAD_community initHashUsers (TAD_community com, int N){
 	HashTableUsers user = malloc(N*sizeof(Users*));
 	for (int i=0; i<N; i++){
@@ -245,6 +294,11 @@ TAD_community initHashData (TAD_community com, int N){
 	return com;
 }
 
+/**
+ * [Inicialização da HeapPosts]
+ * @param  size      [Tamanho da heapPosts]
+ * @return           [HeapPosts]
+ */
 HeapPosts initHeapPosts(int size){
     HeapPosts h = malloc(sizeof(struct heapPosts));
     if(h != NULL) {
@@ -255,6 +309,11 @@ HeapPosts initHeapPosts(int size){
     return h;
 }
 
+/** 
+ * [Devolve o valor de Hash correspondente a um determinado id]
+ * @param id   [Id do utilizador]
+ * @return     [Valor de Hash]
+ */
 int userHash (long i, TAD_community com){
 	if (i < 0) return (-(i % com->usersSize));
 	else return (i % (com->usersSize));
@@ -272,6 +331,14 @@ static void insereTableUsers (HashTableUsers h1, int i, int reputation, long id,
 	h1[i]=new;
 }
 
+/**
+ * [Determina a posição onde se irá inserir a informação de um utilizador]
+ * @param  com            [Estrutura]
+ * @param  reputação      [Reputação do utilizador] 
+ * @param  id             [Id do utilizador]
+ * @param  name           [Nome do utilizador]
+ * @param  about          [Short bio do utilizador]  
+ */
 void addUser (TAD_community com,int reputation, long id,char *name,char *about){
 	int i = userHash(id,com);
 	while (com->hashUser[i]!=NULL && !(com->hashUser[i]->ownerUserId == id)){
@@ -281,6 +348,12 @@ void addUser (TAD_community com,int reputation, long id,char *name,char *about){
 	insereTableUsers(com->hashUser,i,reputation, id, name, about);
 }
 
+/**
+ * [Devolve a posição da hashUser onde se encontra um dado utilizador]
+ * @param  com     [Estrutura]
+ * @param  id      [Id do utilizador]
+ * @return         [Posição da hashUser]
+ */
 int procuraUser (TAD_community com, long id){
 	int i, chave = userHash(id,com),c=0;
 	for (i=chave; com->hashUser[i]!=NULL && c<com->usersSize && com->hashUser[i]->ownerUserId!=id; i++){
@@ -324,6 +397,11 @@ int dataHash (Date data, TAD_community com){
 	return ((i) % com->dataSize); 
 }
 
+/** 
+ * [Devolve a altura da árvore]
+ * @param p    [Árvore dos posts]
+ * @return     [Altura]
+ */
 static int height(Post *p){
 	int altura = 0;
 	if(p!=NULL){
@@ -346,6 +424,11 @@ static Post* rotate_left(Post *p){
 	return q;
 }
 
+/** 
+ * [Realiza o balanceamento da árvore dos posts]
+ * @param p    [Árvore dos posts]
+ * @return     [Árvore dos posts]
+ */
 static Post* balancaTree (Post *p){
 	Post *p1 = p->esq;	
 	Post *p2 = p->dir;
@@ -382,6 +465,22 @@ static Post* insereTree(int score, int postTypeId, long parentId, long id, char 
 	return p;
 }
 
+/** 
+ * [Insere na árvore dos posts um novo, mantendo as propriedades da árvore, depois de o criar com a informção existente]
+ * @param c                  [Árvore binária dos posts]
+ * @param score              [Score a inserir]
+ * @param postTypeId         [PostTypeId a inserir]
+ * @param parentId           [ParentId a inserir]
+ * @param id                 [Id a inserir]
+ * @param tag                [Tag a inserir]
+ * @param title              [Title a inserir]
+ * @param ownUserId          [OwnerUserId a inserir]
+ * @param question           [Conteúdo a inserir]
+ * @param answerCount        [AnswerCount a inserir]
+ * @param data               [Data a inserir]
+ * @param commentCount       [CommentCount a inserir]
+ * @return                   [Post já com o novo inserido]
+ */
 static Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char *tag, char *title, long ownUserId, char *question, int answerCount, Date data, int commentCount){
 	if(c==NULL){
 	    return insereTree(score, postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
@@ -429,6 +528,11 @@ int procuraPost (TAD_community com, long id){
 	return -1;
 }
 
+/** 
+ * [Verifica se uma determinada posicão da treeHash é nula]
+ * @param com  [Estrutura]
+ * @param i    [Posição a verificar]
+ */
 int existeTree (TAD_community com, int i){
     if(com->treeHash[i]!=NULL) return 1;
     return 0;
@@ -448,6 +552,15 @@ static void retornaIdR (Post* a, char* tag, long* p, int c, Date* data){
 	}
 }
 
+/** 
+ * [Função que acede à árvore dos posts pretendida]
+ * @param com      [Estrutura]
+ * @param i        [Posição da treeHash onde se encontra a árvore]
+ * @param p        [Array de ids]
+ * @param tag      [Tag a verificar]
+ * @param c        [Tamanho dos arrays]
+ * @param arrayD   [Array de datas]
+*/
 void retornaId (TAD_community com, int i, long* p, char* tag, int c, Date* arrayD){
 	Post* a = com->treeHash[i]->tree;
 	retornaIdR (a, tag, p, c, arrayD);
@@ -467,6 +580,14 @@ void retornaSId (TAD_community com,long *p, int *s, int N,int i){
 	retornaSIdR (a, p, s, N);
 }
 
+/** 
+ * [Guarda os ids dos posts, de uma posição da treeHash, que contém uma determinada palavra no título, por cronologia inversa]
+ * @param a           [Árvore dos posts]
+ * @param word        [Palavra]
+ * @param data        [Array com as datas de criação dos posts]
+ * @param id          [Array com os ids dos posts]
+ * @param N           [N pedido no top N]
+ */
 static void procuraTituloR(Post *a,char *word,Date *data,long *id,int N){
 	if(a){
 		if(a->title!=NULL && a->postTypeId!=2)
@@ -507,6 +628,11 @@ static void guardaRespostas(TAD_community com, Post* a, long id, float max, int 
 	}
 }
 
+/** 
+ * [Devolve o id da resposta com maior média ponderada de um determinado post do tipo pergunta]
+ * @param com         [Estrutura]
+ * @param id          [Id do post pergunta]
+ */
 long procuraRespostas(TAD_community com, long id){
 	int i,j,flag = 0,local = procuraPost(com,id),nRespostas=0;
 	float max = 0,maximo = 0;
@@ -562,6 +688,12 @@ long procuraRespostas(TAD_community com, long id){
 	return idM;
 }
 
+/** 
+ * [Devolve a posição da treeHash com uma determinada data]
+ * @param com         [Estrutura]
+ * @param data        [Data]
+ * @return            [Posição da treeHash]
+ */
 int procuraData(TAD_community com, Date data){
 	int chave = dataHash(data,com),i,c=0;
 	for(i=chave;com->treeHash[i]!=NULL && c<com->dataSize && !compareDate(com->treeHash[i]->tree->creationDate,data);i++){
@@ -578,6 +710,11 @@ static void swapPosts(HeapPosts h, int a, int b){
     h->array[b] = t;
 }
 
+/**
+ * [Função que após inserção de um elemento na HeapPosts, coloca esse elemento na posição correta]
+ * @param h       [HeapPosts]
+ * @param i       [Quantos elementos existem na heap]
+ */
 static void bubbleUpPosts(HeapPosts h, int i){                
     while (i!=0 && compareDateQ(h->array[i].data,h->array[PARENT(i)].data)==2) {
         swapPosts(h, i, PARENT(i));
@@ -648,6 +785,16 @@ static void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3
 	}
 }
 
+/** 
+ * [Coloca no array os ids dos posts tipo pergunta em que dois dados utilizadores participam]
+ * @param h1        [Heap com os posts de um utilizador]
+ * @param h2        [Heap com os posts de um utilizador]
+ * @param N         [N pedido no top N]
+ * @param id        [Array com os ids dos posts]
+ * @param com       [Estrutura]
+ * @param chave1    [Local da hashUser onde se encontra a informação de determinado utilizador]
+ * @param chave2    [Local da hashUser onde se encontra a informação de determinado utilizador]
+ */
 static int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,int chave1,int chave2){
 	int k=0; 
 	if(h1->used<h2->used) {
@@ -717,6 +864,11 @@ static void swap(Heap h, int a, int b){
     h->array[b] = t;
 }
 
+/**
+ * [Função que após inserção de um elemento na Heap, coloca esse elemento na posição correta]
+ * @param h       [Heap]
+ * @param i       [Quantos elementos existem na heap]
+ */
 static void bubbleUp(Heap h, int i){
     while (i!=0 && h->array[i].count > h->array[PARENT(i)].count) {
         swap(h, i, PARENT(i));
@@ -734,6 +886,12 @@ static void bubbleDown(Heap h, int N){
         swap(h, i, LEFT(i));
 }
 
+/** 
+ * [Insire um elemento (id e count) na Heap mantendo o invariante que o pai é sempre maior que os filhos]
+ * @param h        [Heap onde queremos inserir o elemento]
+ * @param count    [Paramentro a inserir]
+ * @param id       [Id relacionado com o count que queremos inserir]
+ */
 static int insertHeap(Heap h,int count,long id){
     if (h->used == h->size) {
         h->array= realloc(h->array, 2*(h->size)*sizeof(struct elemento));
@@ -769,6 +927,13 @@ void insere_Heap(TAD_community com){
     }
 }
 
+/** 
+ * [Insere na heap da posição da hashUser de um determinado utilizador]
+ * @param com             [Estrutura]
+ * @param ownerUserId     [Id do utilizador]
+ * @param id              [Id do post]
+ * @param date            [Data de criação do post]
+ */
 void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
 	int i = procuraUser(com, ownerUserId);
 	insertHeapPosts(com->hashUser[i]->top10,data,id);
@@ -899,6 +1064,13 @@ long* retornaTop10(TAD_community com, int i){
 	return id;
 }
 
+/** 
+ * [Devolve a lista com os ids dos top N utilizadores com maior número de posts de sempre]
+ * @param com          [Estrutura]
+ * @param N            [Número de ids pedidos]
+ * @param nOrdenados   [Número de posições do array ocupadas]
+ * @return             [Lista com os ids dos N utilizadores com maior número de posts]
+*/
 LONG_list contaPosts(TAD_community com, int N, int nOrdenados){
 	int b = com->Top->used;
 	if(N>0){
@@ -927,6 +1099,10 @@ int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id){
 	return a;
 }
 
+/** 
+ * [Liberta o array topN e o array topNR]
+ * @param com     [Estrutura]
+ */
 void freeTopN(TAD_community com){
 	free(com->topN);
 	free(com->topNR);
@@ -990,6 +1166,15 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
   return 0;
 }
 
+/** 
+ * [Para todos os nodos de uma árvore verifica se o criador desse posts está no topR para inserir nos arrays passados]
+ *@param com             [Estrutura]
+ *@param a               [Árvore dos posts]
+ *@param N               [Número de ids pedidos no top N]
+ *@param z               [Número de ids inseridos no topR]
+ *@param ocupados        [Número de ids no topR]
+ *@param h               [HashTableQuery11] 
+ */
 static void retornaTIdR (TAD_community com, Post* a, int N, int z, int ocupados,HashTableQuery11 h){
 	if (a!=NULL){
 		if (pertenceU(com,a->ownerUserId,N,ocupados))
