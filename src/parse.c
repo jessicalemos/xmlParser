@@ -30,10 +30,20 @@ int count (xmlDocPtr doc){
 	return c;
 }
 
+/**
+ * [Verifica se um determinado nodo é posts]
+ * @param  cur     [Nodo do libxml]
+ * @return         [Booleano de comparação]
+ */
 int isPost (xmlNodePtr cur){
 	return xmlStrcmp(cur->name, (const xmlChar *) "posts");
 }
 
+/**
+ * [Verifica se um determinado nodo é users]
+ * @param  cur     [Nodo do libxml]
+ * @return         [Booleano de comparação]
+ */
 int isUser (xmlNodePtr cur){
 	return xmlStrcmp(cur->name, (const xmlChar *) "users");
 }
