@@ -83,10 +83,20 @@ typedef struct query11{
   int contador;
 } Query11;
 
+/** [Para obter o id de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  i    [Posição da hash]
+ * @return      [Id]
+ */
 long get_id(HashTableQuery11 h,int i) {
   return h[i]->id;
 }
 
+/** [Para obter a tag de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  i    [Posição da hash]
+ * @return      [Tag]
+ */
 char* get_tag(HashTableQuery11 h,int i) {
        return h[i]->tag;
 }
@@ -111,6 +121,12 @@ int max(int e,int d){
   return e>d?e:d;
 }
 
+/**
+ * [Verifica se uma determinada tag se encontra num conjunto de tags]
+ * @param  s     [Conjunto de tags]
+ * @param  t     [Tag a verificar]
+ * @return       [Booleano de comparação]
+ */
 int verificaTag(char *s,char *t){
   int a=0,i=0,k=0,j;
   char *tag=malloc(strlen(s)*sizeof(char));
@@ -129,6 +145,14 @@ int verificaTag(char *s,char *t){
   return 0;
 }
 
+/**
+ * [Função que insere ordenadamente uma data e um valor inteiro na mesma posição dos arrays respetivos, com fator de ordenação o inteiro]
+ * @param  x     [Valor a inserir]
+ * @param  id    [Id a inserir]
+ * @param  p     [Array de ids]
+ * @param  s     [Array de inteiros]
+ * @param  N     [Tamanho dos arrays]
+ */
 void insere (int x, long id, long *p, int *s,int N){
     int i,j;
   for(i=0;i<N-1 && s[i]>x;i++);
@@ -140,6 +164,12 @@ void insere (int x, long id, long *p, int *s,int N){
        }
 }
 
+/**
+ * [Verifica se uma palara está contida num conjunto de palavras]
+ * @param  s      [Conjunto de palavras]
+ * @param  word   [Palavra a comparar]
+ * @return        [Booleano de comparação]
+ */
 int contida (char* s,char* word){
   int i = 0, j=0;
   while(s[i]!='\0'){
@@ -244,6 +274,11 @@ void freeHashTableQuery7 (HashTableQuery7 h, int size){
   free(h);
 }
 
+/**
+ * [Inicialização da HashTableQuery11]
+ * @param  N       [Tamanho da HashTableQuery11]
+ * @return         [HashTableQuery11]
+ */
 HashTableQuery11 initHashQuery11 (int N){
   HashTableQuery11 tag = malloc(N*sizeof(Query11*));
   for (int i=0; i<N; i++){
