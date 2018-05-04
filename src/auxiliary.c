@@ -101,10 +101,22 @@ char* get_tag(HashTableQuery11 h,int i) {
        return h[i]->tag;
 }
 
+/** 
+ * [Para obter o número de vezes que uma tag de uma determinada posição da hash ocorre]
+ * @param  h    [Hash]
+ * @param  i    [Posição da hash]
+ * @return      [Contador]
+ */
 int get_contador(HashTableQuery11 h,int i) {
   return h[i]->contador;
 }
 
+/** 
+ * [Altera o id de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  l    [Novo id]
+ * @param  i    [Posição da hash]
+ */
 void set_id(HashTableQuery11 h, long l,int i) {
  h[i]->id = l;
 }
@@ -184,6 +196,12 @@ int contida (char* s,char* word){
   return 0;
 }
 
+/**
+ * [Verifica se um id se encontra num array de ids]
+ * @param  postId  [Array de ids]
+ * @param  id      [Id a comparar]
+ * @return         [Booleano de comparação]
+ */
 int procuraArray (long* postId, long id, int N){
   int i;
   for(i=0; i<N && postId[i]!=id && postId[i]!=-2; i++);
@@ -192,6 +210,12 @@ int procuraArray (long* postId, long id, int N){
   return 1;
 }
 
+/**
+ * [Verifica se duas datas são iguais]
+ * @param  d1     [Data]
+ * @param  d2     [Data]
+ * @return        [Booleano de comparação]
+ */
 int compareDate (Date d1, Date d2){
   if (get_year(d1)==get_year(d2) && get_month(d1)==get_month(d2) && get_day(d1)==get_day(d2))
     return 1;
@@ -206,6 +230,14 @@ int compareDateQ (Date d1, Date d2){
   return 0;
 }
 
+/**
+ * [Função que insere ordenadamente uma data e um id na mesma posição dos arrays respetivos, com fator de ordenação a data]
+ * @param  d          [Data]
+ * @param  postId     [Id]
+ * @param  data       [Array de datas]
+ * @param  id         [Array de ids]
+ * @param  N          [Tamanho do array]
+ */
 void insereT(Date d,long postId,Date *data,long *id,int N){
   int i,j;
   for(i=0;i<N-1 && data[i]!=NULL && compareDateQ(data[i],d)==2;i++);
@@ -295,6 +327,12 @@ void insereTQuery11 (HashTableQuery11 h1, int i,char* tag,int contador, long id)
   h1[i]=new;
 }
 
+/**
+ * [Verifica se uma determinada posição da hash é nula]
+ * @param  h      [HashTableQuery11]
+ * @param  i      [Posição da hash]
+ * @return        [Booleano de comparação]
+ */
 int existeQ11(HashTableQuery11 h,int i){
   if(h[i]!=NULL) return 1;
   return 0;
