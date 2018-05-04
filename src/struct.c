@@ -1111,14 +1111,14 @@ static int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h){
 }
 
 static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h){
-	int i,chave,local;
+	int chave,local;
 	if (a!=NULL){
 		if (a->postTypeId==1){
 			chave = q7Hash(a->id,com);
 			local = procuraQ7(com,a->id,chave,h);
 			if(local==-1){
 				while (existeQ7(h,chave)){
-					if (chave+1>com->dataSize) i=0;
+					if (chave+1>com->dataSize) chave=0;
 					else chave++;
 				}
 			insereTQ7(h,chave,1,0,a->id);
@@ -1130,7 +1130,7 @@ static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h){
 			local = procuraQ7(com,a->parentId,chave,h);
 			if(local==-1){
 				while (existeQ7(h,chave)){
-					if (chave+1>com->dataSize) i=0;
+					if (chave+1>com->dataSize) chave=0;
 					else chave++;
 				}
 			insereTQ7(h,chave,0,1,a->parentId);
