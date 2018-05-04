@@ -1301,6 +1301,13 @@ static int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
   return -1;
 }
 
+/**
+ * [Procura uma tag na hashTag]
+ * @param  com       [Estrutura]
+ * @param  chave     [Valor da hash]
+ * @param  tag       [Tag a procurar]
+ * @return           [Posição da hash]
+ */
 int procuraTag(TAD_community com,int chave,char* tag){
 	int i,c=0;
 	for(i=chave;com->hashTag[i]!=NULL && c<com->tagsSize && strcmp(com->hashTag[i]->tagName,tag);i++){
