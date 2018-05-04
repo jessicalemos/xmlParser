@@ -458,7 +458,7 @@ void addUser (TAD_community com,int reputation, long id,char *name,char *about){
 int procuraUser (TAD_community com, long id){
 	int i, chave = userHash(id,com),c=0;
 	for (i=chave; com->hashUser[i]!=NULL && c<com->usersSize && com->hashUser[i]->ownerUserId!=id; i++){
-		if (i+1>com->usersSize) i=0;
+		if (i+1 == com->usersSize) i=0;
 		c++;
 	}
 	if (com->hashUser[i]!=NULL && com->hashUser[i]->ownerUserId==id) return i;
@@ -911,7 +911,7 @@ long procuraRespostas(TAD_community com, long id){
 int procuraData(TAD_community com, Date data){
 	int chave = dataHash(data,com),i,c=0;
 	for(i=chave;com->treeHash[i]!=NULL && c<com->dataSize && !compareDate(com->treeHash[i]->tree->creationDate,data);i++){
-		if(i+1>com->dataSize) i=0;
+		if(i+1 == com->dataSize) i=0;
 		c++;
 	}
 	if(com->treeHash[i]!=NULL && compareDate(com->treeHash[i]->tree->creationDate,data)) return i;
@@ -1212,7 +1212,7 @@ int q7Hash (long i, TAD_community com){
 static int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h){
 	int i,c=0;
 	for (i=chave; existeQ7(h,i) && c<com->dataSize && get_id_Q7(h,i)!=id; i++){
-		if (i+1>com->dataSize) i=0;
+		if (i+1 == com->dataSize) i=0;
 		c++;
 	}
 	if (existeQ7(h,i) && get_id_Q7(h,i)==id) return i;
@@ -1413,7 +1413,7 @@ int pertenceU (TAD_community com, long ownerUserId, int N, int n){
 static int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
   int i,c=0;
   for(i=chave;existeQ11(h,i) && c<TAD_community_get_tagsSize(com) && strcmp(get_tag(h,i),tag);i++){
-    if (i+1>TAD_community_get_tagsSize(com)) i=0;
+    if (i+1 == TAD_community_get_tagsSize(com)) i=0;
     c++;
   }
   if(existeQ11(h,i) && !strcmp(get_tag(h,i),tag)) return i;
