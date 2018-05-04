@@ -1319,10 +1319,10 @@ int procuraTag(TAD_community com,int chave,char* tag){
 }
 
 void buscaId (TAD_community com, char* tag, HashTableQuery11 h){
-	int chave = tagHash(tag, com), local = procuraQ11(com,chave,tag,h);
+	int chave = tagHash(tag, com),local = procuraQ11(com,chave,tag,h);
 	if(local==-1){
 		while(existeQ11(h,chave)){
-			if(chave+1>com->tagsSize) i=0;
+			if(chave+1>com->tagsSize) chave=0;
 			else chave++;
 		}
 		int idTag = procuraTag(com,chave,tag);
