@@ -54,7 +54,6 @@ typedef struct post{
 	char *title; /* Titulo */
 	long ownerUserId; /* Id do utilizador */
 	Date creationDate; /* Data de criação do post */	
-	char *question; /* Conteúdo do post */
 	int answerCount; /* Número de respostas ao post */
 	int commentCount; /* Número de comentários ao post */
 	int score; 
@@ -595,13 +594,12 @@ static Post* balancaTree (Post *p){
  * @param tag             [Tag a inserir]
  * @param title           [Title a inserir]
  * @param ownUserId       [OwnerUserId a inserir]
- * @param question        [Question a inserir]
  * @param answerCount     [AnswerCount a inserir]
  * @param data            [Data a inserir]
  * @param commentCount    [CommentCount a inserir]
  * @return                [Post já com a informção inserida]
 */
-static Post* insereTree(int score, int postTypeId, long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data, int commentCount){
+static Post* insereTree(int score, int postTypeId, long parentId, long id, char *tag, char *title, long ownerUserId, int answerCount, Date data, int commentCount){
 	Post *p = malloc (sizeof(Post));
 	if(p!=NULL){
 	    p->postTypeId = postTypeId; 
@@ -611,7 +609,6 @@ static Post* insereTree(int score, int postTypeId, long parentId, long id, char 
 		p->id = id;
 		p->score = score;
 	    p->title = title;
-		p->question = question;
 		p->parentId = parentId;
 		p->commentCount = commentCount;
 		p->tag = tag;
@@ -631,19 +628,18 @@ static Post* insereTree(int score, int postTypeId, long parentId, long id, char 
  * @param tag                [Tag a inserir]
  * @param title              [Title a inserir]
  * @param ownUserId          [OwnerUserId a inserir]
- * @param question           [Conteúdo a inserir]
  * @param answerCount        [AnswerCount a inserir]
  * @param data               [Data a inserir]
  * @param commentCount       [CommentCount a inserir]
  * @return                   [Post já com o novo inserido]
  */
-static Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char *tag, char *title, long ownUserId, char *question, int answerCount, Date data, int commentCount){
+static Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char *tag, char *title, long ownUserId, int answerCount, Date data, int commentCount){
 	if(c==NULL){
-	    return insereTree(score, postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
+	    return insereTree(score, postTypeId,parentId,id,tag,title,ownUserId,answerCount,data,commentCount);
 	}
     else{
-    	if(c->id>id) c->esq=rec(c->esq,score,postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
-        else c->dir=rec(c->dir,score,postTypeId,parentId,id,tag,title,ownUserId,question,answerCount,data,commentCount);
+    	if(c->id>id) c->esq=rec(c->esq,score,postTypeId,parentId,id,tag,title,ownUserId,answerCount,data,commentCount);
+        else c->dir=rec(c->dir,score,postTypeId,parentId,id,tag,title,ownUserId,answerCount,data,commentCount);
     }
     return balancaTree(c);
 }
@@ -658,12 +654,11 @@ static Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char 
  * @param tag             [Tag a inserir]
  * @param title           [Title a inserir]
  * @param ownUserId       [OwnerUserId a inserir]
- * @param question        [Question a inserir]
  * @param answerCount     [AnswerCount a inserir]
  * @param data            [Data a inserir]
  * @param commentCount    [CommentCount a inserir]
 */
-void addPost (TAD_community com,int score,int postTypeId,long parentId, long id, char *tag, char *title, long ownerUserId, char *question, int answerCount, Date data,int commentCount){
+void addPost (TAD_community com,int score,int postTypeId,long parentId, long id, char *tag, char *title, long ownerUserId, int answerCount, Date data,int commentCount){
 	int i=dataHash(data,com); 
 	while (com->treeHash[i]!=NULL && !compareDate(com->treeHash[i]->tree->creationDate,data)){
 		if (i>com->dataSize) i=0;
@@ -677,7 +672,7 @@ void addPost (TAD_community com,int score,int postTypeId,long parentId, long id,
         	com->treeHash[i]->contadorP = 0;
         	com->treeHash[i]->numRespostas = 0;
 	}
-    com->treeHash[i]->tree=rec(com->treeHash[i]->tree,score,postTypeId,parentId,id,tag,title,ownerUserId,question,answerCount,data,commentCount);
+    com->treeHash[i]->tree=rec(com->treeHash[i]->tree,score,postTypeId,parentId,id,tag,title,ownerUserId,answerCount,data,commentCount);
     incrementaPost(com,ownerUserId);
     if (postTypeId ==1 || postTypeId == 2) insere_Heap_Posts(com,ownerUserId,id,data);
     if (postTypeId == 2) com->treeHash[i]->contadorR++;
@@ -1591,7 +1586,6 @@ static void freeP(Post* p2){
 	if(p2!=NULL){
 		free(p2->title);
 		free(p2->tag);
-		free(p2->question);
 		free_date(p2->creationDate);
 		freeP((p2->esq));
 		freeP((p2->dir));

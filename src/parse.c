@@ -98,7 +98,7 @@ Date creatingDate(char *s){
 void loadingPost (xmlNodePtr n,TAD_community com){
 	xmlNodePtr cur = n->xmlChildrenNode;
 	Date data;
-	char *titulo=NULL, *tag=NULL, *body=NULL, *parentIdChar = NULL, *answerCountChar = NULL;
+	char *titulo=NULL, *tag=NULL, *parentIdChar = NULL, *answerCountChar = NULL;
 	xmlChar *SCORE, *ID, *POSTTYPEID, *OWNERUSERID, *COMMENTCOUNT;
 	int score, postTypeId, answerCount, commentCount;
 	long id, ownerUserId, parentId;
@@ -119,7 +119,6 @@ void loadingPost (xmlNodePtr n,TAD_community com){
 		    	commentCount = atoi((char *) COMMENTCOUNT);
 		    	xmlFree(COMMENTCOUNT);
 		    	data = creatingDate((char *) xmlGetProp(cur,(xmlChar *)"CreationDate"));
-				body = (char *) xmlGetProp(cur,(xmlChar *)"Body");
 				parentIdChar = (char *) xmlGetProp(cur,(xmlChar *)"ParentId");
 		    	if (parentIdChar!=NULL){
 		   	 		parentId = atol(parentIdChar);
@@ -137,7 +136,7 @@ void loadingPost (xmlNodePtr n,TAD_community com){
 				ownerUserId = atol((char *) OWNERUSERID);
 				xmlFree(OWNERUSERID);
 
-	   		addPost(com, score, postTypeId, parentId, id,tag, titulo, ownerUserId, body, answerCount, data, commentCount);
+	   		addPost(com, score, postTypeId, parentId, id,tag, titulo, ownerUserId, answerCount, data, commentCount);
 			}
 		}
 		cur = cur->next;		
