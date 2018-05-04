@@ -33,6 +33,12 @@ STR_pair info_from_post(TAD_community com, long id){
 	return p;
 }
 
+/**
+ * [Query 2 - Devolve o top N utilizadores com maior número de posts de sempre]
+ * @param  com     [Estrutura]
+ * @param  N       [N pedido no top N]
+ * @return         [Lista com os ids dos utilizadores com maior número de posts]
+ */
 LONG_list top_most_active(TAD_community com, int N){
 	int k;
 	for(k=0;get_topN(com,k)!=-2;k++);
@@ -97,6 +103,14 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
 	return list;
 }
 
+/**
+ * [Query 7 - Devolve os ids das N perguntas com mais respostas num dado intervalo de tempo]
+ * @param  com         [Estrutura]
+ * @param  N           [N pedido no top N] 
+ * @param  begin       [Data inicial]
+ * @param  end         [Data final] 
+ * @return             [Lista com os ids das N perguntas com mais respostas]
+ */
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
 	int w, size = TAD_community_get_dataSize(com)/2, tam; 
 	long *array,*aId;
@@ -121,6 +135,13 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
 	return list;
 }
 
+/**
+ * [Query 8 - Devolve uma lista com os ids de N perguntas cujos tı́tulos contenham uma dada palavra]
+ * @param  com         [Estrutura]
+ * @param  word        [Palavra a comparar] 
+ * @param  N           [N pedido no top N]  
+ * @return             [Lista com os ids de N perguntas cujos tı́tulos contenham a palavra]
+ */
 LONG_list contains_word(TAD_community com, char* word, int N){
 	int j, i;
 	long* id = malloc(N*sizeof(long));
@@ -203,6 +224,14 @@ long better_answer(TAD_community com, long id){
 	return procuraRespostas(com, id);
 }
 
+/**
+ * [Query 11 - Devolve os identificadores das N tags mais usadas pelos N utilizadores com melhor reputação num dado intervalo de tempo]
+ * @param  com         [Estrutura]
+ * @param  N           [N pedido no top N]  
+ * @param  begin       [Data inicial]
+ * @param  end         [Data final] 
+ * @return             [Lista com os ids das N tags mais usadas pelos N utilizadores com melhor reputação]
+ */
 LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	int w, z; 
 	HashTableQuery11 h = initHashQuery11(TAD_community_get_tagsSize(com));
