@@ -365,7 +365,6 @@ HashTableQuery11 initHashQuery11 (int N){
  * @param  contador     [Contador]
  * @param  id           [Id]
  */
-
 void insereTQuery11 (HashTableQuery11 h1, int i,char* tag,int contador, long id){
   Query11 *new= malloc(sizeof(Query11));
   new->id = id;  
