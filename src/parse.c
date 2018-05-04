@@ -221,6 +221,11 @@ void add (TAD_community com, xmlNodePtr t){
 	}
 }
 
+/**
+ * [Parse da informação do ficheiro]
+ * @param  doc     [Árvore resultante do parsing do documento]
+ * @param  com     [Estrutura]
+ */
 void parseDoc(xmlDocPtr doc, TAD_community com){
 	xmlNodePtr cur, a;
 	if (doc==NULL){
@@ -237,6 +242,11 @@ void parseDoc(xmlDocPtr doc, TAD_community com){
 	add(com, a);
 }
 
+/**
+ * [Parse dos ficheiro]
+ * @param  com    		 [Estrutura]
+ * @param  dump_path     [Caminho para a diretoria onde se encontram os ficheiros]
+ */
 void parse (TAD_community com, char* dump_path){
 	int dataSize, usersSize, tagsSize;
 	if (dump_path == NULL){
@@ -267,7 +277,12 @@ void parse (TAD_community com, char* dump_path){
 	free(z);free(w);free(k);
 	xmlCleanupParser();
 }
-
+/**
+ * [Função resposável pelo parse e carregamento das estruturas]
+ * @param  com     		 [Estrutura]
+ * @param  dump_path     [Caminho para a diretoria]
+ * @return       		 [Estrutura]
+ */
 TAD_community load (TAD_community com ,char* dump_path){
     parse(com, dump_path);
     return com;

@@ -123,14 +123,32 @@ void set_id(HashTableQuery11 h, long l,int i) {
  h[i]->id = l;
 }
 
+/** 
+ * [Altera a tag de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  l    [Nova tag]
+ * @param  i    [Posição da hash]
+ */
 void set_tag(HashTableQuery11 h, char* tag,int i) {
   h[i]->tag = tag;
 }
 
+/** 
+ * [Altera o contador de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  l    [Novo contador]
+ * @param  i    [Posição da hash]
+ */
 void set_contador(HashTableQuery11 h, int l,int i) {
   h[i]->contador = l;
 }
 
+/**
+ * [Encontra o máximo entre dois inteiros]
+ * @param  e     [Inteiro a comparar]
+ * @param  d     [Inteiro a comparar]
+ * @return       [Máximo]
+ */
 int max(int e,int d){
   return e>d?e:d;
 }
@@ -224,6 +242,12 @@ int compareDate (Date d1, Date d2){
   return 0;
 }
 
+/**
+ * [Estabelece uma relação entre duas datas]
+ * @param  d1     [Data]
+ * @param  d2     [Data]
+ * @return        [Booleano de comparação]
+ */
 int compareDateQ (Date d1, Date d2){
   if (get_year(d1)==get_year(d2) && get_month(d1)==get_month(d2) && get_day(d1)==get_day(d2))
     return 1;
@@ -265,6 +289,13 @@ void insereT(Date d,long postId,Date *data,long *id,int N){
   }
 }
 
+/**
+ * [Insere uma tag num array de ids de tags e caso esta já exista aumenta ao número de vezes que esta ocorre no array respetivo]
+ * @param  tag   [Id da tag]
+ * @param  p     [Array de ids das tags]
+ * @param  s     [Array do número de vezes que cada tag ocorre]
+ * @param  N     [Tamanho dos arrays]
+ */
 void insereTag (long tag, long* p, int* s, int N){ 
   int i;
   for(i=0;i<N-1 && p[i]!=-2 && p[i]!=tag; i++);
@@ -275,6 +306,11 @@ void insereTag (long tag, long* p, int* s, int N){
   }
 }
 
+/**
+ * [Inicialização da hashTopN]
+ * @param  N       [Tamanho da hashTopN]
+ * @return         [HashTableTopN]
+ */
 HashTableQuery7 initHashQ7 (int N){
   HashTableQuery7 tag = malloc(N*sizeof(Query7*));
   for (int i=0; i<N; i++){
@@ -320,6 +356,15 @@ HashTableQuery11 initHashQuery11 (int N){
   }
   return tag;
 }
+
+/**
+ * [Insere numa detreminada posição da hash um novo elemento]
+ * @param  h1           [HashTableQuery11]
+ * @param  i            [Posição da hash]
+ * @param  tag          [Tag]
+ * @param  contador     [Contador]
+ * @param  id           [Id]
+ */
 
 void insereTQuery11 (HashTableQuery11 h1, int i,char* tag,int contador, long id){
   Query11 *new= malloc(sizeof(Query11));

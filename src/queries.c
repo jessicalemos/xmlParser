@@ -113,15 +113,9 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
  */
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
 	int w, size = TAD_community_get_dataSize(com)/2; 
-	long *array,*aId;
-	int *arrayA;
 	HashTableQuery7 h = initHashQ7(TAD_community_get_dataSize(com));
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	else{
-		array = malloc(N*sizeof(long));
-		arrayA = malloc(N*sizeof(int));
-		aId = malloc(size*sizeof(long));
-		for(int j=0; j<N; j++) {array[j]=-2;arrayA[j]=-20;aId[j]=-2;}
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
 				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
@@ -131,7 +125,6 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
 		}
 	}
 	LONG_list list = carregaListaQ(com,N,h); 
-	free(array);free(arrayA);free(aId);
 	return list;
 }
 
@@ -191,6 +184,12 @@ LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end)
 	return list;
 }
 
+/**
+ * [Query 5 - Devolve a informação do seu perfil e os ids dos seus 10 últimos posts]
+ * @param  com         [Estrutura]
+ * @param  id          [Id de um utilizador] 
+ * @return             [USER que contém a short bio e os ids dos posts]
+ */
 USER get_user_info(TAD_community com, long id){
 	int i = procuraUser(com,id);
 	USER u;
@@ -207,6 +206,14 @@ USER get_user_info(TAD_community com, long id){
 	return u;
 }
 
+/**
+ * [Query 9 - Devolve as últimas N perguntas em que participaram dois utilizadores especı́ficos]
+ * @param  com          [Estrutura]
+ * @param  id1          [Id de um utilizador] 
+ * @param  id2          [Id de um utilizador]  
+ * @param  N            [N pedido no top N]  
+ * @return              [Lista com os ids das N perguntas em que participaram os dois utilizadores]
+ */
 LONG_list both_participated(TAD_community com, long id1, long id2, int N){
 	long* id = malloc(N*sizeof(long));
 	for(int i=0;i<N;i++) id[i]=-2;
@@ -220,6 +227,12 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N){
 	return l;	
 }
 
+/**
+ * [Query 10 - obter a melhor resposta, ou seja, com melhor média ponderada]
+ * @param  com         [Estrutura]
+ * @param  id          [Id de uma pergunta] 
+ * @return             [Id da pergunta com melhor média ponderada]
+ */
 long better_answer(TAD_community com, long id){
 	return procuraRespostas(com, id);
 }
@@ -251,6 +264,11 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	return list;
 }
 
+/**
+ * [Liberta todas as estruturas associadas à estrutura TAD_community]
+ * @param  com         [Estrutura]
+ * @return             [A estrutura sem nada guardado em memória]
+ */
 TAD_community clean (TAD_community com){
     if (com!=NULL){
         if(TAD_community_get_dataSize(com)!=-1){
