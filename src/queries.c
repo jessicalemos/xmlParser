@@ -2,7 +2,12 @@
 #include "struct.h"
 #include "auxiliary.h"
 
-
+/**
+ * [Query 1 - Devolve o tı́tulo do post e o nome de utilizador do autor]
+ * @param  com      [Estrutura]
+ * @param  id       [Id de um post]
+ * @return          [Par com o tı́tulo do post e o nome do autor]
+ */
 STR_pair info_from_post(TAD_community com, long id){
 	char *nome = NULL, *title = NULL;
 	int iP = procuraPost(com,id); 
@@ -35,6 +40,13 @@ LONG_list top_most_active(TAD_community com, int N){
 	return contaPosts(com,tam,k);
 }
 
+/**
+ * [Query 3 - Devolve o número total de posts, perguntas e respostas separadamente, num dado intervalo de tempo]
+ * @param  com         [Estrutura]
+ * @param  begin       [Data inicial]
+ * @param  end         [Data final] 
+ * @return             [Par com o número de perguntas e número de respostas]
+ */
 LONG_pair total_posts(TAD_community com, Date begin, Date end){
 	int w;
 	long perguntas = 0, respostas = 0;
@@ -52,6 +64,14 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end){
 		return create_long_pair(perguntas,respostas);
 }
 
+/**
+ * [Query 6 - Devolve os ids das N respostas com mais votos num dado intervalo de tempo]
+ * @param  com         [Estrutura]
+ * @param  N           [N pedido no top N] 
+ * @param  begin       [Data inicial]
+ * @param  end         [Data final] 
+ * @return             [Lista com os ids das N respostas com mais votos]
+ */
 LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
 	int  w; 
 	long *array;
@@ -120,6 +140,14 @@ LONG_list contains_word(TAD_community com, char* word, int N){
 	return l;
 }
 
+/**
+ * [Query 4 - Devolve todas as perguntas que contenham uma determinada tag num dado intervalo de tempo]
+ * @param  com         [Estrutura]
+ * @param  tag         [Tag a comparar] 
+ * @param  begin       [Data inicial]
+ * @param  end         [Data final] 
+ * @return             [Lista com os ids das perguntas]
+ */
 LONG_list questions_with_tag(TAD_community com, char* tag, Date begin, Date end){
 	int c = TAD_community_get_dataSize(com)/2,w; 
 	long *array;
