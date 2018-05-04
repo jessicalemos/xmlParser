@@ -83,7 +83,8 @@ typedef struct query11{
   int contador;
 } Query11;
 
-/** [Para obter o id de uma determinada posição da hash]
+/** 
+ * [Para obter o id de uma determinada posição da hash]
  * @param  h    [Hash]
  * @param  i    [Posição da hash]
  * @return      [Id]
@@ -92,7 +93,8 @@ long get_id(HashTableQuery11 h,int i) {
   return h[i]->id;
 }
 
-/** [Para obter a tag de uma determinada posição da hash]
+/** 
+ * [Para obter a tag de uma determinada posição da hash]
  * @param  h    [Hash]
  * @param  i    [Posição da hash]
  * @return      [Tag]
