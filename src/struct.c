@@ -962,6 +962,13 @@ static void bubbleDownPosts(HeapPosts h, int N){
         swapPosts(h, i, LEFT(i));
 }
 
+/** 
+ * [Insire um elemento (id e data) na HeapPosts mantendo o invariante que o pai é sempre maior que os filhos]
+ * @param h        [HeapPosts onde queremos inserir o elemento]
+ * @param data     [Data que queremos inserir]
+ * @param id       [Id que queremos inserir]
+ * @return         [Caso de sucesso]  
+ */
 static int insertHeapPosts(HeapPosts h,Date data,long id){
     if (h->used == h->size) {
         h->array= realloc(h->array, 2*(h->size)*sizeof(struct elemPosts));
