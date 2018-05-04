@@ -556,7 +556,7 @@ static Post* insereTree(int score, int postTypeId, long parentId, long id, char 
 }
 
 /** 
- * [Insere na árvore dos posts um novo, mantendo as propriedades da árvore, depois de o criar com a informção existente]
+ * [Insere na árvore dos posts um novo, mantendo as propriedades da árvore, depois de o criar com a informação existente]
  * @param c                  [Árvore binária dos posts]
  * @param score              [Score a inserir]
  * @param postTypeId         [PostTypeId a inserir]
@@ -637,6 +637,7 @@ int procuraPost (TAD_community com, long id){
  * [Verifica se uma determinada posicão da treeHash é nula]
  * @param com  [Estrutura]
  * @param i    [Posição a verificar]
+ * @return     [Booleano de comparação] 
  */
 int existeTree (TAD_community com, int i){
     if(com->treeHash[i]!=NULL) return 1;
@@ -753,6 +754,7 @@ static void guardaRespostas(TAD_community com, Post* a, long id, float max, int 
  * [Devolve o id da resposta com maior média ponderada de um determinado post do tipo pergunta]
  * @param com         [Estrutura]
  * @param id          [Id do post pergunta]
+ * @return            [Id da resposta com maior média ponderada] 
  */
 long procuraRespostas(TAD_community com, long id){
 	int i,j,flag = 0,local = procuraPost(com,id),nRespostas=0;
@@ -932,6 +934,7 @@ static void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3
  * @param com       [Estrutura]
  * @param chave1    [Local da hashUser onde se encontra a informação de determinado utilizador]
  * @param chave2    [Local da hashUser onde se encontra a informação de determinado utilizador]
+ * @return          [Número de posts em que ambos os utilizadores participam]
  */
 static int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,int chave1,int chave2){
 	int k=0; 
@@ -1039,6 +1042,7 @@ static void bubbleDown(Heap h, int N){
  * @param h        [Heap onde queremos inserir o elemento]
  * @param count    [Paramentro a inserir]
  * @param id       [Id relacionado com o count que queremos inserir]
+ * @return         [Caso de sucesso] 
  */
 static int insertHeap(Heap h,int count,long id){
     if (h->used == h->size) {
@@ -1339,13 +1343,13 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
 }
 
 /** 
- * [Para todos os nodos de uma árvore verifica se o criador desse posts está no topR para inserir nos arrays passados]
- *@param com             [Estrutura]
- *@param a               [Árvore dos posts]
- *@param N               [Número de ids pedidos no top N]
- *@param z               [Número de ids inseridos no topR]
- *@param ocupados        [Número de ids no topR]
- *@param h               [HashTableQuery11] 
+ * [Para todos os nodos de uma árvore verifica se o criador desse post está no topR para inserir as tags usadas na HashTableQuery11]
+ * @param com             [Estrutura]
+ * @param a               [Árvore dos posts]
+ * @param N               [Número de ids pedidos no top N]
+ * @param z               [Número de ids inseridos no topR]
+ * @param ocupados        [Número de ids no topR]
+ * @param h               [HashTableQuery11] 
  */
 static void retornaTIdR (TAD_community com, Post* a, int N, int z, int ocupados,HashTableQuery11 h){
 	if (a!=NULL){
@@ -1411,6 +1415,10 @@ void freeHashTableUsers  (TAD_community com, int size){
 	free(com->hashUser);
 }
 
+/** [Liberta a HashTag]
+ * @param com     [Estrutura]
+ * @param size    [Tamanho da hashTag]
+ */
 void freeHashTableTags (TAD_community com, int size){
 	int i;
 	Tags *cur;
