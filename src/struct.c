@@ -1169,7 +1169,7 @@ LONG_list carregaListaQ(TAD_community com,int N,HashTableQuery7 h){
 	Heap tag;
 	int size=com->dataSize/2;
 	tag = NULL;
-	tag = initHeap(size);int c=0;
+	tag = initHeap(size);
 	for(int i=0;i<size;i++)
 			if(existeQ7(h,i) && get_flag_Q7(h,i)!=0) insertHeap(tag,get_contador_Q7(h,i),get_id_Q7(h,i));
 	if(tag->used<N) N=tag->used;
@@ -1191,7 +1191,7 @@ LONG_list carregaListaT(TAD_community com,long* id,Date* d){
 	HeapPosts tag;
 	int size=com->dataSize/2,i;
 	tag = NULL;
-	tag = initHeapPosts(size);int c=0;
+	tag = initHeapPosts(size);
 	for(i=0;i<size && id[i]!=-2;i++){
 			 insertHeapPosts(tag,d[i],id[i]);}
 	LONG_list l=create_list(i);
@@ -1319,7 +1319,7 @@ int procuraTag(TAD_community com,int chave,char* tag){
 }
 
 void buscaId (TAD_community com, char* tag, HashTableQuery11 h){
-	int chave = tagHash(tag, com), c=0, i, local = procuraQ11(com,chave,tag,h);
+	int chave = tagHash(tag, com), c=0, local = procuraQ11(com,chave,tag,h);
 	if(local==-1){
 		while(existeQ11(h,chave)){
 			if(chave+1>com->tagsSize) i=0;
