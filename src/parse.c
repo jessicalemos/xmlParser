@@ -48,10 +48,20 @@ int isUser (xmlNodePtr cur){
 	return xmlStrcmp(cur->name, (const xmlChar *) "users");
 }
 
+/**
+ * [Verifica se um determinado nodo é tags]
+ * @param  cur     [Nodo do libxml]
+ * @return         [Booleano de comparação]
+ */
 int isTag (xmlNodePtr cur){
 	return xmlStrcmp(cur->name, (const xmlChar *) "tags");
 }
 
+/**
+ * [Transforma uma string que contém uma data no tipo Date]
+ * @param  s     [String que contém a data a transformar]
+ * @return       [Data]
+ */
 Date creatingDate(char *s){
     char ano[5],mes[3],dia[3];
     int i=0,m,j=0,d,a,k=0;
@@ -75,6 +85,11 @@ Date creatingDate(char *s){
     return createDate(d,m,a);
 }
 
+/**
+ * [Retira a informação necessária do ficheiro dos posts para o carregamento das estruturas]
+ * @param  cur     [Nodo do libxml]
+ * @param  com     [Estrutura]
+ */
 void loadingPost (xmlNodePtr n,TAD_community com){
 	xmlNodePtr cur = n->xmlChildrenNode;
 	Date data;
@@ -165,6 +180,11 @@ void loadingUsers (xmlNodePtr n, TAD_community com){
 	}
 }
 
+/**
+ * [De acordo com o tipo do ficheiro retira-lhe a informação necessária para o carregamento das estruturas]
+ * @param  cur     [Nodo do libxml]
+ * @param  com     [Estrutura]
+ */
 void add (TAD_community com, xmlNodePtr t){
 	xmlNodePtr a;
 	int flag=0;
