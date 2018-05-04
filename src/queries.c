@@ -112,7 +112,7 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
  * @return             [Lista com os ids das N perguntas com mais respostas]
  */
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
-	int w, size = TAD_community_get_dataSize(com)/2, tam; 
+	int w, size = TAD_community_get_dataSize(com)/2; 
 	long *array,*aId;
 	int *arrayA;
 	HashTableQuery7 h = initHashQ7(TAD_community_get_dataSize(com));
