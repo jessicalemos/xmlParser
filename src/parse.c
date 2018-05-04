@@ -10,6 +10,11 @@
 #include <dirent.h>
 #include <memory.h>
 
+/**
+ * [Conta o número de elementos de um ficheiro]
+ * @param  doc     [Árvore resultante do parsing do documento]
+ * @return         [Número de elementos]
+ */
 int count (xmlDocPtr doc){
 	xmlNodePtr cur, a;
 	int c=0;
@@ -139,6 +144,11 @@ void loadingPost (xmlNodePtr n,TAD_community com){
 	}	
 }
 
+/**
+ * [Retira a informação necessária do ficheiro das tags]
+ * @param  cur     [Nodo do libxml]
+ * @param  com     [Estrutura]
+ */
 void loadingTags (xmlNodePtr n, TAD_community com){
 	xmlNodePtr cur = n->xmlChildrenNode;
 	long id;
