@@ -263,7 +263,14 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	HashTableTopN h1 = initHashTopN(N*2);
 	h1 = transfere(com,N,h1);
 	if (ocupados == 0) ocupados = N;
-	c *= 3;
+	for(w=0;w<TAD_community_get_dataSize(com);w++){
+		if(existeTree(com,w)){
+			if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+				c += treeHash_getNumRespostas(com,w); 
+			}
+		}
+	}
+	c *= 5;
 	HashTableQuery11 h = initHashQuery11(c);
 	for(w=0;w<TAD_community_get_dataSize(com);w++){
 		if(existeTree(com,w)){
