@@ -403,7 +403,8 @@ HeapPosts initHeapPosts(int size){
 
 /** 
  * [Devolve o valor de Hash correspondente a um determinado id]
- * @param id   [Id do utilizador]
+ * @param i    [Id do utilizador]
+ * @param com  [Estrutura]
  * @return     [Valor de Hash]
  */
 int userHash (long i, TAD_community com){
@@ -921,7 +922,7 @@ int procuraData(TAD_community com, Date data){
 
 /** 
  * [Troca dois elementos da heapPost]
- * @param h       [Heap]
+ * @param h       [HeapPosts]
  * @param a       [Elemento para trocar de posição com b]
  * @param b       [Elemento para trocar de posição com a]
  */
@@ -1038,8 +1039,8 @@ static void procuraId(HeapPosts h, TAD_community com, long* postId, HeapPosts h3
 
 /** 
  * [Coloca no array os ids dos posts tipo pergunta em que dois dados utilizadores participam]
- * @param h1        [Heap com os posts de um utilizador]
- * @param h2        [Heap com os posts de um utilizador]
+ * @param h1        [HeapPosts com os posts de um utilizador]
+ * @param h2        [HeapPosts com os posts de um utilizador]
  * @param N         [N pedido no top N]
  * @param id        [Array com os ids dos posts]
  * @param com       [Estrutura]
@@ -1369,11 +1370,11 @@ LONG_list carregaListaT(TAD_community com,long* id,Date* d){
  * @param com     [Estrutura]
  * @param N       [N pedido no top N]
  * @param h       [HashTableQuery11]
+ * @param size    [Tamanho da HashTableQuery11]
  * @return        [Lista com os ids das N tags mais usadas]
  */
-LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
+LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h,int size){
 	Heap tag;
-	int size=com->tagsSize/2;
 	tag = NULL;
 	tag = initHeap(size);
 	for(int i=0;i<size;i++)
@@ -1462,7 +1463,7 @@ void freeTopN(TAD_community com){
 
 /** 
  * [Devolve o valor de Hash correspondente a um determinado id]
- * @param id   [Id]
+ * @param i    [Id]
  * @param N    [Tamanho da HashTableTopN]
  * @return     [Valor de Hash]
  */
@@ -1577,13 +1578,14 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h, int size){
  * @param N               [Número de ids pedidos no top N]
  * @param h               [HashTableQuery11] 
  * @param h               [HashTableTopN]  
+ * @param size            [Tamanho da HashTableQuery11] 
  */
-static void retornaTIdR (TAD_community com, Post* a, int N,HashTableQuery11 h,HashTableTopN h1){
+static void retornaTIdR (TAD_community com, Post* a, int N,HashTableQuery11 h,HashTableTopN h1,int size){
 	if (a!=NULL){
 		if (a->tag!=NULL && pertenceU(com,a->ownerUserId,N,h1)==1)
-			buscaTag(com,a->tag,h);
-		retornaTIdR (com,a->esq,N,h,h1);
-		retornaTIdR (com,a->dir,N,h,h1);
+			buscaTag(com,a->tag,h,size);
+		retornaTIdR (com,a->esq,N,h,h1,size);
+		retornaTIdR (com,a->dir,N,h,h1,size);
 	}
 }
 
@@ -1594,7 +1596,7 @@ static void retornaTIdR (TAD_community com, Post* a, int N,HashTableQuery11 h,Ha
  * @param z               [Número de ids inseridos no topNR]
  * @param N               [Número de ids pedidos no top N]
  */
-int preencheTopNR (TAD_community com, int tam, int z, int N){
+void preencheTopNR (TAD_community com, int tam, int z, int N){
 	int b = com->TopR->used;
 	if (tam>0){
 		for (int k=0; k<tam && k<b; k++){
@@ -1608,14 +1610,13 @@ int preencheTopNR (TAD_community com, int tam, int z, int N){
 			z++;
 		}
 	}
-	return b;
 }
 
 /** 
  * [Função que insere na HashTableTopN o id dos N melhores utilizdores]
  * @param com       [Estrutura]
- * @param h         [HashTableTopN]
  * @param N         [N pedido no top N]
+ * @param h         [HashTableTopN]
  * @return          [HashTableTopN]
  */
 HashTableTopN transfere(TAD_community com, int N, HashTableTopN h){
@@ -1638,10 +1639,11 @@ HashTableTopN transfere(TAD_community com, int N, HashTableTopN h){
  * @param N               [Número de ids pedidos no top N]
  * @param h               [HashTableQuery11]
  * @param h1              [HashTableTopN]
+ * @param size            [Tamanho da HashTableQuery11]
  */
-void retornaTId(TAD_community com, int i, int N, HashTableQuery11 h,HashTableTopN h1){
+void retornaTId(TAD_community com, int i, int N, HashTableQuery11 h,HashTableTopN h1,int size){
 	Post* a = com->treeHash[i]->tree;
-	retornaTIdR (com,a,N,h,h1);
+	retornaTIdR (com,a,N,h,h1,size);
 }
 
 /** 
