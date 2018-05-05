@@ -1082,13 +1082,13 @@ static int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,i
 		for(j=0;j<a && k<N;j++){
 			Date data = h2->array[0].data;
 			long postId = extractMaxPosts2(h2,h4);
-			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c)!=0){
+			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c)!=0 && procuraArray(id,postId,c)==0){
 				id[k] = postId; 
 				k++;
 			}
 			else {
 				long idP = post_getparentId(com,procuraData(com,data),postId);
-				if(procuraArray(ID,idP,c)!=0){
+				if(procuraArray(ID,idP,c)!=0  && procuraArray(id,idP,c)==0){
 					id[k] = idP ;
 					k++;
 				 }
@@ -1223,9 +1223,9 @@ void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
  * @param size     [Tamanho da HashTableQuery7]
  * @return     	   [Valor de Hash]
 */
-int q7Hash (long i, TAD_community com){
-	if (i < 0) return (-(i % com->dataSize));
-	else return (i % (com->dataSize));
+int q7Hash (long i, int size){
+	if (i < 0) return (-(i % size));
+	else return (i % size);
 }
 
 /**
@@ -1237,16 +1237,23 @@ int q7Hash (long i, TAD_community com){
  * @param size       [Tamanho da HashTableQuery7] 
  * @return           [Posição da HashTableQuery7]
  */
-static int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h){
+static int procuraQ7 (TAD_community com, long id,int chave,HashTableQuery7 h, int size){
 	int i,c=0;
-	for (i=chave; existeQ7(h,i) && c<com->dataSize && get_id_Q7(h,i)!=id; i++){
-		if (i+1 == com->dataSize) i=0;
+	for (i=chave; existeQ7(h,i) && c<size && get_id_Q7(h,i)!=id; i++){
+		if (i+1 == size) i=0;
 		c++;
 	}
 	if (existeQ7(h,i) && get_id_Q7(h,i)==id) return i;
 	else return -1;
 }
 
+/**
+ * [Insere na HashTableQuery7 os ids dos posts tipo pergunta e o número de respostas de cada]
+ * @param a          [Árvore dos posts] 
+ * @param com        [Estrutura]
+ * @param h          [HashTableQuery7]  
+ * @param size       [Tamanho da HashTableQuery7] 
+ */
 static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h,int size){
 	int chave,local;
 	if (a!=NULL){
@@ -1263,19 +1270,19 @@ static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h,int size){
 			else set_flag_Q7(h,1,local);
 		}
 		if(a->postTypeId==2){
-			chave = q7Hash(a->parentId,com);
-			local = procuraQ7(com,a->parentId,chave,h);
+			chave = q7Hash(a->parentId,size);
+			local = procuraQ7(com,a->parentId,chave,h,size);
 			if(local==-1){
 				while (existeQ7(h,chave)){
-					if (chave+1==com->dataSize) chave=0;
+					if (chave+1==size) chave=0;
 					else chave++;
 				}
 			insereTQ7(h,chave,0,1,a->parentId);
 			}
 			else set_contador_Q7(h,get_contador_Q7(h,local)+1,local);
 		}
-	retornaAIdR (a->esq,com,h);
-	retornaAIdR (a->dir,com,h);
+	retornaAIdR (a->esq,com,h,size);
+	retornaAIdR (a->dir,com,h,size);
 	}
 }
 
@@ -1356,6 +1363,13 @@ LONG_list carregaListaT(TAD_community com,long* id,Date* d){
     return l;
 }
 
+/** 
+ * [Devolve os ids das tags mais usadas pelos N utilizadores com melhor reputação]
+ * @param com     [Estrutura]
+ * @param N       [N pedido no top N]
+ * @param h       [HashTableQuery11]
+ * @return        [Lista com os ids das N tags mais usadas]
+ */
 LONG_list carregaListaTag(TAD_community com,int N,HashTableQuery11 h){
 	Heap tag;
 	int size=com->tagsSize/2;
@@ -1446,6 +1460,17 @@ void freeTopN(TAD_community com){
 }
 
 /** 
+ * [Devolve o valor de Hash correspondente a um determinado id]
+ * @param id   [Id]
+ * @param N    [Tamanho da HashTableTopN]
+ * @return     [Valor de Hash]
+ */
+int topNHash (long i, int N){
+	if (i < 0) return (-(i % N));
+	else return (i % (N));
+}
+
+/** 
  * [Verifica se um utilizador pertence ao top N]
  * @param com           [Estrutura]
  * @param ownerUserId   [Id do utilizador a verificar]
@@ -1462,6 +1487,14 @@ int pertenceU (TAD_community com, long ownerUserId, int N, HashTableTopN h){
 	return -1;
 }
 
+/**
+ * [Devolve a posição da HashTableQuery11 onde se encontra uma dada tag]
+ * @param  com        [Estrutura]
+ * @param  chave      [Valor de hash]
+ * @param  tag        [Tag a procurar]
+ * @param  h          [HashTableQuery11]  
+ * @return            [Posição da HashTableQuery11]
+ */
 static int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
   int i,c=0;
   for(i=chave;existeQ11(h,i) && c<TAD_community_get_tagsSize(com) && strcmp(get_tag(h,i),tag);i++){
@@ -1541,15 +1574,22 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
  * @param ocupados        [Número de ids no topR]
  * @param h               [HashTableQuery11] 
  */
-static void retornaTIdR (TAD_community com, Post* a, int N, int z, int ocupados,HashTableQuery11 h){
+static void retornaTIdR (TAD_community com, Post* a, int N,HashTableQuery11 h,HashTableTopN h1){
 	if (a!=NULL){
-		if (pertenceU(com,a->ownerUserId,N,ocupados))
-			if (a->tag!=NULL) buscaTag(com,a->tag,h);
-		retornaTIdR (com,a->esq,N,z,ocupados,h);
-		retornaTIdR (com,a->dir,N,z,ocupados,h);
+		if (a->tag!=NULL && pertenceU(com,a->ownerUserId,N,h1)==1)
+			buscaTag(com,a->tag,h);
+		retornaTIdR (com,a->esq,N,h,h1);
+		retornaTIdR (com,a->dir,N,h,h1);
 	}
 }
 
+/** 
+ * [Preenche o array topNR com os N utilizadores com melhor reputação]
+ * @param com             [Estrutura]
+ * @param tam             [Número de ids que falta preencher no topNR]
+ * @param z               [Número de ids inseridos no topNR]
+ * @param N               [Número de ids pedidos no top N]
+ */
 int preencheTopNR (TAD_community com, int tam, int z, int N){
 	int b = com->TopR->used;
 	if (tam>0){
@@ -1565,6 +1605,26 @@ int preencheTopNR (TAD_community com, int tam, int z, int N){
 		}
 	}
 	return b;
+}
+
+/** 
+ * [Função que insere na HashTableTopN o id dos N melhores utilizdores]
+ * @param com       [Estrutura]
+ * @param h         [HashTableTopN]
+ * @param N         [N pedido no top N]
+ * @return          [HashTableTopN]
+ */
+HashTableTopN transfere(TAD_community com, int N, HashTableTopN h){
+	int chave, tam = N*2;
+	for(int i=0;i<N;i++){
+		chave = topNHash(com->topNR[i],tam);
+		while (existeHashTopN(h,chave)){
+			if (chave+1 == tam) chave=0;
+			else chave++;
+		}
+		insereHashTopN(h,chave,com->topNR[i]);
+	}
+	return h;
 }
 
 void retornaTId(TAD_community com, int i, int N, HashTableQuery11 h,HashTableTopN h1){
