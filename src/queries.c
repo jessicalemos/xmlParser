@@ -259,10 +259,9 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	for(z=0; get_topNR(com,z)!=-2; z++);
 	int tam = N-z;
 	if(compareDateQ(begin,end)==2) return create_list(0);
-	int ocupados = preencheTopNR(com,tam,z,N);
+	preencheTopNR(com,tam,z,N);
 	HashTableTopN h1 = initHashTopN(N*2);
 	h1 = transfere(com,N,h1);
-	if (ocupados == 0) ocupados = N;
 	for(w=0;w<TAD_community_get_dataSize(com);w++){
 		if(existeTree(com,w)){
 			if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
