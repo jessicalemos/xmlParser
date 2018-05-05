@@ -196,8 +196,8 @@ void loadingUsers (xmlNodePtr n, TAD_community com){
 
 /**
  * [De acordo com o tipo do ficheiro retira-lhe a informação necessária para o carregamento das estruturas]
- * @param  cur     [Nodo do libxml]
  * @param  com     [Estrutura]
+ * @param  t       [Nodo do libxml]
  */
 void add (TAD_community com, xmlNodePtr t){
 	xmlNodePtr a;
