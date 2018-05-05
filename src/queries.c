@@ -41,9 +41,12 @@ STR_pair info_from_post(TAD_community com, long id){
  */
 LONG_list top_most_active(TAD_community com, int N){
 	int k;
-	for(k=0;get_topN(com,k)!=-2;k++);
-	int tam=N-k;
-	return contaPosts(com,tam,k);
+	if(N>0){
+		for(k=0;get_topN(com,k)!=-2;k++);
+		int tam=N-k;
+		return contaPosts(com,tam,k);
+	}
+	return create_list(0);
 }
 
 /**
@@ -82,7 +85,7 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
 	int  w; 
 	long *array;
 	int *arrayS;
-	if(compareDateQ(begin,end)==2) return create_list(0);
+	if(compareDateQ(begin,end)==2 || N<=0) return create_list(0);
 	else{
 		array = malloc(N*sizeof(long));
 		arrayS = malloc(N*sizeof(int));
