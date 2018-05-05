@@ -272,7 +272,7 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 		}
 	}
 	LONG_list list = carregaListaTag(com,N,h); 
-	freeHashTableQuery11(h,TAD_community_get_tagsSize(com));freeHashTableTopN(hb,N*2); 		
+	freeHashTableQuery11(h,TAD_community_get_tagsSize(com));freeHashTableTopN(h1,N*2); 		
 	return list;
 }
 
