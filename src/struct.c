@@ -858,7 +858,7 @@ long procuraRespostas(TAD_community com, long id){
 		while(b){
 			if(b->id==id){
 				if(b->postTypeId==1) {nRespostas = b->answerCount;break;}
-		    	else return -2;
+		    	else return -1;
 			}
 			else if(b->id>id && b->esq!=NULL) b = b->esq;
 				 else b = b->dir;
