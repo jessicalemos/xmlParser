@@ -58,7 +58,7 @@ long* retornaTop10(TAD_community com, int i);
 int extraiHeaps(TAD_community com,int chave1,int chave2,int N,long* id);
 long procuraRespostas(TAD_community com, long id);
 LONG_list contaPosts(TAD_community com, int N, int nOrdenados);
-int pertenceU (TAD_community com, long ownerUserId, int N, int n);
+int pertenceU (TAD_community com, long ownerUserId, int N, HashTableTopN h);
 int preencheTopNR (TAD_community com, int tam, int z, int N);
 int procuraTag(TAD_community com,int chave,char* tag);
 void buscaId (TAD_community com, char* tag, HashTableQuery11 h);
