@@ -168,7 +168,7 @@ void loadingTags (xmlNodePtr n, TAD_community com){
 
 /**
  * [Retira a informação necessária do ficheiro dos users]
- * @param  cur     [Nodo do libxml]
+ * @param  n       [Nodo do libxml]
  * @param  com     [Estrutura]
  */
 void loadingUsers (xmlNodePtr n, TAD_community com){
