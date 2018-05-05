@@ -1627,6 +1627,14 @@ HashTableTopN transfere(TAD_community com, int N, HashTableTopN h){
 	return h;
 }
 
+/** 
+ * [Função que acede à árvore dos posts pretendida]
+ * @param com             [Estrutura]
+ * @param i               [Posição da treeHash onde se encontra a árvore]
+ * @param N               [Número de ids pedidos no top N]
+ * @param h               [HashTableQuery11]
+ * @param h1              [HashTableTopN]
+ */
 void retornaTId(TAD_community com, int i, int N, HashTableQuery11 h,HashTableTopN h1){
 	Post* a = com->treeHash[i]->tree;
 	retornaTIdR (com,a,N,z,ocupados,h,h1);
