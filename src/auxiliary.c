@@ -135,9 +135,9 @@ void set_id_Q7(HashTableQuery7 h, long l,int i) {
 
 /** 
  * [Altera a flag de uma determinada posição da hash]
- * @param  h    [Hash]
- * @param  l    [Nova flag]
- * @param  i    [Posição da hash]
+ * @param  h       [Hash]
+ * @param  flag    [Nova flag]
+ * @param  i       [Posição da hash]
  */
 void set_flag_Q7(HashTableQuery7 h, int flag,int i) {
   h[i]->flag = flag;
@@ -311,6 +311,7 @@ int contida (char* s,char* word){
  * [Verifica se um id se encontra num array de ids]
  * @param  postId  [Array de ids]
  * @param  id      [Id a comparar]
+ * @param  N       [Tamanho do array]
  * @return         [Booleano de comparação]
  */
 int procuraArray (long* postId, long id, int N){
@@ -414,7 +415,7 @@ HashTableQuery7 initHashQ7 (int N){
  * [Insere numa determinada posição da hash um novo id, uma nova flag e um novo id]
  * @param  h1            [HashTableQuery7]
  * @param  i             [Posição da hash]
- * @param  id            [Flag]
+ * @param  flag          [Flag]
  * @param  contador      [Contador]
  * @param  id            [Id]
  */
