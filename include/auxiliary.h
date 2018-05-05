@@ -44,5 +44,8 @@ HashTableQuery11 initHashQuery11 (int N);
 void insereTQuery11 (HashTableQuery11 h1, int i,char* tag,int contador, long id);
 int existeQ11(HashTableQuery11 h,int i);
 void freeHashTableQuery11 (HashTableQuery11 h, int size);
+HashTableTopN initHashTopN (int N);
+void insereHashTopN (HashTableTopN h1, int i,long id);
+int existeHashTopN(HashTableTopN h,int i);
 void freeHashTableTopN (HashTableTopN h, int size);
 #endif
