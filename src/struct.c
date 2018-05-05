@@ -391,7 +391,7 @@ TAD_community initHashData (TAD_community com, int N){
  * @param  size      [Tamanho da heapPosts]
  * @return           [HeapPosts]
  */
-HeapPosts initHeapPosts(int size){
+static HeapPosts initHeapPosts(int size){
     HeapPosts h = malloc(sizeof(struct heapPosts));
     if(h != NULL) {
         h->size = size;
