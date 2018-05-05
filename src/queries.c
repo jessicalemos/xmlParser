@@ -255,8 +255,7 @@ long better_answer(TAD_community com, long id){
  * @return             [Lista com os ids das N tags mais usadas pelos N utilizadores com melhor reputação]
  */
 LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
-	int w, z; 
-	HashTableQuery11 h = initHashQuery11(TAD_community_get_tagsSize(com));
+	int w, z, c = 0;
 	for(z=0; get_topNR(com,z)!=-2; z++);
 	int tam = N-z;
 	if(compareDateQ(begin,end)==2) return create_list(0);
@@ -264,15 +263,17 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	HashTableTopN h1 = initHashTopN(N*2);
 	h1 = transfere(com,N,h1);
 	if (ocupados == 0) ocupados = N;
+	c *= 3;
+	HashTableQuery11 h = initHashQuery11(c);
 	for(w=0;w<TAD_community_get_dataSize(com);w++){
 		if(existeTree(com,w)){
 			if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-				retornaTId(com,w,N,h,h1); 
+				retornaTId(com,w,N,h,h1,c); 
 			}
 		}
 	}
-	LONG_list list = carregaListaTag(com,N,h); 
-	freeHashTableQuery11(h,TAD_community_get_tagsSize(com));freeHashTableTopN(h1,N*2); 		
+	LONG_list list = carregaListaTag(com,N,h,c); 
+	freeHashTableQuery11(h,c);freeHashTableTopN(h1,N*2); 		
 	return list;
 }
 
