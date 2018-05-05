@@ -1227,7 +1227,7 @@ static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h){
 			local = procuraQ7(com,a->id,chave,h);
 			if(local==-1){
 				while (existeQ7(h,chave)){
-					if (chave+1>com->dataSize) chave=0;
+					if (chave+1==com->dataSize) chave=0;
 					else chave++;
 				}
 			insereTQ7(h,chave,1,0,a->id);
@@ -1239,7 +1239,7 @@ static void retornaAIdR (Post* a,TAD_community com,HashTableQuery7 h){
 			local = procuraQ7(com,a->parentId,chave,h);
 			if(local==-1){
 				while (existeQ7(h,chave)){
-					if (chave+1>com->dataSize) chave=0;
+					if (chave+1==com->dataSize) chave=0;
 					else chave++;
 				}
 			insereTQ7(h,chave,0,1,a->parentId);
@@ -1430,7 +1430,7 @@ static int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
 int procuraTag(TAD_community com,int chave,char* tag){
 	int i,c=0;
 	for(i=chave;com->hashTag[i]!=NULL && c<com->tagsSize && strcmp(com->hashTag[i]->tagName,tag);i++){
-		if (i+1>com->tagsSize) i=0;
+		if (i+1==com->tagsSize) i=0;
 		c++;
 	}
 	if(com->hashTag[i]!=NULL && !strcmp(com->hashTag[i]->tagName,tag)) return i;
@@ -1447,7 +1447,7 @@ void buscaId (TAD_community com, char* tag, HashTableQuery11 h){
 	int chave = tagHash(tag, com),local = procuraQ11(com,chave,tag,h);
 	if(local==-1){
 		while(existeQ11(h,chave)){
-			if(chave+1>com->tagsSize) chave=0;
+			if(chave+1==com->tagsSize) chave=0;
 			else chave++;
 		}
 		int idTag = procuraTag(com,chave,tag);
