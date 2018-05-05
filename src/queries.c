@@ -116,7 +116,7 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
  */
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
 	int w, c = 0;HashTableQuery7 h; 
-	if(compareDateQ(begin,end)==2) return create_list(0);
+	if(compareDateQ(begin,end)==2 || N<=0) return create_list(0);
 	else{
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
@@ -149,6 +149,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
  */
 LONG_list contains_word(TAD_community com, char* word, int N){
 	int j, i;
+	if(N<=0) return create_list(0);
 	long* id = malloc(N*sizeof(long));
 	Date* data = malloc(N*sizeof(Date));
 	for(i=0;i<N;i++){
@@ -227,6 +228,7 @@ USER get_user_info(TAD_community com, long id){
  * @return              [Lista com os ids das N perguntas em que participaram os dois utilizadores]
  */
 LONG_list both_participated(TAD_community com, long id1, long id2, int N){
+	if(N<=0) return create_list(0);
 	long* id = malloc(N*sizeof(long));
 	for(int i=0;i<N;i++) id[i]=-2;
 	int chave1 = procuraUser(com,id1),chave2 = procuraUser(com,id2),tam; 
@@ -261,7 +263,7 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	int w, z, c = 0;
 	for(z=0; get_topNR(com,z)!=-2; z++);
 	int tam = N-z;
-	if(compareDateQ(begin,end)==2) return create_list(0);
+	if(compareDateQ(begin,end)==2 || N<=0) return create_list(0);
 	preencheTopNR(com,tam,z,N);
 	HashTableTopN h1 = initHashTopN(N*2);
 	h1 = transfere(com,N,h1);
