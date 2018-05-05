@@ -202,7 +202,7 @@ void set_id(HashTableQuery11 h, long l,int i) {
 /** 
  * [Altera a tag de uma determinada posição da hash]
  * @param  h    [Hash]
- * @param  l    [Nova tag]
+ * @param  tag  [Nova tag]
  * @param  i    [Posição da hash]
  */
 void set_tag(HashTableQuery11 h, char* tag,int i) {
@@ -398,9 +398,9 @@ void insereTag (long tag, long* p, int* s, int N){
 }
 
 /**
- * [Inicialização da hashTopN]
- * @param  N       [Tamanho da hashTopN]
- * @return         [HashTableTopN]
+ * [Inicialização da HashTableQuery7]
+ * @param  N       [Tamanho da HashTableQuery7]
+ * @return         [HashTableQuery7]
  */
 HashTableQuery7 initHashQ7 (int N){
   HashTableQuery7 tag = malloc(N*sizeof(Query7*));
@@ -530,7 +530,6 @@ HashTableTopN initHashTopN (int N){
  * @param  h1      [HashTableTopN]
  * @param  i       [Posição da hash]
  * @param  id      [Id]
- * @return         [HashTableTopN]
  */
 void insereHashTopN (HashTableTopN h1, int i,long id){
   HashTopN *new= malloc(sizeof(HashTopN));
