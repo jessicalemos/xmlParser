@@ -10,7 +10,13 @@ struct new_pair {
   int trd;
 };
 
-
+/** 
+ * [Cria uma NEW_pair com as informações dadas]
+ * @param  fst    [Float a inserir]
+ * @param  snd    [Long a inserir]
+ * @param  trd    [Inteiro a inserir]
+ * @return        [NEW_pair]
+ */
 NEW_pair create_new_pair(float fst, long snd, int trd) {
   NEW_pair p = malloc(sizeof(struct new_pair));
   p->fst = fst; 
@@ -43,15 +49,29 @@ void set_trd_new(NEW_pair pair, int l) {
   pair->trd = l;
 }
 
+/** 
+ * [Para obter o float do NEW_pair]
+ * @param pair    [NEW_pair]
+ * @return        [O float do NEW_pair]
+ */
 float get_fst_new(NEW_pair pair) {
   return pair->fst;
 }
 
-
+/** 
+ * [Para obter o int do NEW_pair]
+ * @param pair    [NEW_pair]
+ * @return        [O int do NEW_pair]
+ */
 int get_trd_new(NEW_pair pair) {
   return pair->trd;
 }
 
+/** 
+ * [Para obter o long do NEW_pair]
+ * @param pair    [NEW_pair]
+ * @return        [O long do NEW_pair]
+ */
 long get_snd_new(NEW_pair pair) {
   return pair->snd;
 }
@@ -100,14 +120,32 @@ int get_contador_Q7(HashTableQuery7 h,int i) {
   return h[i]->contador;
 }
 
+/** 
+ * [Altera o id de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  l    [Novo id]
+ * @param  i    [Posição da hash]
+ */
 void set_id_Q7(HashTableQuery7 h, long l,int i) {
   h[i]->id = l;
 }
 
+/** 
+ * [Altera a flag de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  l    [Nova flag]
+ * @param  i    [Posição da hash]
+ */
 void set_flag_Q7(HashTableQuery7 h, int flag,int i) {
   h[i]->flag = flag;
 }
 
+/** 
+ * [Altera o contador de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  l    [Novo contador]
+ * @param  i    [Posição da hash]
+ */
 void set_contador_Q7(HashTableQuery7 h, int l,int i) {
   h[i]->contador = l;
 }
