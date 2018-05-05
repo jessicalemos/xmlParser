@@ -216,6 +216,21 @@ void set_contador(HashTableQuery11 h, int l,int i) {
   h[i]->contador = l;
 }
 
+typedef struct hashTopN{
+  long id;
+} HashTopN;
+
+/** [Para obter o id de uma determinada posição da hash]
+ * @param  h    [Hash]
+ * @param  i    [Posição da hash]
+ * @return      [Id]
+ */
+long get_id_HashTopN(HashTableTopN h,int i) {
+ if(h[i]!=NULL)
+   return h[i]->id;
+ else return -1;
+}
+
 /**
  * [Encontra o máximo entre dois inteiros]
  * @param  e     [Inteiro a comparar]
@@ -457,6 +472,11 @@ int existeQ11(HashTableQuery11 h,int i){
   return 0;
 }
 
+/**
+ * [Liberta a HashTableQuery11]
+ * @param  h          [HashTableQuery11]
+ * @param  size       [Tamanho da HashTableQuery11]
+ */
 void freeHashTableQuery11 (HashTableQuery11 h, int size){
   int i;
   Query11 *cur;
@@ -464,6 +484,23 @@ void freeHashTableQuery11 (HashTableQuery11 h, int size){
     if (h[i]!=NULL){
       cur = h[i];
       free(cur->tag);
+      free(cur);
+    }
+  } 
+  free(h);
+}
+
+/**
+ * [Liberta a HashTableTopN]
+ * @param  h          [HashTableTopN]
+ * @param  size       [Tamanho da HashTableTopN]
+ */
+void freeHashTableTopN (HashTableTopN h, int size){
+  int i;
+  HashTopN *cur;
+  for (i=0; i<size; i++){
+    if (h[i]!=NULL){
+      cur = h[i];
       free(cur);
     }
   } 
