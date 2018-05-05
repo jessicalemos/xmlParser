@@ -5,6 +5,7 @@
 typedef struct new_pair* NEW_pair;
 typedef struct query7 **HashTableQuery7;
 typedef struct query11 **HashTableQuery11;
+typedef struct hashTopN **HashTableTopN;
 NEW_pair create_new_pair(float fst, long snd, int trd);
 void set_fst_new(NEW_pair pair, float l);
 void set_snd_new(NEW_pair pair, long l);
@@ -38,8 +39,10 @@ int get_contador(HashTableQuery11 h,int i);
 void set_id(HashTableQuery11 h, long l,int i);
 void set_tag(HashTableQuery11 h, char* tag,int i);
 void set_contador(HashTableQuery11 h, int l,int i);
+long get_id_HashTopN(HashTableTopN h,int i);
 HashTableQuery11 initHashQuery11 (int N);
 void insereTQuery11 (HashTableQuery11 h1, int i,char* tag,int contador, long id);
 int existeQ11(HashTableQuery11 h,int i);
 void freeHashTableQuery11 (HashTableQuery11 h, int size);
+void freeHashTableTopN (HashTableTopN h, int size);
 #endif
