@@ -112,19 +112,20 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end){
  * @return             [Lista com os ids das N perguntas com mais respostas]
  */
 LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end){
-	int w, size = TAD_community_get_dataSize(com)/2; 
-	HashTableQuery7 h = initHashQ7(TAD_community_get_dataSize(com));
+	int w, c = 0;HashTableQuery7 h; 
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	else{
+		c *= 2;
+		h = initHashQ7(c);
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
 			if(existeTree(com,w)){
 				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-					retornaAId (com,w,h); 
+					retornaAId (com,w,h,c); 
 				}
 			}
 		}
 	}
-	LONG_list list = carregaListaQ(com,N,h); 
+	LONG_list list = carregaListaQ(com,N,h,c); 
 	return list;
 }
 
@@ -252,15 +253,18 @@ LONG_list most_used_best_rep (TAD_community com, int N, Date begin, Date end){
 	int tam = N-z;
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	int ocupados = preencheTopNR(com,tam,z,N);
+	HashTableTopN h1 = initHashTopN(N*2);
+	h1 = transfere(com,N,h1);
 	if (ocupados == 0) ocupados = N;
 	for(w=0;w<TAD_community_get_dataSize(com);w++){
 		if(existeTree(com,w)){
 			if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
-				retornaTId(com,w,N,tam,z,ocupados,h); 
+				retornaTId(com,w,N,h,h1); 
 			}
 		}
 	}
-	LONG_list list = carregaListaTag(com,N,h); 		
+	LONG_list list = carregaListaTag(com,N,h); 
+	freeHashTableQuery11(h,TAD_community_get_tagsSize(com));freeHashTableTopN(hb,N*2); 		
 	return list;
 }
 
