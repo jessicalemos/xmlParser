@@ -92,7 +92,7 @@ Date creatingDate(char *s){
 
 /**
  * [Retira a informação necessária do ficheiro dos posts para o carregamento das estruturas]
- * @param  cur     [Nodo do libxml]
+ * @param  n       [Nodo do libxml]
  * @param  com     [Estrutura]
  */
 void loadingPost (xmlNodePtr n,TAD_community com){
@@ -145,7 +145,7 @@ void loadingPost (xmlNodePtr n,TAD_community com){
 
 /**
  * [Retira a informação necessária do ficheiro das tags]
- * @param  cur     [Nodo do libxml]
+ * @param  n       [Nodo do libxml]
  * @param  com     [Estrutura]
  */
 void loadingTags (xmlNodePtr n, TAD_community com){
