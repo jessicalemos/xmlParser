@@ -1061,12 +1061,12 @@ static int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,i
 			Date data = h1->array[0].data;
 			long postId;
 			postId = extractMaxPosts2(h1,h4);
-			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c) && procuraArray(id,postId,c)==0){
+			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c) && procuraArray(id,postId,N)==0){
 				id[k] = postId; k++;
 			}
 			else {
 				long idP = post_getparentId(com,procuraData(com,data),postId);
-				if(procuraArray(ID,idP,c)!=0 && procuraArray(id,idP,c)==0){
+				if(procuraArray(ID,idP,c)!=0 && procuraArray(id,idP,N)==0){
 					id[k] = idP ;
 					k++;
 				 }
