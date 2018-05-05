@@ -1637,7 +1637,7 @@ HashTableTopN transfere(TAD_community com, int N, HashTableTopN h){
  */
 void retornaTId(TAD_community com, int i, int N, HashTableQuery11 h,HashTableTopN h1){
 	Post* a = com->treeHash[i]->tree;
-	retornaTIdR (com,a,N,z,ocupados,h,h1);
+	retornaTIdR (com,a,N,h,h1);
 }
 
 /** 
