@@ -115,6 +115,13 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
 	int w, c = 0;HashTableQuery7 h; 
 	if(compareDateQ(begin,end)==2) return create_list(0);
 	else{
+		for(w=0;w<TAD_community_get_dataSize(com);w++){
+			if(existeTree(com,w)){
+				if(compareDateQ(post_getCreationDate (com,w), begin)!=0 && compareDateQ(post_getCreationDate (com,w), end)!=2){
+					c += treeHash_getNumRespostas(com,w);
+				}
+			}
+		}
 		c *= 2;
 		h = initHashQ7(c);
 		for(w=0;w<TAD_community_get_dataSize(com);w++){
@@ -126,6 +133,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
 		}
 	}
 	LONG_list list = carregaListaQ(com,N,h,c); 
+	freeHashTableQuery7(h,c); 
 	return list;
 }
 
