@@ -1577,7 +1577,7 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h, int size){
  * @param a               [Árvore dos posts]
  * @param N               [Número de ids pedidos no top N]
  * @param h               [HashTableQuery11] 
- * @param h               [HashTableTopN]  
+ * @param h1              [HashTableTopN]  
  * @param size            [Tamanho da HashTableQuery11] 
  */
 static void retornaTIdR (TAD_community com, Post* a, int N,HashTableQuery11 h,HashTableTopN h1,int size){
