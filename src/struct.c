@@ -852,7 +852,7 @@ static void guardaRespostas(TAD_community com, Post* a, long id, float max, int 
 long procuraRespostas(TAD_community com, long id){
 	int i,j,flag = 0,local = procuraPost(com,id),nRespostas=0;
 	float max = 0,maximo = 0;
-	long idM=-2;
+	long idM=-1;
 	if(local!=-1){
 		Post *b = com->treeHash[local]->tree;
 		while(b){
@@ -1084,13 +1084,13 @@ static int extraiId(HeapPosts h1,HeapPosts h2,int N,long* id,TAD_community com,i
 		for(j=0;j<a && k<N;j++){
 			Date data = h2->array[0].data;
 			long postId = extractMaxPosts2(h2,h4);
-			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c)!=0 && procuraArray(id,postId,c)==0){
+			if(post_getPostTypeId(com,procuraData(com,data),postId)==1 && procuraArray(ID,postId,c)!=0 && procuraArray(id,postId,N)==0){
 				id[k] = postId; 
 				k++;
 			}
 			else {
 				long idP = post_getparentId(com,procuraData(com,data),postId);
-				if(procuraArray(ID,idP,c)!=0  && procuraArray(id,idP,c)==0){
+				if(procuraArray(ID,idP,c)!=0  && procuraArray(id,idP,N)==0){
 					id[k] = idP ;
 					k++;
 				 }
