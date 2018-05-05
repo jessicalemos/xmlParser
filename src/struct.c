@@ -123,7 +123,7 @@ long get_topN(TAD_community com, int i){
 /**
  * [Devolve o id que se encontra numa posição do array]
  * @param  com     [Estrutura]
- * @param  com     [Posição do array]
+ * @param  i       [Posição do array]
  * @return         [Id do utilizador]
  */
 long get_topNR(TAD_community com, int i){
@@ -415,7 +415,7 @@ int userHash (long i, TAD_community com){
  * [Insere a informação de um utilizador]
  * @param  h1             [HashTableUsers]
  * @param  i              [Posição da HashTableUsers] 
- * @param  reputação      [Reputação do utilizador] 
+ * @param  reputation     [Reputação do utilizador] 
  * @param  id             [Id do utilizador]
  * @param  name           [Nome do utilizador]
  * @param  about          [Short bio do utilizador] 
@@ -435,7 +435,7 @@ static void insereTableUsers (HashTableUsers h1, int i, int reputation, long id,
 /**
  * [Determina a posição onde se irá inserir a informação de um utilizador]
  * @param  com            [Estrutura]
- * @param  reputação      [Reputação do utilizador] 
+ * @param  reputation     [Reputação do utilizador] 
  * @param  id             [Id do utilizador]
  * @param  name           [Nome do utilizador]
  * @param  about          [Short bio do utilizador]  
@@ -520,6 +520,7 @@ void addTags (TAD_community com,char* tagName, long id){
 /** 
  * [Devolve o valor de Hash correspondente a uma determinada data]
  * @param data   [Data]
+ * @param com    [Estrutura] 
  * @return       [Valor de Hash]
  */
 int dataHash (Date data, TAD_community com){
@@ -653,7 +654,7 @@ static Post* rec(Post* c,int score, int postTypeId,long parentId, long id, char 
  * @param id              [Id a inserir]
  * @param tag             [Tag a inserir]
  * @param title           [Title a inserir]
- * @param ownUserId       [OwnerUserId a inserir]
+ * @param ownerUserId     [OwnerUserId a inserir]
  * @param answerCount     [AnswerCount a inserir]
  * @param data            [Data a inserir]
  * @param commentCount    [CommentCount a inserir]
@@ -1210,7 +1211,7 @@ void insere_Heap(TAD_community com){
  * @param com             [Estrutura]
  * @param ownerUserId     [Id do utilizador]
  * @param id              [Id do post]
- * @param date            [Data de criação do post]
+ * @param data            [Data de criação do post]
  */
 void insere_Heap_Posts(TAD_community com,long ownerUserId, long id, Date data){
 	int i = procuraUser(com, ownerUserId);
@@ -1474,6 +1475,7 @@ int topNHash (long i, int N){
  * [Verifica se um utilizador pertence ao top N]
  * @param com           [Estrutura]
  * @param ownerUserId   [Id do utilizador a verificar]
+ * @param N             [N pedido no top N] 
  * @param h             [HashTableTopN]
  * @return              [Booleano de comparação]
  */
@@ -1493,12 +1495,13 @@ int pertenceU (TAD_community com, long ownerUserId, int N, HashTableTopN h){
  * @param  chave      [Valor de hash]
  * @param  tag        [Tag a procurar]
  * @param  h          [HashTableQuery11]  
+ * @param  size       [Tamanho da HashTableQuery11]   
  * @return            [Posição da HashTableQuery11]
  */
-static int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h){
+static int procuraQ11(TAD_community com,int chave,char* tag,HashTableQuery11 h, int size){
   int i,c=0;
-  for(i=chave;existeQ11(h,i) && c<TAD_community_get_tagsSize(com) && strcmp(get_tag(h,i),tag);i++){
-    if (i+1 == TAD_community_get_tagsSize(com)) i=0;
+  for(i=chave;existeQ11(h,i) && c<size && strcmp(get_tag(h,i),tag);i++){
+    if (i+1 == size) i=0;
     c++;
   }
   if(existeQ11(h,i) && !strcmp(get_tag(h,i),tag)) return i;
@@ -1527,12 +1530,13 @@ int procuraTag(TAD_community com,int chave,char* tag){
  * @param com             [Estrutura]
  * @param tag             [Tag]
  * @param h               [HashTableQuery11]
+ * @param size            [Tamanho da HashTableQuery11] 
  */
-void buscaId (TAD_community com, char* tag, HashTableQuery11 h){
-	int chave = tagHash(tag, com),local = procuraQ11(com,chave,tag,h);
+void buscaId (TAD_community com, char* tag, HashTableQuery11 h, int size){
+	int chave = tagHash(tag, com),local = procuraQ11(com,chave,tag,h,size);
 	if(local==-1){
 		while(existeQ11(h,chave)){
-			if(chave+1==com->tagsSize) chave=0;
+			if(chave+1==size) chave=0;
 			else chave++;
 		}
 		int idTag = procuraTag(com,chave,tag);
@@ -1546,8 +1550,9 @@ void buscaId (TAD_community com, char* tag, HashTableQuery11 h){
  * @param com             [Estrutura]
  * @param s               [Tag]
  * @param h               [HashTableQuery11]
+ * @param size            [Tamanho da HashTableQuery11] 
  */
-int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
+int buscaTag(TAD_community com, char *s, HashTableQuery11 h, int size){
   int a=0,i=0,k=0,j; 
   char *tag=malloc(strlen(s)*sizeof(char));
   while(s[k]){
@@ -1557,7 +1562,7 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
         tag[a]=s[j];
     }
     tag[a]=0; 
-      buscaId(com,tag,h);
+      buscaId(com,tag,h,size);
       if(s[j] && s[j]=='>') {j++;}
       k=j;
   }
@@ -1570,9 +1575,8 @@ int buscaTag(TAD_community com, char *s, HashTableQuery11 h){
  * @param com             [Estrutura]
  * @param a               [Árvore dos posts]
  * @param N               [Número de ids pedidos no top N]
- * @param z               [Número de ids inseridos no topR]
- * @param ocupados        [Número de ids no topR]
  * @param h               [HashTableQuery11] 
+ * @param h               [HashTableTopN]  
  */
 static void retornaTIdR (TAD_community com, Post* a, int N,HashTableQuery11 h,HashTableTopN h1){
 	if (a!=NULL){
