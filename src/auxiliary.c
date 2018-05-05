@@ -317,8 +317,8 @@ int contida (char* s,char* word){
 int procuraArray (long* postId, long id, int N){
   int i;
   for(i=0; i<N && postId[i]!=id && postId[i]!=-2; i++);
-  if(postId[i]==-2) return 0;
   if (i==N) return 0;
+  else if(postId[i]==-2) return 0;
   return 1;
 }
 
