@@ -25,7 +25,8 @@ NEW_pair create_new_pair(float fst, long snd, int trd) {
   return p;
 }
 
-/** [Altera o float do NEW_pair]
+/** 
+ * [Altera o float do NEW_pair]
  * @param pair    [NEW_pair]
  * @param l       [Novo float]
  */
@@ -33,7 +34,8 @@ void set_fst_new(NEW_pair pair, float l) {
   pair->fst = l;
 }
 
-/** [Altera o long do NEW_pair]
+/** 
+ * [Altera o long do NEW_pair]
  * @param pair    [NEW_pair]
  * @param l       [Novo long]
  */
@@ -41,7 +43,8 @@ void set_snd_new(NEW_pair pair, long l) {
   pair->snd = l;
 }
 
-/** [Altera o int do NEW_pair]
+/** 
+ * [Altera o int do NEW_pair]
  * @param pair    [NEW_pair]
  * @param l       [Novo int]
  */
@@ -407,6 +410,14 @@ HashTableQuery7 initHashQ7 (int N){
   return tag;
 }
 
+/**
+ * [Insere numa determinada posição da hash um novo id, uma nova flag e um novo id]
+ * @param  h1            [HashTableQuery7]
+ * @param  i             [Posição da hash]
+ * @param  id            [Flag]
+ * @param  contador      [Contador]
+ * @param  id            [Id]
+ */
 void insereTQ7 (HashTableQuery7 h1, int i,int flag,int contador, long id){
   Query7 *new= malloc(sizeof(Query7));
   new->id = id;  
@@ -415,11 +426,22 @@ void insereTQ7 (HashTableQuery7 h1, int i,int flag,int contador, long id){
   h1[i]=new;
 }
 
+/**
+ * [Verifica se uma determinada posição da hash é nula]
+ * @param  h       [HashTableQuery7]
+ * @param  i       [Posição da hash]
+ * @return         [Booleano de comparação]
+ */
 int existeQ7(HashTableQuery7 h,int i){
   if(h[i]!=NULL) return 1;
   return 0;
 }
 
+/**
+ * [Liberta a HashTableQuery7]
+ * @param  h          [HashTableQuery7]
+ * @param  size       [Tamanho da HashTableQuery7]
+ */
 void freeHashTableQuery7 (HashTableQuery7 h, int size){
   int i;
   Query7 *cur;
@@ -488,6 +510,43 @@ void freeHashTableQuery11 (HashTableQuery11 h, int size){
     }
   } 
   free(h);
+}
+
+/**
+ * [Inicialização da hashTopN]
+ * @param  N       [Tamanho da hashTopN]
+ * @return         [HashTableTopN]
+ */
+HashTableTopN initHashTopN (int N){
+  HashTableTopN t = malloc(N*sizeof(HashTopN*));
+  for (int i=0; i<N; i++){
+    t[i] = NULL;
+  }
+  return t;
+}
+
+/**
+ * [Insere numa determinada posição da hash um novo id]
+ * @param  h1      [HashTableTopN]
+ * @param  i       [Posição da hash]
+ * @param  id      [Id]
+ * @return         [HashTableTopN]
+ */
+void insereHashTopN (HashTableTopN h1, int i,long id){
+  HashTopN *new= malloc(sizeof(HashTopN));
+  new->id = id;     
+  h1[i]=new;
+}
+
+/**
+ * [Verifica se uma determinada posição da hash é nula]
+ * @param  h       [HashTableTopN]
+ * @param  i       [Posição da hash]
+ * @return         [Booleano de comparação]
+ */
+int existeHashTopN(HashTableTopN h,int i){
+  if(h[i]!=NULL) return 1;
+  return 0;
 }
 
 /**
