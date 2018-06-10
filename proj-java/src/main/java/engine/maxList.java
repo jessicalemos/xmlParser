@@ -2,6 +2,11 @@ public class maxList {
     private long id;
     private LocalDate creationDate;
 
+    public maxList() {
+        this.id = 0;
+        this.creationDate = LocalDate.now();
+    }
+
     public maxList(maxList c) {
         this.id = c.getId();
         this.creationDate = c.getCreationDate();
