@@ -25,6 +25,15 @@ public class Users {
         if(userList!=null) setUserList(userList);
     }
 
+    public Users(Users u) {
+        this.ownerUserId = u.getOwnerUserId();
+        this.displayName = u.getDisplayName();
+        this.reputation = u.getReputation();
+        this.nPosts = u.getnPosts();
+        this.aboutMe = u.getAboutMe();
+        this.userList = u.getUserList();
+    }
+
     public long getOwnerUserId() {
         return ownerUserId;
     }
