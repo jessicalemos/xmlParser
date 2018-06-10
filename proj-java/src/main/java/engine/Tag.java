@@ -9,9 +9,30 @@ public class Tag {
         this.tagName = "";
     }
 
+    public Tag(long id, String tagName) {
+        this.id = id;
+        this.tagName = tagName;
+    }
+    
     public Tag(Tag t) {
         this.id = t.getId();
         this.tagName = t.getTagName();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
 	public boolean equals(Object o) {
@@ -22,3 +43,8 @@ public class Tag {
         Tag t = (Tag) o;
         return t.getId() == (this.id) && t.getTagName().equals(this.tagName);
     }
+
+    public Tag clone() {
+        return new Tag(this);
+    }
+}
