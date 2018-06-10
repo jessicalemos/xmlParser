@@ -52,6 +52,52 @@ public class Parse {
                         Attribute scoreAttr = startElement.getAttributeByName(new QName("Score"));
                         if (scoreAttr != null) {
                             this.post.setScore(Integer.parseInt(scoreAttr.getValue()));
+                        }
+                        Attribute idAttr = startElement.getAttributeByName(new QName("Id"));
+                        if (idAttr != null) {
+                            this.post.setId(Integer.parseInt(idAttr.getValue()));
+                        }
+                        Attribute dateAttr = startElement.getAttributeByName(new QName("CreationDate"));
+                        String d = dateAttr.getValue();
+                        StringBuilder sb = new StringBuilder();
+                        for(int i=0; d.charAt(i)!='T' && d!=null; i++) {
+                            sb.append(d.charAt(i));
+                        }
+                        LocalDate date = LocalDate.now();
+                        if (sb.toString() != null) {
+                            date = LocalDate.parse(sb.toString());
+                        }
+                        Attribute tittleAttr = startElement.getAttributeByName(new QName("Title"));
+                        if (tittleAttr != null) {
+                            this.post.setTitle(tittleAttr.getValue());
+                        }
+
+                        Attribute tagAttr = startElement.getAttributeByName(new QName("Tags"));
+                        if (tagAttr != null) {
+                            this.post.setTag(tagAttr.getValue());
+                        }
+                        estrutura.addPosts(this.post, date);
+                    }
+                }
+            }
+        } catch (FileNotFoundException | XMLStreamException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void parseUsers(String fileName, Struct estrutura) {
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        try {
+            XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(fileName));
+            while (xmlEventReader.hasNext()) {
+                this.users = new Users();
+                XMLEvent xmlEvent = xmlEventReader.nextEvent();
+                if (xmlEvent.isStartElement()) {
+                    StartElement startElement = xmlEvent.asStartElement();
+                    if (startElement.getName().getLocalPart().equals("row")) {
+                        Attribute idAttr = startElement.getAttributeByName(new QName("Reputation"));
+                        if (idAttr != null) {
+                            this.users.setReputation(Integer.parseInt(idAttr.getValue()));
 
     public void parseTags(String fileName, Struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
