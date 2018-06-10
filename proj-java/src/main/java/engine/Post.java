@@ -1,3 +1,5 @@
+package src.main.java.engine;
+
 public class Post {
     private int postTypeId; 
     private long parentID; 
@@ -33,6 +35,18 @@ public class Post {
         this.score = score;
     }
 
+    public Post(Post p) {
+        this.postTypeId = p.getPostTypeId();
+        this.parentID = p.getParentID();
+        this.id = p.getId();
+        this.tag = p.getTag();
+        this.title = p.getTitle();
+        this.ownerUserID = p.getOwnerUserID();
+        this.answerCount = p.getAnswerCount();
+        this.commentCount = p.getCommentCount();
+        this.score = p.getScore();
+    }
+    
     public int getPostTypeId() {
         return postTypeId;
     }

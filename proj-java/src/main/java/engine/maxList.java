@@ -1,3 +1,6 @@
+package src.main.java.engine;
+import java.time.LocalDate;
+
 public class maxList {
     private long id;
     private LocalDate creationDate;
@@ -5,6 +8,11 @@ public class maxList {
     public maxList() {
         this.id = 0;
         this.creationDate = LocalDate.now();
+    }
+
+    public maxList(long id, LocalDate creationDate) {
+        this.id = id;
+        this.creationDate = creationDate;
     }
 
     public maxList(maxList c) {
@@ -26,6 +34,15 @@ public class maxList {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if ((o == null) || (this.getClass() != o.getClass()))
+            return false;
+        maxList p = (maxList) o;
+        return p.getId() == this.id &&  p.getCreationDate().equals(this.creationDate);
     }
 
     public maxList clone() {

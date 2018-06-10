@@ -1,3 +1,8 @@
+package src.main.java.engine;
+import java.util.Map;
+import java.util.TreeMap;
+import java.time.LocalDate;
+
 public class TreeHash {
     private Map<Long, Post> postTree;
     private long contadorR;
@@ -8,6 +13,14 @@ public class TreeHash {
         this.postTree = new TreeMap <Long, Post>();
         this.contadorR = 0;
         this.contadorP = 0;
+    }
+
+    public TreeHash(TreeMap<Long, Post> postTree, long contadorR, long contadorP, LocalDate creationDate) {
+        this.postTree = new TreeMap <Long, Post>();
+        if(postTree!=null) setPostTree(postTree);
+        this.contadorR = contadorR;
+        this.contadorP = contadorP;
+        this.creationDate = creationDate;
     }
 
     public TreeHash(TreeHash a) {
@@ -29,6 +42,30 @@ public class TreeHash {
         this.postTree = new TreeMap<Long, Post>();
         for(Map.Entry<Long, Post> entry: utilizadores.entrySet())
             this.postTree.put(entry.getKey(), entry.getValue().clone());
+    }
+
+    public long getContadorR() {
+        return contadorR;
+    }
+
+    public void setContadorR(long contadorR) {
+        this.contadorR = contadorR;
+    }
+
+    public long getContadorP() {
+        return contadorP;
+    }
+
+    public void setContadorP(long contadorP) {
+        this.contadorP = contadorP;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this. creationDate = creationDate;
     }
 
     public void addTreeMap(Post p){

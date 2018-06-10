@@ -1,3 +1,5 @@
+package src.main.java.engine;
+
 public class maxPosts {
     private long id;
     private int nPosts;
@@ -12,6 +14,11 @@ public class maxPosts {
         this.nPosts = nPosts;
     }
 
+    public maxPosts(maxPosts c) {
+        this.id = c.getId();
+        this.nPosts = c.getNPosts();
+    }
+    
 	public long getId() {
         return id;
     }
