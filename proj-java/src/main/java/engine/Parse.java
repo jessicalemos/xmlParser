@@ -13,6 +13,46 @@ public class Parse {
     private Users users;
     private Tag tag;
 
+    public Parse() {
+        this.post = new Post();
+        this.users = new Users();
+        this.tag = new Tag();
+    }
+
+    public void parsePosts(String fileName, Struct estrutura) {
+        XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        try {
+            XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(fileName));
+            while (xmlEventReader.hasNext()) {
+                XMLEvent xmlEvent = xmlEventReader.nextEvent();
+                if (xmlEvent.isStartElement()) {
+                    StartElement startElement = xmlEvent.asStartElement();
+                    if (startElement.getName().getLocalPart().equals("row")) {
+                        this.post = new Post();
+                        Attribute pIdAttr = startElement.getAttributeByName(new QName("PostTypeId"));
+                        if (pIdAttr != null) {
+                            this.post.setPostTypeId(Integer.parseInt(pIdAttr.getValue()));
+                        }
+                        Attribute parentIdAttr = startElement.getAttributeByName(new QName("ParentId"));
+                        if (parentIdAttr != null) {
+                            this.post.setParentID(Integer.parseInt(parentIdAttr.getValue()));
+                        }
+                        Attribute ownIdAttr = startElement.getAttributeByName(new QName("OwnerUserId"));
+                        if (ownIdAttr != null) {
+                            this.post.setOwnerUserID(Integer.parseInt(ownIdAttr.getValue()));
+                        }
+                        Attribute ACountAttr = startElement.getAttributeByName(new QName("AnswerCount"));
+                        if (ACountAttr != null) {
+                            this.post.setAnswerCount(Integer.parseInt(ACountAttr.getValue()));
+                        }
+                        Attribute CCountAttr = startElement.getAttributeByName(new QName("CommentCount"));
+                        if (CCountAttr != null) {
+                            this.post.setCommentCount(Integer.parseInt(CCountAttr.getValue()));
+                        }
+                        Attribute scoreAttr = startElement.getAttributeByName(new QName("Score"));
+                        if (scoreAttr != null) {
+                            this.post.setScore(Integer.parseInt(scoreAttr.getValue()));
+
     public void parseTags(String fileName, Struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
