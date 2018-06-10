@@ -98,6 +98,27 @@ public class Parse {
                         Attribute idAttr = startElement.getAttributeByName(new QName("Reputation"));
                         if (idAttr != null) {
                             this.users.setReputation(Integer.parseInt(idAttr.getValue()));
+                        }
+                        Attribute ownerIdAttr = startElement.getAttributeByName(new QName("Id"));
+                        if (ownerIdAttr != null) {
+                            this.users.setOwnerUserId(Integer.parseInt(ownerIdAttr.getValue()));
+                        }
+                        Attribute nameAttr = startElement.getAttributeByName(new QName("DisplayName"));
+                        if (nameAttr != null) {
+                            this.users.setDisplayName(nameAttr.getValue());
+                        }
+                        Attribute aboutAttr = startElement.getAttributeByName(new QName("AboutMe"));
+                        if (aboutAttr != null) {
+                            this.users.setAboutMe(aboutAttr.getValue());
+                        }
+                    }
+                }
+                estrutura.addUsers(this.users);
+            }
+        } catch (FileNotFoundException | XMLStreamException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void parseTags(String fileName, Struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
