@@ -11,6 +11,11 @@ public class Post {
     private int commentCount;
     private int score;
 
+    /** Construtores */
+   
+    /**
+     * Construtor vazio de um Post
+     */
     public Post() {
         this.postTypeId = 0;
         this.parentID = 0;
@@ -113,30 +118,58 @@ public class Post {
         return commentCount;
     }
 
+    /**
+     * Obter o score de um post
+     * @return o score
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Altera o tipo do post
+     * @param postTypeId  Novo tipo do post  
+     */
     public void setPostTypeId(int postTypeId) {
         this.postTypeId = postTypeId;
     }
 
+    /**
+     * Altera o id do post da pergunta correspondente
+     * @param parentID   Novo id da pergunta correspondente
+     */
     public void setParentID(long parentID) {
         this.parentID = parentID;
     }
 
+    /**
+     * Altera o id do Post
+     * @param id   Novo id
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * Altera a Tag do post
+     * @param tag   Nova Tag
+     */
     public void setTag(String tag) {
         this.tag = tag;
     }
 
+    /**
+     * Altera o título do post
+     * @param title   Novo título
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Altera o id do utilizador que criou o post
+     * @param ownerUserID   Novo id
+     */
     public void setOwnerUserID(long ownerUserID) {
         this.ownerUserID = ownerUserID;
     }
@@ -153,6 +186,11 @@ public class Post {
         this.score = score;
     }
 
+    /**
+     * Compara dois Posts
+     * @param o post a comparar
+     * @return È um post igual(true) ou não é (false)
+     */
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -166,6 +204,10 @@ public class Post {
                 p.getScore() == (this.score);
     }
 
+    /**
+     * Faz a cópia de um post
+     * @return cópia do post
+     */
     public Post clone() {
         return new Post(this);
     }
