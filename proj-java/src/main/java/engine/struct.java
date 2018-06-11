@@ -62,12 +62,15 @@ public class Struct {
     }
 
 
-    public void addTopN(){
+    public void addTop(){
         for(Users i : this.userHashTable.values()) {
             maxPosts m = new maxPosts(i.getOwnerUserId(), i.getnPosts());
+            maxPosts mr = new maxPosts(i.getOwnerUserId(), i.getReputation());
             this.topN.add(m.clone());
+            this.topR.add(mr.clone());
         }
-        Collections.sort(this.topN, new nPostsComparator());
+        Collections.sort(this.topN, new maxPostsComparator());
+        Collections.sort(this.topR, new maxPostsComparator());
     }
 
     public void getPair(Pair p, LocalDate begin, LocalDate end){
