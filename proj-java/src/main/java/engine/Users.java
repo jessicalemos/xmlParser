@@ -71,14 +71,26 @@ public class Users {
         return displayName;
     }
 
+    /**
+     * Altera o nome do utilizador
+     * @param displayName   Nome do utilizador
+     */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
+    /**
+     * Obter a reputação do utilizador
+     * @return reputação
+     */
     public int getReputation() {
         return reputation;
     }
 
+    /**
+     * Altera a reputação do utilizador
+     * @param reputation   Nova reputação
+     */
     public void setReputation(int reputation) {
         this.reputation = reputation;
     }
