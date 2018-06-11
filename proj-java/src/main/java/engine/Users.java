@@ -6,6 +6,11 @@ public class Users {
     private String aboutMe;
     private List<maxList> userList;
 
+    /** Construtores */
+
+    /**
+     * Constrói um User sem parâmetros
+     */
     public Users() {
         this.ownerUserId = 0;
         this.displayName = "";
@@ -15,6 +20,14 @@ public class Users {
         this.userList = new ArrayList<maxList>();
     }
 
+    /**
+     * Construtor por parâmetros de um User
+     * @param ownerUserId  Id do utilizador
+     * @param displayName  Nome do utilizador
+     * @param reputation   Reputação do utilizador
+     * @param aboutMe      Short bio do utilizador
+     * @param userList     Lista dos pots do utilizador     
+     */
     public Users(long ownerUserId, String displayName, int reputation, String aboutMe, ArrayList<maxList> userList) {
         this.ownerUserId = ownerUserId;
         this.displayName = displayName;
@@ -34,14 +47,26 @@ public class Users {
         this.userList = u.getUserList();
     }
 
+    /**
+     * Obter o id do utilizador
+     * @return id do utilizador
+     */
     public long getOwnerUserId() {
         return ownerUserId;
     }
 
+    /**
+     * Altera o id do utilizador
+     * @param ownerUserId   Id do utilizador
+     */
     public void setOwnerUserId(long ownerUserId) {
         this.ownerUserId = ownerUserId;
     }
 
+    /**
+     * Obter o nome do utilizador
+     * @return nome do utilizador
+     */
     public String getDisplayName() {
         return displayName;
     }
@@ -74,6 +99,10 @@ public class Users {
         this.aboutMe = aboutMe;
     }
 
+    /**
+     * Obter a lista com os posts do utilizador
+     * @return estrutura 
+     */
     public ArrayList<maxList> getUserList(){
         ArrayList<maxList> aux = new ArrayList<maxList>();
         for(maxList i : this.userList){
