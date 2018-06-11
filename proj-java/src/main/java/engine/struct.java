@@ -82,6 +82,76 @@ public class Struct {
         p.setSecond(respostas);
     }
 
+    public void getList(List<Long> l, LocalDate begin, LocalDate end, String tag){
+        List<maxList> aux = new ArrayList<maxList>();
+        for(TreeHash t : this.treeHashTable.values())
+            if(t.getCreationDate().equals(begin) || t.getCreationDate().equals(end) ||
+                    (t.getCreationDate().isAfter(begin) && t.getCreationDate().isBefore(end))) {
+                for (Post p : t.getPostTree().values()) {
+                    if (p.getPostTypeId() == 1 && p.getTag() != null) {
+                        String[] splitted = p.getTag().split(">");
+                        for (int i = 0; i< splitted.length; i++)
+                            if (splitted[i].contains(tag)) {
+                                String[] splitted2 = splitted[i].split("<");
+                                if(splitted2[1].equals(tag)) {
+                                    maxList m = new maxList(p.getId(), t.getCreationDate());
+                                    aux.add(m.clone());
+                                }
+                            }
+                    }
+                }
+            }
+        Collections.sort(aux, new DataComparator());
+        for(maxList i : aux)
+            l.add(i.getId());
+    }
+
+    public void mostAnswered(List<Long> aux, LocalDate begin, LocalDate end, int N) {
+        Map<Long,maxMap> m = new HashMap<Long,maxMap>();
+        for (TreeHash t : this.treeHashTable.values())
+            if (t.getCreationDate().equals(begin) || t.getCreationDate().equals(end) ||
+                    (t.getCreationDate().isAfter(begin) && t.getCreationDate().isBefore(end))) {
+                for(Post p : t.getPostTree().values()){
+                    if(p.getPostTypeId() == 1) {
+                        if (!m.containsKey(p.getId())) {
+                            maxMap mm = new maxMap(p.getId(), 0, 1);
+                            m.put(p.getId(), mm);
+                        } else m.get(p.getId()).setFlag(1);
+                    }
+                    else if(!m.containsKey(p.getParentID())){
+                        maxMap mm = new maxMap(p.getParentID(),1,0);
+                        m.put(p.getParentID(),mm);
+                    }
+                    else{
+                        m.get(p.getParentID()).setCount(m.get(p.getParentID()).getCount()+1);
+                    }
+                }
+            }
+        List<maxMap> max = new ArrayList<maxMap>();
+        for(maxMap j : m.values()) {
+            if (j.getFlag() == 1)
+                max.add(j.clone());
+        }
+        Collections.sort(max,new maxMapComparator());
+        for(int i=0; i<N && i<max.size(); i++) {
+            aux.add(max.get(i).getId());
+        }
+    }
+
+    public void containsW(List<Long> aux, String word, int N){
+        List<maxList> l = new ArrayList<maxList>();
+        for (TreeHash t : this.treeHashTable.values())
+            for (Post p : t.getPostTree().values()) {
+                if(p.getTitle().contains(word)){
+                    maxList m = new maxList(p.getId(),t.getCreationDate());
+                    l.add(m.clone());
+                }
+            }
+        Collections.sort(l,new DataComparator());
+        for(int i=0; i<N && i<l.size(); i++)
+            aux.add(l.get(i).getId());
+    }
+
     public void both(List<Long> aux, int N, long id1, long id2){
         if(this.userHashTable.containsKey(id1) && this.userHashTable.containsKey(id2)) {
             List<maxList> l1 = this.userHashTable.get(id1).getUserList();
@@ -105,6 +175,27 @@ public class Struct {
             for(maxList i : lmaior) {
                 Post p = this.treeHashTable.get(i.getCreationDate()).getPostTree().get(i.getId());
                 if (p.getPostTypeId() == 2) {
+                    if(!v.contains(p.getParentID())) {
+                            long parent = p.getParentID();
+                            if (parents.contains(parent)) {
+                                maxList mx = new maxList(parent, i.getCreationDate());
+                                l.add(mx.clone());
+                                v.add(parent);
+                            }
+                        }
+                } else if(!v.contains(p.getId())) {
+                        if (parents.contains(p.getId())) {
+                            maxList mx = new maxList(p.getId(), i.getCreationDate());
+                            l.add(mx.clone());
+                            v.add(p.getId());
+                        }
+                    }
+            }
+            Collections.sort(l,new DataComparator());
+            for(int i=0; i<N && i<l.size(); i++)
+                aux.add(l.get(i).getId());
+        }
+    }
 
     public long answer(long id) {
         int nRespostas = 0;
