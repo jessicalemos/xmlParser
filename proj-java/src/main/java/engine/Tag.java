@@ -19,11 +19,21 @@ public class Tag {
         this.tagName = tagName;
     }
     
+    /**
+     * Constrói uma Tag a partir de uma definida
+     * @param t Tag
+     */
     public Tag(Tag t) {
         this.id = t.getId();
         this.tagName = t.getTagName();
     }
 
+    /* Métodos de Instância */
+
+    /**
+     * Obter o id da Tag
+     * @return id da Tag
+     */
     public long getId() {
         return id;
     }
@@ -32,6 +42,10 @@ public class Tag {
         this.id = id;
     }
 
+    /**
+     * Obter o nome da Tag
+     * @return nome da Tag
+     */
     public String getTagName() {
         return tagName;
     }
