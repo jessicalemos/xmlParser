@@ -47,34 +47,68 @@ public class Post {
         this.score = p.getScore();
     }
     
+    /** Métodos de instância */
+
+    /**
+     * Obter o tipo do Post, ou seja, se corresponde a um post tipo pergunta ou resposta
+     * @return tipo do post
+     */
     public int getPostTypeId() {
         return postTypeId;
     }
 
+    /**
+     * Obter o id do post da pergunta correspondente
+     * @return id do post
+     */
     public long getParentID() {
         return parentID;
     }
 
+    /**
+     * Obter o id do Post
+     * @return id do post
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Obter as tags presentes no Post
+     * @return tags
+     */
     public String getTag() {
         return tag;
     }
 
+    /**
+     * Obter o título do Post
+     * @return o título
+     */
        public String getTitle() {
         return title;
     }
 
+    /**
+     * Obter o id do utilizador
+     * @return o id do utilizador
+     */
     public long getOwnerUserID() {
         return ownerUserID;
     }
 
+    /**
+     * Obter o número de respostas ao post
+     * @return número de respostas
+     */
     public int getAnswerCount() {
         return answerCount;
     }
 
+    /**
+     * Obter o número de comentários ao post
+     * @return número de comentários
+     */
     public int getCommentCount() {
         return commentCount;
     }
