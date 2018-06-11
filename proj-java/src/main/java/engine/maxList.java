@@ -15,6 +15,10 @@ public class maxList {
         this.creationDate = creationDate;
     }
 
+    /**
+     * Constrói uma maxList a partir de uma definida
+     * @param c maxList
+     */
     public maxList(maxList c) {
         this.id = c.getId();
         this.creationDate = c.getCreationDate();
