@@ -136,4 +136,7 @@ public class TreeHash {
                  p.getPostTree().equals(this.postTree) && p.getCreationDate().equals(this.creationDate);
     }
 
+    public TreeHash clone() {
+        return new TreeHash(this);
+    }
 }
