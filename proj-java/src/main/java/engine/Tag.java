@@ -3,7 +3,12 @@ package src.main.java.engine;
 public class Tag {
     private long id;
     private String tagName;
+    
+    /** Construtores */
 
+    /**
+     * Constrói uma Tag sem parâmetros
+     */
     public Tag(){
         this.id = 0;
         this.tagName = "";
@@ -31,10 +36,19 @@ public class Tag {
         return tagName;
     }
 
+    /**
+     * Altera o nome da Tag
+     * @param tagName   Nome da Tag
+     */
     public void setTagName(String tagName) {
         this.tagName = tagName;
     }
 
+    /**
+     * Compara duas Tags
+     * @param a Tag a comparar
+     * @return é uma Tag igual (true) ou não (false)
+     */
 	public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -44,6 +58,10 @@ public class Tag {
         return t.getId() == (this.id) && t.getTagName().equals(this.tagName);
     }
 
+    /**
+     * Faz uma cópia da Tag
+     * @return cópia da Tag
+     */
     public Tag clone() {
         return new Tag(this);
     }
