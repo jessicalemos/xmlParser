@@ -23,6 +23,10 @@ public class TreeHash {
         this.creationDate = creationDate;
     }
 
+    /**
+     * Constrói uma TreeHash a partir de um definido
+     * @param TreeHash
+     */
     public TreeHash(TreeHash a) {
         this.postTree = a.getPostTree();
         this.contadorR = a.getContadorR();
@@ -30,6 +34,12 @@ public class TreeHash {
         this.creationDate = a.getCreationDate();
     }
 
+    /** Métodos de instância */
+
+    /**
+     * Obter a árvore dos posts de uma dada data
+     * @return postTree
+     */
     public Map<Long, Post> getPostTree(){
         Map<Long, Post> neo = new TreeMap<Long, Post>();
         for(Map.Entry<Long, Post> entry : this.postTree.entrySet()){
@@ -38,16 +48,28 @@ public class TreeHash {
         return neo;
     }
 
+    /**
+     * Alterar a árvore com os posts de uma dada data
+     * @param utilizadores  Árvore com os posts
+     */
     private void setPostTree(Map<Long, Post> utilizadores) {
         this.postTree = new TreeMap<Long, Post>();
         for(Map.Entry<Long, Post> entry: utilizadores.entrySet())
             this.postTree.put(entry.getKey(), entry.getValue().clone());
     }
 
+    /**
+     * Obter o contador com os posts do tipo resposta
+     * @return número de posts respostas
+     */
     public long getContadorR() {
         return contadorR;
     }
 
+    /**
+     * Altera o contador com os posts do tipo resposta
+     * @param contadorR    Número de posts respostas
+     */
     public void setContadorR(long contadorR) {
         this.contadorR = contadorR;
     }
@@ -68,6 +90,10 @@ public class TreeHash {
         this. creationDate = creationDate;
     }
 
+    /**
+     * Adiciona um post à árvore dos posts de uma dada data
+     * @param p Post a adicionar
+     */
     public void addTreeMap(Post p){
         this.postTree.put(p.getId(),p);
     }
