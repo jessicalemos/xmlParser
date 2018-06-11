@@ -24,6 +24,12 @@ public class maxList {
         this.creationDate = c.getCreationDate();
     }
 	
+    /** Métodos de instância */
+
+    /**
+     * Obter o id
+     * @return id
+     */
 	public long getId() {
         return id;
     }
@@ -49,6 +55,10 @@ public class maxList {
         return p.getId() == this.id &&  p.getCreationDate().equals(this.creationDate);
     }
 
+    /**
+     * Faz a cópia de uma maxList
+     * @return a cópia da maxList
+     */
     public maxList clone() {
         return new maxList(this);
     }
