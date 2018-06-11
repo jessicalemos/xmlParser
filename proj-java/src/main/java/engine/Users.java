@@ -1,3 +1,8 @@
+package src.main.java.engine;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Users {
     private long ownerUserId;
     private String displayName;
@@ -111,6 +116,12 @@ public class Users {
         this.aboutMe = aboutMe;
     }
 
+    private void setUserList(ArrayList<maxList> utilizadores) {
+        this.userList = new ArrayList<maxList>();
+        for(maxList i : utilizadores)
+            this.userList.add(i.clone());
+    }
+
     /**
      * Obter a lista com os posts do utilizador
      * @return estrutura 
@@ -123,6 +134,17 @@ public class Users {
         return aux;
     }
 
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if ((o == null) || (this.getClass() != o.getClass()))
+            return false;
+        Users u = (Users) o;
+        return u.getOwnerUserId() == (this.ownerUserId) && u.getDisplayName().equals(this.displayName) &&
+                u.getReputation() == (this.reputation) && u.getnPosts() == (this.nPosts) &&
+                u.getAboutMe().equals(this.aboutMe) && u.getUserList().equals(this.userList);
+    }
+    
     public Users clone() {
         return new Users(this);
     }
