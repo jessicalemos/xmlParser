@@ -9,12 +9,24 @@ public class TreeHash {
     private long contadorP;
     private LocalDate creationDate;
 
+    /** Construtores */
+   
+    /**
+     * Construtor vazio de uma TreeHash
+     */
     public TreeHash() {
         this.postTree = new TreeMap <Long, Post>();
         this.contadorR = 0;
         this.contadorP = 0;
     }
 
+    /**
+     * Contrutor por parâmetros de uma TreeHash
+     * @param postTree        Árvore de posts
+     * @param contadorR       Número de posts do tipo resposta
+     * @param contadorP       Número de posts do tipo pergunta
+     * @param creationDate    Data de criação
+     */
     public TreeHash(TreeMap<Long, Post> postTree, long contadorR, long contadorP, LocalDate creationDate) {
         this.postTree = new TreeMap <Long, Post>();
         if(postTree!=null) setPostTree(postTree);
@@ -73,19 +85,35 @@ public class TreeHash {
     public void setContadorR(long contadorR) {
         this.contadorR = contadorR;
     }
-
+    
+    /**
+     * Obter o número de posts do tipo pergunta
+     * @return número de posts 
+     */
     public long getContadorP() {
         return contadorP;
     }
 
+    /**
+     * Altera o número de posts do tipo pergunta
+     * @param contadorP    Número de posts
+     */
     public void setContadorP(long contadorP) {
         this.contadorP = contadorP;
     }
 
+    /**
+     * Obter a data de criação
+     * @return data 
+     */
     public LocalDate getCreationDate() {
         return creationDate;
     }
 
+    /**
+     * Altera a data de criação
+     * @param creationDate    Nova data 
+     */
     public void setCreationDate(LocalDate creationDate) {
         this. creationDate = creationDate;
     }
