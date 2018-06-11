@@ -116,6 +116,10 @@ public class Users {
         this.aboutMe = aboutMe;
     }
 
+    /**
+     * Altera a lista com os posts do utilizador
+     * @param utilizador   Nova lista 
+     */
     private void setUserList(ArrayList<maxList> utilizadores) {
         this.userList = new ArrayList<maxList>();
         for(maxList i : utilizadores)
