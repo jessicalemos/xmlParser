@@ -109,6 +109,38 @@ public class Struct {
             l.add(i.getId());
     }
 
+    public Post procuraPost(long id){
+        for(TreeHash i : this.treeHashTable.values())
+            if (i.getPostTree().containsKey(id)) return i.getPostTree().get(id);
+        return null;
+    }
+
+    public void getInfo(List<Long> ids, long id){
+        if(this.userHashTable.containsKey(id)){
+            List<maxList> user = this.userHashTable.get(id).getUserList();
+            Collections.sort(user,new DataComparator());
+            for(int i=0; i<10 && i<user.size(); i++)
+                ids.add(user.get(i).getId());
+        }
+    }
+
+    public void mostVoted(List<Long> aux, LocalDate begin, LocalDate end, int N) {
+        List<maxPosts> l = new ArrayList<maxPosts>();
+        for (TreeHash t : this.treeHashTable.values())
+            if (t.getCreationDate().equals(begin) || t.getCreationDate().equals(end) ||
+                    (t.getCreationDate().isAfter(begin) && t.getCreationDate().isBefore(end))) {
+                for (Post p : t.getPostTree().values()) {
+                    if (p.getPostTypeId() == 2) {
+                        maxPosts m = new maxPosts(p.getId(), p.getScore());
+                        l.add(m.clone());
+                    }
+                }
+            }
+            Collections.sort(l, new maxPostsComparator());
+            for(int i=0; i<N && i<l.size(); i++)
+                aux.add(l.get(i).getId());
+    }
+    
     public void mostAnswered(List<Long> aux, LocalDate begin, LocalDate end, int N) {
         Map<Long,maxMap> m = new HashMap<Long,maxMap>();
         for (TreeHash t : this.treeHashTable.values())
