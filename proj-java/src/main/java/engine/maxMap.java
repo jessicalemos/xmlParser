@@ -43,6 +43,14 @@ public class maxMap {
         this.count = count;
     }
 
+    /**
+     * Altera a flag
+     * @param flag
+     */
+    public void setFlag(int flag){ 
+        this.flag = flag;
+    }
+
     public boolean equals(Object o) {
         if (this == o)
             return true;
