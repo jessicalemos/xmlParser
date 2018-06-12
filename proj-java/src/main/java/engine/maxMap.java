@@ -16,6 +16,12 @@ public class maxMap {
         this.flag = 0;
     }
 
+     /**
+     * Construtor por parâmetros de uma maxMap
+     * @param id      Id do post
+     * @param count   Contador
+     * @param flag    Indica se a condição é verdadeira
+     */
     public maxMap(long id, int count, int flag) {
         this.id = id;
         this.count = count;
@@ -71,6 +77,10 @@ public class maxMap {
         return p.getId() == this.id &&  p.getCount() == this.count && p.getFlag() == this.getFlag();
     }
 
+    /**
+     * Imprime a informação de uma maxMap
+     * @return String com a informação
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("O seu id é: ");
@@ -83,6 +93,10 @@ public class maxMap {
         return sb.toString();
     }
 
+    /**
+     * Faz a cópia de uma maxMap
+     * @return cópia da maxMap
+     */
     public maxMap clone() {
         return new maxMap(this);
     }
