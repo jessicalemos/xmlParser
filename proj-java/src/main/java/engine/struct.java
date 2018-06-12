@@ -74,7 +74,7 @@ public class Struct {
      * @param t     Tag
      */
     public void addTags(Tag t){
-        this.tags.put(t.getId(), t.clone());
+        this.tags.put(t.getTagName(), t.clone());
     }
 
 
