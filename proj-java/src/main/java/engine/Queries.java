@@ -15,6 +15,9 @@ public class Queries implements TADCommunity {
     private Struct com;
     private Parse parse;
 
+    /**
+     * Função responsável por iniciar as estruturas
+     */
     public void init(){
         this.com = new Struct();
         this.parse = new Parse();
@@ -64,6 +67,11 @@ public class Queries implements TADCommunity {
         return pair;
     }
 
+    /**
+     * Query 2 - Devolve o top N utilizadores com maior número de posts de sempre
+     * @param N  N pedido no top N
+     * @return   Lista com os ids dos utilizadores com maior número de posts 
+     */
     public List<Long> topMostActive(int N){
         List<Long> aux = new ArrayList<Long>();
         if(N<=0) return aux;
@@ -100,6 +108,13 @@ public class Queries implements TADCommunity {
         return pair;
     }
 
+    /**
+     * Query 6 - Devolve os ids das N respostas com mais votos num dado intervalo de tempo
+     * @param N      N pedido no Top N
+     * @param begin  Data inicial
+     * @param end    Data final
+     * @return       Lista com os ids das N respostas com mais votos
+     */
     public List<Long> mostVotedAnswers(int N, LocalDate begin, LocalDate end){
         List<Long> aux = new ArrayList<Long>();
         if(end.isBefore(begin) || N<=0) return aux;
@@ -128,10 +143,22 @@ public class Queries implements TADCommunity {
         return aux;
     }
     
+    /**
+     * Query 10 - obter a melhor resposta, ou seja, com melhor média ponderada
+     * @param id    Id de uma pergunta
+     * @return      Id da pergunta com melhor média ponderada
+     */
     public long betterAnswer(long id){
         return this.com.answer(id);
     }
 
+    /**
+     * Query 11 - Devolve os identificadores das N tags mais usadas pelos N utilizadores com melhor reputação num dado intervalo de tempo
+     * @param N      N pedido no Top N
+     * @param begin  Data inicial
+     * @param end    Data final
+     * @return       Lista com os ids das N tags mais usadas pelos N utilizadores com melhor reputação
+     */
     public List<Long> mostUsedBestRep(int N, LocalDate begin, LocalDate end){
         List<Long> aux = new ArrayList<Long>();
         if(end.isBefore(begin) || N<=0) return aux;
