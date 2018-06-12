@@ -55,6 +55,7 @@ public class Users {
         this.aboutMe = u.getAboutMe();
         this.userList = u.getUserList();
     }
+	/* Métodos de Instância */
 
     /**
      * Obter o id do utilizador
