@@ -24,11 +24,19 @@ public class maxPosts {
         this.nPosts = nPosts;
     }
 
+    /**
+     * Constrói uma maxPost a partir de uma definida
+     * @param c    maxPost
+     */
     public maxPosts(maxPosts c) {
         this.id = c.getId();
         this.nPosts = c.getNPosts();
     }
     
+    /**
+     * Obter o id
+     * @return id
+     */
 	public long getId() {
         return id;
     }
@@ -45,6 +53,10 @@ public class maxPosts {
         this.id = id;
     }
 
+    /**
+     * Altera o número de posts
+     * @param nPosts   Novo número de posts
+     */
     public void setnPosts(int nPosts) {
         this.nPosts = nPosts;
     }
