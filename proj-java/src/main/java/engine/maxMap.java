@@ -27,7 +27,10 @@ public class maxMap {
         this.count = count;
         this.flag = flag;
     }
-
+/**
+     * Constroi umá maxMap a partir de um objeto definido
+     * @param p
+     */
     public maxMap(maxMap c) {
         this.id = c.getId();
         this.count = c.getCount();
