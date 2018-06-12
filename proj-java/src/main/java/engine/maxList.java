@@ -84,6 +84,20 @@ public class maxList {
     }
 
     /**
+     * Imprime a informação de uma maxList
+     * @return String com a informação
+     */
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("O id é");
+        sb.append(this.id);
+        sb.append("e foi criado em");
+        sb.append(this.creationDate);
+        sb.append(".\n")
+        return sb.toString();
+    }
+
+    /**
      * Faz a cópia de uma maxList
      * @return a cópia da maxList
      */
