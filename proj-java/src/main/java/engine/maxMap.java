@@ -5,6 +5,11 @@ public class maxMap {
     private int count;
     private int flag;
 
+	/** Construtores */
+   
+    /**
+     * Construtor vazio de uma maxMap
+     */
     public maxMap() {
         this.id = 0;
         this.count = 0;
@@ -22,7 +27,13 @@ public class maxMap {
         this.count = c.getCount();
         this.flag = c.getFlag();
     }
+	
+	/** Métodos de instância */
 
+    /**
+     * Obter o id do post
+     * @return id do post
+     */
     public long getId() {
         return id;
     }
