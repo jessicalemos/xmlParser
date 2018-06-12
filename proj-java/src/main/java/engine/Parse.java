@@ -85,6 +85,11 @@ public class Parse {
         }
     }
 
+    /**
+     * Função responsável por fazer o parse dos Users
+     * @param fileName   Caminho para o ficheiro
+     * @param estrutura  Estrutura a carregar
+     */
     public void parseUsers(String fileName, Struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
