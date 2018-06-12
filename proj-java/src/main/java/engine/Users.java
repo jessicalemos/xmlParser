@@ -137,6 +137,10 @@ public class Users {
         this.aboutMe = aboutMe;
     }
 
+    /**
+     * Adiciona uma maxList à lista de posts do utilizador
+     * @param p    maxList
+     */
     public void addUserList(maxList p){
         this.userList.add(p.clone());
     }
@@ -186,9 +190,9 @@ public class Users {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("O id do utilizador é ");
-        sb.append(this.ownerUserID);
+        sb.append(this.ownerUserId);
         sb.append(", cujo nome é ");
-        sb.append(this.displayname);
+        sb.append(this.displayName);
         sb.append(".\n Tem");
         sb.append(this.reputation);
         sb.append(" pontos de reputação e tem");
