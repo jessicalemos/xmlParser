@@ -30,6 +30,10 @@ public class Struct {
         return this.treeHashTable;
     }
 
+    /**
+     * Obter a topN
+     * @return topN
+     */
     public List<maxPosts> getTopN() {
         return this.topN;
     }
@@ -65,6 +69,10 @@ public class Struct {
         this.userHashTable.put(u.getOwnerUserId(), u.clone());
     }
 
+    /**
+     * Adiciona uma Tag à estrutura
+     * @param t     Tag
+     */
     public void addTags(Tag t){
         this.tags.put(t.getId(), t.clone());
     }
@@ -141,6 +149,11 @@ public class Struct {
         return null;
     }
 
+    /**
+     * Guarda numa lista os ids dos 10 últimos posts de um utilizador
+     * @param ids Lista onde são guardados os ids dos posts
+     * @param id  Id do utilizador 
+     */
     public void getInfo(List<Long> ids, long id){
         if(this.userHashTable.containsKey(id)){
             List<maxList> user = this.userHashTable.get(id).getUserList();
@@ -174,6 +187,13 @@ public class Struct {
                 aux.add(l.get(i).getId());
     }
     
+    /**
+     * Guarda numa lista os ids das N perguntas com mais respostas num dado intervalo de tempo
+     * @param aux    Lista onde é guardada a informação
+     * @param begin  Data inicial
+     * @param end    Data final
+     * @param N      N pedido no Top N
+     */
     public void mostAnswered(List<Long> aux, LocalDate begin, LocalDate end, int N) {
         Map<Long,maxMap> m = new HashMap<Long,maxMap>();
         for (TreeHash t : this.treeHashTable.values())
@@ -206,6 +226,12 @@ public class Struct {
         }
     }
 
+    /**
+     * Guarda numa lista com os ids de N perguntas cujos tı́tulos contenham uma dada palavra 
+     * @param aux       Lista onde é guardada a informação
+     * @param word      Palavra a comparar
+     * @param N         N pedido no top N
+     */
     public void containsW(List<Long> aux, String word, int N){
         List<maxList> l = new ArrayList<maxList>();
         for (TreeHash t : this.treeHashTable.values())
@@ -287,6 +313,13 @@ public class Struct {
         return idMax;
     }
 
+    /**
+     * Coloca na lista os identificadores das N tags mais usadas pelos N utilizadores com melhor reputação num dado intervalo de tempo
+     * @param aux    Lista onde é guardada a informação
+     * @param N      N pedido na Top N
+     * @param begin  Data inicial
+     * @param end    Data final
+     */
     public void bestRep(List<Long> aux, int N, LocalDate begin, LocalDate end ){
         List<maxPosts> m = new ArrayList<maxPosts>();
         List<Long> users = new ArrayList<Long>();
