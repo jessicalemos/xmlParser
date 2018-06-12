@@ -93,7 +93,7 @@ public class maxList {
         sb.append(this.id);
         sb.append("e foi criado em");
         sb.append(this.creationDate);
-        sb.append(".\n")
+        sb.append(".\n");
         return sb.toString();
     }
 
