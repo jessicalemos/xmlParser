@@ -27,7 +27,7 @@ public class Parse {
      * @param fileName    Caminho para o ficheiro
      * @param estrutura   Estrutura a carregar
      */
-    public void parsePosts(String fileName, Struct estrutura) {
+    public void parsePosts(String fileName, struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
             XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(fileName));
@@ -98,7 +98,7 @@ public class Parse {
      * @param fileName   Caminho para o ficheiro
      * @param estrutura  Estrutura a carregar
      */
-    public void parseUsers(String fileName, Struct estrutura) {
+    public void parseUsers(String fileName, struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
             XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(fileName));
@@ -138,7 +138,7 @@ public class Parse {
      * @param fileName    Caminho para o ficheiro
      * @param estrutura   Estrutura a carregar
      */
-    public void parseTags(String fileName, Struct estrutura) {
+    public void parseTags(String fileName, struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
             XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(fileName));

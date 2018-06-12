@@ -18,7 +18,7 @@ public class struct {
      * Construtor vazio de uma Struct
      */
     public struct() {
-        this.tags = new HashMap<Long, Tag>();
+        this.tags = new HashMap<String, Tag>();
         this.treeHashTable = new HashMap<LocalDate, TreeHash>();
         this.userHashTable = new HashMap<Long, Users>();
         this.topN = new ArrayList<maxPosts>();

@@ -233,8 +233,6 @@ public class Post {
         sb.append(this.title);
         sb.append(". O id do utilizador é ");
         sb.append(this.ownerUserID);
-        sb.append(" e foi criado em");
-        sb.append(this.creationDate);
         sb.append(" tem ");
         sb.append(this.answerCount);
         sb.append(" respostas e ");
