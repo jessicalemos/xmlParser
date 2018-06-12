@@ -19,6 +19,11 @@ public class Parse {
         this.tag = new Tag();
     }
 
+    /**
+     * Função responsável por fazer o parse dos Posts
+     * @param fileName    Caminho para o ficheiro
+     * @param estrutura   Estrutura a carregar
+     */
     public void parsePosts(String fileName, Struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
