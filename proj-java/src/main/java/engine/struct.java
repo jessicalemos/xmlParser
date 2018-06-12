@@ -5,7 +5,7 @@ import java.util.*;
 import java.lang.Long;
 import java.time.LocalDate;
 
-public class Struct {
+public class struct {
     private Map<Long, Tag> tags;
     private Map<LocalDate, TreeHash> treeHashTable;
     private Map<Long, Users> userHashTable;
@@ -17,7 +17,7 @@ public class Struct {
     /**
      * Construtor vazio de uma Struct
      */
-    public Struct() {
+    public struct() {
         this.tags = new HashMap<Long, Tag>();
         this.treeHashTable = new HashMap<LocalDate, TreeHash>();
         this.userHashTable = new HashMap<Long, Users>();
@@ -50,6 +50,10 @@ public class Struct {
         return this.topN;
     }
 
+    /**
+     * Obter o topR
+     * @return topR
+     */
     public List<maxPosts> getTopR() {
         return this.topR;
     }
