@@ -1,11 +1,7 @@
 package engine;
 
-import src.main.java.common.Pair;
-import src.main.java.engine.Parse;
-import src.main.java.engine.Post;
-import src.main.java.engine.Struct;
-import src.main.java.engine.maxPosts;
-import src.main.java.li3.TADCommunity;
+import common.Pair;
+import li3.TADCommunity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -86,6 +82,12 @@ public class Queries implements TADCommunity {
         return aux;
     }
 
+    /**
+     * Query 3 - Devolve o número total de posts, perguntas e respostas separadamente, num dado intervalo de tempo
+     * @param begin  Data inicial
+     * @param end    Data final
+     * @return       Par com o número de perguntas e número de respostas
+     */
     public Pair<Long,Long> totalPosts(LocalDate begin, LocalDate end){
         long respostas = 0, perguntas = 0;
         Pair pair;
@@ -95,6 +97,13 @@ public class Queries implements TADCommunity {
         return pair;
     }
 
+    /**
+     * Query 4 - Devolve todas as perguntas que contenham uma determinada tag num dado intervalo de tempo
+     * @param  tag     Tag a comparar
+     * @param  begin   Data inicial
+     * @param  end     Data final
+     * @return         Lista com os ids das perguntas
+     */
     public List<Long> questionsWithTag(String tag, LocalDate begin, LocalDate end){
         List<Long> aux = new ArrayList<Long>();
         if(end.isBefore(begin)) return aux;
@@ -132,6 +141,13 @@ public class Queries implements TADCommunity {
         return aux;
     }
 
+    /**
+     * Query 7 - Devolve os ids das N perguntas com mais respostas num dado intervalo de tempo
+     * @param N      N pedido na Top N
+     * @param begin  Data inicial
+     * @param end    Data final
+     * @return       Lista com os ids das N perguntas com mais respostas
+     */
     public List<Long> mostAnsweredQuestions(int N, LocalDate begin, LocalDate end){
         List<Long> aux = new ArrayList<Long>();
         if(end.isBefore(begin) || N<=0) return aux;
@@ -139,6 +155,12 @@ public class Queries implements TADCommunity {
         return aux;
     }
 
+    /**
+     * Query 8 - Devolve uma lista com os ids de N perguntas cujos tı́tulos contenham uma dada palavra 
+     * @param  word        Palavra a comparar
+     * @param  N           N pedido no top N
+     * @return             Lista com os ids de N perguntas cujos tı́tulos contenham a palavra
+     */
     public List<Long> containsWord(int N, String word){
         List<Long> aux = new ArrayList<Long>();
         if(N<=0) return aux;

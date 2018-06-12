@@ -1,4 +1,4 @@
-package src.main.java.engine;
+package engine;
 import java.util.Map;
 import java.util.TreeMap;
 import java.time.LocalDate;

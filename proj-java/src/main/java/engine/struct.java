@@ -1,5 +1,5 @@
-package src.main.java.engine;
-import src.main.java.common.Pair;
+package engine;
+import common.Pair;
 
 import java.util.*;
 import java.lang.Long;
@@ -11,6 +11,11 @@ public class Struct {
     private Map<Long, Users> userHashTable;
     private List<maxPosts> topN;
 
+/** Construtores */
+   
+    /**
+     * Construtor vazio de uma Struct
+     */
     public Struct() {
         this.tags = new HashMap<Long, Tag>();
         this.treeHashTable = new HashMap<LocalDate, TreeHash>();
@@ -18,6 +23,12 @@ public class Struct {
         this.topN = new ArrayList<maxPosts>();
     }
 
+/** Métodos de Instância */
+
+    /**
+     * Obter a struct das tags
+     * @return struct das tags
+     */
     public Map<Long, Tag> getTags() {
         return this.tags;
     }
@@ -38,6 +49,10 @@ public class Struct {
         return this.topN;
     }
 
+    /**
+     * Obter a UserHashTable
+     * @return UserHashTable
+     */
     public Map<Long, Users> getUserHashTable() {
         return this.userHashTable;
     }
@@ -77,7 +92,9 @@ public class Struct {
         this.tags.put(t.getTagName(), t.clone());
     }
 
-
+    /**
+     * Função responsavel por carregar e ordenar o topN e o topR
+     */
     public void addTop(){
         for(Users i : this.userHashTable.values()) {
             maxPosts m = new maxPosts(i.getOwnerUserId(), i.getnPosts());
@@ -246,6 +263,13 @@ public class Struct {
             aux.add(l.get(i).getId());
     }
 
+    /**
+     * Guarda numa lista as últimas N perguntas em que participaram dois utilizadores especı́ficos
+     * @param aux   Lista onde é guardada a informação
+     * @param N     N pedido no top N
+     * @param id    Id de um utilizador
+     * @param id2   Id de um utilizador 
+     */
     public void both(List<Long> aux, int N, long id1, long id2){
         if(this.userHashTable.containsKey(id1) && this.userHashTable.containsKey(id2)) {
             List<maxList> l1 = this.userHashTable.get(id1).getUserList();
@@ -291,6 +315,11 @@ public class Struct {
         }
     }
 
+    /**
+     * Obter a melhor resposta, ou seja, com melhor média ponderada
+     * @param id  Id de uma pergunta 
+     * @return    Id da pergunta com melhor média ponderada
+     */
     public long answer(long id) {
         int nRespostas = 0;
         double c = 0, max = 0;

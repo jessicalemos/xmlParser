@@ -1,4 +1,4 @@
-package src.main.java.engine;
+package engine;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.Attribute;
@@ -130,6 +130,11 @@ public class Parse {
         }
     }
 
+    /**
+     * Função responsáve por fazer o parse dos Users
+     * @param fileName    Caminho para o ficheiro
+     * @param estrutura   Estrutura a carregar
+     */
     public void parseTags(String fileName, Struct estrutura) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
         try {
