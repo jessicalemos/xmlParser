@@ -174,6 +174,28 @@ public class Users {
                 u.getReputation() == (this.reputation) && u.getnPosts() == (this.nPosts) &&
                 u.getAboutMe().equals(this.aboutMe) && u.getUserList().equals(this.userList);
     }
+
+    /**
+     * Imprime a informação de um User
+     * @return String com a informação
+     */
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("O id do utilizador é ");
+        sb.append(this.ownerUserID);
+        sb.append(", cujo nome é ");
+        sb.append(this.displayname);
+        sb.append(".\n Tem");
+        sb.append(this.reputation);
+        sb.append(" pontos de reputação e tem");
+        sb.append(this.nPosts);
+        sb.append("posts.\n");
+        sb.append("Lista dos posts do utilizador:\n");
+        for(maxList m: this.userList)
+            sb.append(m.toString();
+        sb.append(".\n");
+        return sb.toString();
+    }
     
     /**
      * Faz a cópia de um user
