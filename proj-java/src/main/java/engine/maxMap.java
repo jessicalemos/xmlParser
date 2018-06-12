@@ -89,7 +89,7 @@ public class maxMap {
         sb.append(this.count);
         sb.append("e flag");
         sb.append(this.flag);
-        sb.append("\n")
+        sb.append("\n");
         return sb.toString();
     }
 
