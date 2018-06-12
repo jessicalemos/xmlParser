@@ -22,6 +22,7 @@ public class struct {
         this.treeHashTable = new HashMap<LocalDate, TreeHash>();
         this.userHashTable = new HashMap<Long, Users>();
         this.topN = new ArrayList<maxPosts>();
+        this.topR = new ArrayList<maxPosts>();
     }
 
 /** Métodos de Instância */
