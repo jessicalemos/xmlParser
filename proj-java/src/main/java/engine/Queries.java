@@ -19,6 +19,10 @@ public class Queries implements TADCommunity {
         this.parse = new Parse();
     }
 
+    /**
+     * Carrega a informação dos diferentes ficheiros para a estrutura
+     * @param dumpPath
+     */
     public void load(String dumpPath){
         init();
         ArrayList<String> aux = new ArrayList<>();
