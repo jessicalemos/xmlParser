@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Queries implements TADCommunity {
-    private Struct com;
+    private struct com;
     private Parse parse;
 
     /**
      * Função responsável por iniciar as estruturas
      */
     public void init(){
-        this.com = new Struct();
+        this.com = new struct();
         this.parse = new Parse();
     }
 
