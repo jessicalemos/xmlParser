@@ -6,7 +6,7 @@ import java.lang.Long;
 import java.time.LocalDate;
 
 public class struct {
-    private Map<Long, Tag> tags;
+    private Map<String, Tag> tags;
     private Map<LocalDate, TreeHash> treeHashTable;
     private Map<Long, Users> userHashTable;
     private List<maxPosts> topN;
@@ -30,7 +30,7 @@ public class struct {
      * Obter a struct das tags
      * @return struct das tags
      */
-    public Map<Long, Tag> getTags() {
+    public Map<String, Tag> getTags() {
         return this.tags;
     }
 
