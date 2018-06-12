@@ -192,7 +192,7 @@ public class Users {
         sb.append("posts.\n");
         sb.append("Lista dos posts do utilizador:\n");
         for(maxList m: this.userList)
-            sb.append(m.toString();
+            sb.append(m.toString());
         sb.append(".\n");
         return sb.toString();
     }
