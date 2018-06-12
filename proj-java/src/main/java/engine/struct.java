@@ -10,7 +10,8 @@ public class Struct {
     private Map<LocalDate, TreeHash> treeHashTable;
     private Map<Long, Users> userHashTable;
     private List<maxPosts> topN;
-
+    private List<maxPosts> topR;
+    
 /** Construtores */
    
     /**
@@ -47,6 +48,10 @@ public class Struct {
      */
     public List<maxPosts> getTopN() {
         return this.topN;
+    }
+
+    public List<maxPosts> getTopR() {
+        return this.topR;
     }
 
     /**
