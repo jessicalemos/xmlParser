@@ -41,6 +41,10 @@ public class maxPosts {
         return id;
     }
 
+    /**
+     * Obter o número de posts
+     * @return número de posts
+     */
     public int getNPosts(){ 
     	return nPosts;
     }
@@ -60,7 +64,12 @@ public class maxPosts {
     public void setnPosts(int nPosts) {
         this.nPosts = nPosts;
     }
-	
+
+    /**
+     * Compara dois maxPosts
+     * @param o post a comparar
+     * @return É um post igual(true) ou não é (false)
+     */	
 	 public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -84,6 +93,10 @@ public class maxPosts {
         return sb.toString();
     }
 
+    /**
+     * Faz uma cópida de uma maxPosts
+     * @return cópida da maxPosts
+     */
 	public maxPosts clone() {
         return new maxPosts(this);
     }

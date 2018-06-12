@@ -68,6 +68,20 @@ public class Tag {
     }
 
     /**
+     * Imprime a informação de uma Tag
+     * @return String com a informação
+     */
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Tag com o id ");
+        sb.append(this.id);
+        sb.append(", cujo nome é ");
+        sb.append(this.tagName);
+        sb.append(".\n");
+        return sb.toString();
+    }
+    
+    /**
      * Compara duas Tags
      * @param a Tag a comparar
      * @return é uma Tag igual (true) ou não (false)

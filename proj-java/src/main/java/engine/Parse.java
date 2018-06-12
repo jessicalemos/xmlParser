@@ -13,6 +13,9 @@ public class Parse {
     private Users users;
     private Tag tag;
 
+    /**
+     * Contrutor vazio do Parse
+     */    
     public Parse() {
         this.post = new Post();
         this.users = new Users();

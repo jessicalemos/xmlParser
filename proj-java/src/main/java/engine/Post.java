@@ -216,6 +216,34 @@ public class Post {
     }
 
     /**
+     * Imprime a informação de um Post
+     * @return String com a informação
+     */
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("O tipo do post é");
+        sb.append(this.postTypeId);
+        sb.append(". O id do post ao qual foi feito uma resposta é ");
+        sb.append(this.parentID);
+        sb.append(", o seu id é ");
+        sb.append(this.id);
+        sb.append(" a sua tag ");
+        sb.append(this.tag);
+        sb.append(" e o seu título ");
+        sb.append(this.title);
+        sb.append(". O id do utilizador é ");
+        sb.append(this.ownerUserID);
+        sb.append(" e foi criado em");
+        sb.append(this.creationDate);
+        sb.append(" tem ");
+        sb.append(this.answerCount);
+        sb.append(" respostas e ");
+        sb.append(this.commentCount);
+        sb.append(" comentários.\n ");
+        return sb.toString();
+    }
+
+    /**
      * Compara dois Posts
      * @param o post a comparar
      * @return È um post igual(true) ou não é (false)
