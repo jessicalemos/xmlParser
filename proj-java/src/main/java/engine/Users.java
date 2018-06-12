@@ -137,6 +137,10 @@ public class Users {
         this.aboutMe = aboutMe;
     }
 
+    public void addUserList(maxList p){
+        this.userList.add(p.clone());
+    }
+    
     /**
      * Altera a lista com os posts do utilizador
      * @param utilizador   Nova lista 
