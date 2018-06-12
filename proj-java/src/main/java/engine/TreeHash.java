@@ -142,6 +142,25 @@ public class TreeHash {
     }
 
     /**
+     * Imprime a informação de uma TreeHash
+     * @return String com a informação
+     */
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Número de posts do tipo resposta: ");
+        sb.append(this.contadorR);
+        sb.append(".\n Número de posts do tipo pergunta: ");
+        sb.append(this.contadorP);
+        sb.append(".\n Data de criação: ");
+        sb.append(this.creationDate);
+        sb.append(".\n Árvore dos posts: \n");
+        for(Post i : this.postTree.values())
+            sb.append(i.toString());
+        sb.append(".\n");
+        return sb.toString();
+    }
+    
+    /**
      * Faz a cópia de uma TreeHash
      * @return cópida da TreeHash
      */
