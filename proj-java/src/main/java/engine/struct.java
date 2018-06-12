@@ -22,6 +22,10 @@ public class Struct {
         return this.tags;
     }
 
+    /**
+     * Obter a TreeHashTable
+     * @return TreeHashTable
+     */
     public Map<LocalDate, TreeHash> getTreeHashTable() {
         return this.treeHashTable;
     }
@@ -53,6 +57,10 @@ public class Struct {
         }
     }
 
+    /**
+     * Adiciona um User à estrutura
+     * @param u     User
+     */
     public void addUsers(Users u){
         this.userHashTable.put(u.getOwnerUserId(), u.clone());
     }
@@ -73,6 +81,12 @@ public class Struct {
         Collections.sort(this.topR, new maxPostsComparator());
     }
 
+    /**
+     * Coloca num Par o número de perguntas e respostas dadas num dado intervalo de tempo 
+     * @param p      Par
+     * @param begin  Data inicial
+     * @param end    Data final
+     */
     public void getPair(Pair p, LocalDate begin, LocalDate end){
         long respostas = 0, perguntas = 0;
         for(TreeHash t : this.treeHashTable.values())
@@ -85,6 +99,13 @@ public class Struct {
         p.setSecond(respostas);
     }
 
+    /**
+     * Guarda numa lista todas as perguntas que contenham uma determinada tag num dado intervalo de tempo válido
+     * @param l      Lista onde é guardada a informação
+     * @param begin  Data inicial
+     * @param end    Data final
+     * @param tag    Tag a comparar
+     */
     public void getList(List<Long> l, LocalDate begin, LocalDate end, String tag){
         List<maxList> aux = new ArrayList<maxList>();
         for(TreeHash t : this.treeHashTable.values())
@@ -109,6 +130,11 @@ public class Struct {
             l.add(i.getId());
     }
 
+    /**
+     * Procura na estrutura um post 
+     * @param id    Id do post a procurar
+     * @return Post
+     */
     public Post procuraPost(long id){
         for(TreeHash i : this.treeHashTable.values())
             if (i.getPostTree().containsKey(id)) return i.getPostTree().get(id);
@@ -124,6 +150,13 @@ public class Struct {
         }
     }
 
+    /**
+     * Guarda numa lista os ids das N respostas com mais votos num dado intervalo de tempo válido
+     * @param aux    Lista onde é guardada a informação
+     * @param begin  Data inicial
+     * @param end    Data final
+     * @param N      N pedido no Top N
+     */
     public void mostVoted(List<Long> aux, LocalDate begin, LocalDate end, int N) {
         List<maxPosts> l = new ArrayList<maxPosts>();
         for (TreeHash t : this.treeHashTable.values())
