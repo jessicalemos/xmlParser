@@ -29,7 +29,7 @@ public class maxMap {
     }
 /**
      * Constroi umá maxMap a partir de um objeto definido
-     * @param p
+     * @param c
      */
     public maxMap(maxMap c) {
         this.id = c.getId();
@@ -46,19 +46,35 @@ public class maxMap {
     public long getId() {
         return id;
     }
-
+    
+    /**
+     * Obter o contador
+     * @return contador
+     */
     public int getCount(){ 
         return count;
     }
 
+    /**
+     * Obter a flag
+     * @return flag
+     */
     public int getFlag(){ 
         return flag;
     }
 
+    /**
+     * Altera o id do post
+     * @param id do post
+     */
     public void setId(long id) {
         this.id = id;
     }
 
+    /**
+     * Altera o contador
+     * @param count   Contador
+     */
     public void setCount(int count) {
         this.count = count;
     }
@@ -70,7 +86,12 @@ public class maxMap {
     public void setFlag(int flag){ 
         this.flag = flag;
     }
-
+    
+    /**
+     * Compara duas maxMaps
+     * @param a maxMap a comparar
+     * @return É uma maxMap igual(true) ou não é (false)
+     */
     public boolean equals(Object o) {
         if (this == o)
             return true;
