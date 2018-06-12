@@ -46,6 +46,11 @@ public class Queries implements TADCommunity {
         this.com.addTop();
     }
 
+    /**
+     * Query 1 - Devolve o tı́tulo do post e o nome do autor
+     * @param id  Id de um post
+     * @return    Par com o título do post e o nome do autor
+     */
     public Pair<String,String> infoFromPost(long id){
         String nome = null, title = null;
         Post p = this.com.procuraPost(id);
@@ -97,6 +102,11 @@ public class Queries implements TADCommunity {
         return aux;
     }
 
+    /**
+     * Query 5 - Devolve a informação do seu perfil e os ids dos seus 10 últimos posts
+     * @param  id     Id de um utilizador
+     * @return        Par que contém a short bio e os ids dos posts relativos ao user
+     */
     public Pair<String, List<Long>> getUserInfo(long id){
         String aboutMe = null;
         List<Long> ids = new ArrayList<Long>();
@@ -136,6 +146,13 @@ public class Queries implements TADCommunity {
         return aux;
     }
 
+    /**
+     * Query 9 - Devolve as últimas N perguntas em que participaram dois utilizadores especı́ficos
+     * @param N     N pedido no top N
+     * @param id1   Id de um utilizador
+     * @param id2   Id de um utilizador 
+     * @return      Lista com os ids das N perguntas em que participaram os dois utilizadores 
+     */
     public List<Long> bothParticipated(int N, long id1, long id2){
         List<Long> aux = new ArrayList<Long>();
         if(N<=0) return aux;
@@ -166,6 +183,9 @@ public class Queries implements TADCommunity {
         return aux;
     }
 
+    /**
+     * Liberta todas as estruturas
+     */
     public void clear(){
         this.com.getUserHashTable().clear();
         this.com.getTreeHashTable().clear();
