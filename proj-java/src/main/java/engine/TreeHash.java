@@ -126,6 +126,11 @@ public class TreeHash {
         this.postTree.put(p.getId(),p);
     }
 
+    /**
+     * Compara duas TreeHash
+     * @param a TreeHash a comparar
+     * @return É uma TreeHash igual (true) ou não é (false)
+     */
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -136,6 +141,10 @@ public class TreeHash {
                  p.getPostTree().equals(this.postTree) && p.getCreationDate().equals(this.creationDate);
     }
 
+    /**
+     * Faz a cópia de uma TreeHash
+     * @return cópida da TreeHash
+     */
     public TreeHash clone() {
         return new TreeHash(this);
     }

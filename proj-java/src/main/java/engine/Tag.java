@@ -14,6 +14,11 @@ public class Tag {
         this.tagName = "";
     }
 
+    /**
+     * Construtor por parametros de uma taf
+     * @param id
+     * @param tagName
+     */
     public Tag(long id, String tagName) {
         this.id = id;
         this.tagName = tagName;
@@ -38,6 +43,10 @@ public class Tag {
         return id;
     }
 
+    /**
+     * Altera o id da tag
+     * @param id
+     */
     public void setId(long id) {
         this.id = id;
     }

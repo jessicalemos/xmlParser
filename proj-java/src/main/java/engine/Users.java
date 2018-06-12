@@ -43,6 +43,10 @@ public class Users {
         if(userList!=null) setUserList(userList);
     }
 
+    /**
+     * Constroi um user a partir de um objeto definido
+     * @param u User
+     */
     public Users(Users u) {
         this.ownerUserId = u.getOwnerUserId();
         this.displayName = u.getDisplayName();
@@ -100,18 +104,34 @@ public class Users {
         this.reputation = reputation;
     }
 
+    /**
+     * Obter o número de posts
+     * @return número de posts
+     */
     public int getnPosts() {
         return nPosts;
     }
 
+    /**
+     * Altera o número de posts
+     * @param número de posts
+     */
     public void setnPosts(int nPosts) { 
     	this.nPosts = nPosts; 
     }
 
+    /**
+     * Obter uma pequena informação sobre o user
+     * @return pequena informação sobre o user
+     */
     public String getAboutMe() {
         return aboutMe;
     }
 
+    /**
+     * Altera a pequena informação sobre o user
+     * @param aboutMe
+     */
     public void setAboutMe(String aboutMe) {
         this.aboutMe = aboutMe;
     }
@@ -138,6 +158,11 @@ public class Users {
         return aux;
     }
 
+    /**
+     * Compara dois users
+     * @param o user a comparar
+     * @return é um user igual(true) ou não (false)
+     */
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -149,6 +174,10 @@ public class Users {
                 u.getAboutMe().equals(this.aboutMe) && u.getUserList().equals(this.userList);
     }
     
+    /**
+     * Faz a cópia de um user
+     * @return cópia do user
+     */
     public Users clone() {
         return new Users(this);
     }

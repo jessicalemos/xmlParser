@@ -28,6 +28,19 @@ public class Post {
         this.score = 0;
     }
 
+   /**
+     * Construtor por parâmetros de um Post
+     * @param postTypeId     Tipo do post: 1-> tipo resposta e 2-> tipo pergunta
+     * @param parentID       Id do post ao qual foi feito uma resposta
+     * @param id             Id
+     * @param tag            Tag
+     * @param title          Título
+     * @param ownerUserID    Id do Utilizador
+     * @param creationDate   Data da criação do post
+     * @param answerCount    Número de respostas do post
+     * @param commentCount   Número de comentários do post
+     * @param score          Score
+     */
     public Post(int postTypeId, long parentID, long id, String tag, String title, long ownerUserID, int answerCount, int commentCount, int score) {
         this.postTypeId = postTypeId;
         this.parentID = parentID;
@@ -40,6 +53,10 @@ public class Post {
         this.score = score;
     }
 
+    /**
+     * Constroi um  post a partir de um objeto definido
+     * @param p
+     */
     public Post(Post p) {
         this.postTypeId = p.getPostTypeId();
         this.parentID = p.getParentID();
@@ -174,14 +191,26 @@ public class Post {
         this.ownerUserID = ownerUserID;
     }
 
+    /**
+     * Altera o número de respostas ao post
+     * @param answerCount
+     */
     public void setAnswerCount(int answerCount) {
         this.answerCount = answerCount;
     }
 
+    /**
+     * Altera o número de comentários de um post
+     * @param commentCount
+     */
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
     }
 
+    /**
+     * Altera o score
+     * @param score
+     */
     public void setScore(int score) {
         this.score = score;
     }
